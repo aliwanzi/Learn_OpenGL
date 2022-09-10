@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="shader">
+      <UniqueIdentifier>{745e87f7-71f8-4677-9f06-bcfa7c4c6de1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shader\geometry">
+      <UniqueIdentifier>{58570d97-bde7-4b15-b0b5-3e73fa278131}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shader\tessellation">
+      <UniqueIdentifier>{e396e973-cd2d-4aad-a1cb-77c130669cd5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shader\texture">
+      <UniqueIdentifier>{0e29996f-19bf-44c4-9c08-10e8c3e3f4c2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="entity.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="geometry_node.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="gl_resource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="node.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="render_pass.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="render_state.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="scene.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="texture.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="transform.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="camera.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="entity.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="geometry_node.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="gl_resource.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="node.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="render_pass.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="render_state.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="scene.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="shader.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="texture.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="transform.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="camera.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\resources\shaders\Tessellation\triangle.tes">
+      <Filter>shader\tessellation</Filter>
+    </None>
+    <None Include="..\resources\shaders\Tessellation\fragment.fs">
+      <Filter>shader\tessellation</Filter>
+    </None>
+    <None Include="..\resources\shaders\Tessellation\triangle.tcs">
+      <Filter>shader\tessellation</Filter>
+    </None>
+    <None Include="..\resources\shaders\Tessellation\vertex.vs">
+      <Filter>shader\tessellation</Filter>
+    </None>
+    <None Include="..\resources\shaders\Geometry\fragment.fs">
+      <Filter>shader\geometry</Filter>
+    </None>
+    <None Include="..\resources\shaders\Geometry\vertex.vs">
+      <Filter>shader\geometry</Filter>
+    </None>
+    <None Include="..\resources\shaders\texture\fragment.fs">
+      <Filter>shader\texture</Filter>
+    </None>
+    <None Include="..\resources\shaders\texture\vertex.vs">
+      <Filter>shader\texture</Filter>
+    </None>
+    <None Include="..\resources\shaders\geometry\geometry.gs">
+      <Filter>shader\geometry</Filter>
+    </None>
+  </ItemGroup>
+</Project>

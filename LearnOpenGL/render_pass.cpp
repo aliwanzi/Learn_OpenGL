@@ -1,0 +1,20 @@
+#include "render_pass.h"
+RenderPass::RenderPass(std::shared_ptr<Entity> spEntity, std::shared_ptr<RenderState> spRenderState) :
+	m_spEntity(spEntity), m_spRenderState(spRenderState)
+{
+
+}
+
+RenderPass::~RenderPass()
+{
+
+}
+
+void RenderPass::Apply(std::shared_ptr<Camera> spCamera)
+{
+	m_spRenderState->Use();
+	m_spRenderState->ApplyState();
+	m_spRenderState->ApplyTexture();
+	m_spRenderState->ApplyTransform(spCamera);
+	m_spEntity->DrawSelfAndChild();
+}
