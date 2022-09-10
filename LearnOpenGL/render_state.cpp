@@ -6,7 +6,6 @@ RenderState::RenderState(std::shared_ptr<Shader>spShader, std::shared_ptr<Textur
 	m_bBlend(false),
 	m_iVertices(0),
 	m_bDepthTest(false),
-	m_vec4BackGround(glm::vec4(0.f)),
 	m_spShader(spShader),
 	m_spTexture(spTexture),
 	m_ePolygonMode(POLYGON_MODE::FACE_MODE),
@@ -21,10 +20,6 @@ RenderState::~RenderState()
 
 }
 
-void RenderState::SetBackGround(const glm::vec4& vec4BackGround)
-{
-	m_vec4BackGround = vec4BackGround;
-}
 
 void RenderState::SetBlend(float fBlend)
 {
@@ -37,6 +32,16 @@ void RenderState::SetDepthTest(bool bDepthTest)
 	m_bDepthTest = bDepthTest;
 }
 
+void RenderState::SetLights(const std::vector<std::shared_ptr<Light>>& vecLights)
+{
+	m_vecLights = vecLights;
+}
+
+void RenderState::AddLight(std::shared_ptr<Light> spLight)
+{
+	m_vecLights.push_back(spLight);
+}
+
 void RenderState::Use()
 {
 	m_spShader->Use();
@@ -44,8 +49,6 @@ void RenderState::Use()
 
 void RenderState::ApplyState()
 {
-	glClearColor(m_vec4BackGround.r, m_vec4BackGround.g, m_vec4BackGround.b, m_vec4BackGround.a);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	if (m_bBlend)
 	{
@@ -122,6 +125,73 @@ void RenderState::ApplyTransform(std::shared_ptr<Camera>spCamera)
 {
 	m_spShader->SetMat4("matView", spCamera->GetViewMatrix());
 	m_spShader->SetMat4("matProjection", spCamera->GetProjectionMatrix());
+}
+
+void RenderState::ApplyLights(std::shared_ptr<Camera> spCamera)
+{
+	if (m_vecLights.size() > 0)
+	{
+		unsigned int uiPoint(0);
+		m_spShader->SetVec3("viewPos", spCamera->GetEye());
+		for (int i = 0; i < m_vecLights.size(); i++)
+		{
+			switch (m_vecLights[i]->GetLightType())
+			{
+			case LightType::DIR_LIGHT:
+			{
+				std::shared_ptr<DirLight> spDirLight = std::dynamic_pointer_cast<DirLight>(m_vecLights[i]);
+				if (spDirLight != nullptr)
+				{
+					m_spShader->SetVec3("dirLight.direction", (spDirLight)->GetLightDirction());
+					m_spShader->SetVec3("dirLight.ambient", (spDirLight)->GetAmbient());
+					m_spShader->SetVec3("dirLight.diffuse", (spDirLight)->GetDiffuse());
+					m_spShader->SetVec3("dirLight.specular", (spDirLight)->GetSpecular());
+					m_spShader->SetFloat("dirLight.shininess", (spDirLight)->GetShiness());
+				}
+				break;
+			}
+			case LightType::POINT_LIGHT:
+			{
+				std::shared_ptr<PointLight> spPointLight = std::dynamic_pointer_cast<PointLight>(m_vecLights[i]);
+				if (spPointLight != nullptr)
+				{
+					auto sName = "pointLights[" + std::to_string(uiPoint++) + "]";
+					m_spShader->SetVec3(sName + ".position", (spPointLight)->GetLightPosition());
+					m_spShader->SetVec3(sName + ".ambient", (spPointLight)->GetAmbient());
+					m_spShader->SetVec3(sName + ".diffuse", (spPointLight)->GetDiffuse());
+					m_spShader->SetVec3(sName + ".specular", (spPointLight)->GetSpecular());
+					m_spShader->SetFloat(sName + ".shininess", (spPointLight)->GetShiness());
+					m_spShader->SetFloat(sName + ".constant", (spPointLight)->GetConstant());
+					m_spShader->SetFloat(sName + ".linear", (spPointLight)->GetLinear());
+					m_spShader->SetFloat(sName + ".quadratic", (spPointLight)->GetQuartic());
+				}
+				break;
+			}
+			case LightType::SPOT_LIGHT:
+			{
+				std::shared_ptr<SpotLight> spSpotLight = std::dynamic_pointer_cast<SpotLight>(m_vecLights[i]);
+				if (spSpotLight != nullptr)
+				{
+					m_spShader->SetVec3("spotLight.position", spCamera->GetEye());
+					m_spShader->SetVec3("spotLight.direction", spCamera->GetViewDirection());
+					m_spShader->SetVec3("spotLight.ambient", (spSpotLight)->GetAmbient());
+					m_spShader->SetVec3("spotLight.diffuse", (spSpotLight)->GetDiffuse());
+					m_spShader->SetVec3("spotLight.specular", (spSpotLight)->GetSpecular());
+					m_spShader->SetFloat("spotLight.shininess", (spSpotLight)->GetShiness());
+					m_spShader->SetFloat("spotLight.constant", (spSpotLight)->GetConstant());
+					m_spShader->SetFloat("spotLight.linear", (spSpotLight)->GetLinear());
+					m_spShader->SetFloat("spotLight.quadratic", (spSpotLight)->GetQuartic());
+					m_spShader->SetFloat("spotLight.cutOff", glm::cos(glm::radians((spSpotLight)->GetCutOff())));
+					m_spShader->SetFloat("spotLight.outerCutOff", glm::cos(glm::radians((spSpotLight)->GetOuterCutOff())));
+				}
+				break;
+			}
+
+			default:
+				break;
+			}
+		}
+	}
 }
 
 void RenderState::SetPatchVertices(int iVertices)

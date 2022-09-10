@@ -4,6 +4,7 @@
 #include "texture.h"
 #include "camera.h"
 #include "transform.h"
+#include "light.h"
 
 enum POLYGON_MODE
 {
@@ -35,12 +36,15 @@ public:
 	RenderState(std::shared_ptr<Shader>spShader, std::shared_ptr<Texture>spTexture = nullptr);
 	~RenderState();
 
+	void SetLights(const std::vector<std::shared_ptr<Light>>& vecLights);
+	void AddLight(std::shared_ptr<Light> spLight);
+
 	void Use();
 	void ApplyState();
 	void ApplyTexture();
 	void ApplyTransform(std::shared_ptr<Camera>spCamera);
+	void ApplyLights(std::shared_ptr<Camera> spCamera);
 
-	void SetBackGround(const glm::vec4& vec4BackGround);
 	void SetBlend(float fBlend);
 	void SetDepthTest(bool bDepthTest);
 
@@ -62,7 +66,6 @@ private:
 	bool m_bBlend;
 
 	bool m_bDepthTest;
-	glm::vec4 m_vec4BackGround;
 
 	int m_iVertices;
 	POLYGON_MODE m_ePolygonMode;
@@ -73,4 +76,5 @@ private:
 
 	std::shared_ptr<Shader> m_spShader;
 	std::shared_ptr<Texture> m_spTexture;
+	std::vector<std::shared_ptr<Light>> m_vecLights;
 };
