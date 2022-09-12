@@ -48,6 +48,9 @@ public:
 	void SetBlend(float fBlend);
 	void SetDepthTest(bool bDepthTest);
 
+	void SetTexture(std::shared_ptr<Texture>spTexture);
+	std::shared_ptr<Texture>& GetTexture();
+
 	void SetModelMatrix(const glm::mat4& matModel);
 
 	void SetPatchVertices(int iVertices);

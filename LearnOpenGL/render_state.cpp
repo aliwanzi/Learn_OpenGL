@@ -32,6 +32,16 @@ void RenderState::SetDepthTest(bool bDepthTest)
 	m_bDepthTest = bDepthTest;
 }
 
+void RenderState::SetTexture(std::shared_ptr<Texture>spTexture)
+{
+	m_spTexture = spTexture;
+}
+
+std::shared_ptr<Texture>& RenderState::GetTexture()
+{
+	return m_spTexture;
+}
+
 void RenderState::SetLights(const std::vector<std::shared_ptr<Light>>& vecLights)
 {
 	m_vecLights = vecLights;

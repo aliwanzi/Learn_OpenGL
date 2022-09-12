@@ -46,7 +46,6 @@ unsigned int Texture::TextureFromFile(const char* pcPath, bool bflip, bool gamma
 			eFormat = GL_RED;
 			break;
 		}
-
 		case 3:
 		{
 			eFormat = GL_RGB;

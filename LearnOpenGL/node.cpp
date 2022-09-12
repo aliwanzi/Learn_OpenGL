@@ -19,30 +19,27 @@ Node::~Node()
 
 }
 
-void Node::SetNode(std::vector<Vertex>& vecVertexs, std::vector<unsigned int>& vecIndexs,
-	std::shared_ptr<RenderState> spRenderState, std::shared_ptr<Transform> spTransform)
-{
-	this->m_vecVertexs = vecVertexs;
-	this->m_vecIndexs = vecIndexs;
-	this->m_spRenderState = spRenderState;
-	this->m_spTransform = spTransform;
-	SetVAOVBO();
-}
-
 void Node::Prender()
 {
-	if (m_spTransform->GetModelRotUseTime())
+	if (m_spTransform != nullptr)
 	{
-		auto rotAngel = static_cast<float>(glm::degrees(glfwGetTime()));
-		m_spTransform->SetModelRotAngle(rotAngel);
-	}
+		if (m_spTransform->GetModelRotUseTime())
+		{
+			auto rotAngel = static_cast<float>(glm::degrees(glfwGetTime()));
+			m_spTransform->SetModelRotAngle(rotAngel);
+		}
 
-	if (m_spTransform->GetModelScalUseTime())
-	{
-		auto scaleAmount = static_cast<float>(sin(glfwGetTime()));
-		m_spTransform->SetModelScale(glm::vec3(scaleAmount, scaleAmount, scaleAmount));
+		if (m_spTransform->GetModelScalUseTime())
+		{
+			auto scaleAmount = static_cast<float>(sin(glfwGetTime()));
+			m_spTransform->SetModelScale(glm::vec3(scaleAmount, scaleAmount, scaleAmount));
+		}
+		m_spRenderState->SetModelMatrix(m_spTransform->GetModelMatrix());
 	}
-	m_spRenderState->SetModelMatrix(m_spTransform->GetModelMatrix());
+	else
+	{
+		m_spRenderState->SetModelMatrix(glm::mat4(1.0));
+	}
 }
 
 
@@ -68,9 +65,28 @@ void Node::Draw()
 			glDrawElements(GL_TRIANGLES, static_cast<unsigned int>(m_vecIndexs.size()), GL_UNSIGNED_INT, 0);
 		}
 	}
-
 	glBindVertexArray(0);
 	glActiveTexture(GL_TEXTURE0);
+}
+
+void Node::SetVertexs(std::vector<Vertex>& vecVertexs)
+{
+	this->m_vecVertexs = vecVertexs;
+}
+
+void Node::SetIndexs(std::vector<unsigned int>& vecIndexs)
+{
+	this->m_vecIndexs = vecIndexs;
+}
+
+void Node::SetRenderState(std::shared_ptr<RenderState> spRenderState)
+{
+	this->m_spRenderState = spRenderState;
+}
+
+void Node::SetTransform(std::shared_ptr<Transform> spTransform)
+{
+	this->m_spTransform = spTransform;
 }
 
 void Node::SetVAOVBO()

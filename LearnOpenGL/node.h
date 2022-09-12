@@ -7,8 +7,8 @@
 
 struct Vertex
 {
-	Vertex(glm::vec3 position, glm::vec2 texCoords = glm::vec2(0.0),
-		glm::vec3 normal = glm::vec3(0.0),glm::vec3 tangent = glm::vec3(0.0), glm::vec3 bitangent = glm::vec3(0.0)) :
+	Vertex(glm::vec3 position = glm::vec3(0.f), glm::vec2 texCoords = glm::vec2(0.0),
+		glm::vec3 normal = glm::vec3(0.0), glm::vec3 tangent = glm::vec3(0.0), glm::vec3 bitangent = glm::vec3(0.0)) :
 		Position(position), TexCoords(texCoords),
 		Normal(normal), Tangent(tangent), Bitangent(bitangent)
 	{
@@ -29,15 +29,15 @@ public:
 	Node(std::vector<Vertex>& vecVertexs, std::vector<unsigned int>& vecIndexs,
 		std::shared_ptr<RenderState> spRenderState, std::shared_ptr<Transform> spTransform);
 	~Node();
+	void SetRenderState(std::shared_ptr<RenderState> spRenderState);
+	void SetTransform(std::shared_ptr<Transform> spTransform);
 	virtual void Prender();
 	virtual void Draw();
 
 protected:
 
-	void SetNode(std::vector<Vertex>& vecVertexs, std::vector<unsigned int>& vecIndexs,
-		std::shared_ptr<RenderState> spRenderState, std::shared_ptr<Transform> spTransform);
-
-private:
+	void SetVertexs(std::vector<Vertex>& vecVertexs);
+	void SetIndexs(std::vector<unsigned int>& vecIndexs);
 	void SetVAOVBO();
 
 protected:

@@ -28,6 +28,9 @@
     <Filter Include="shader\light">
       <UniqueIdentifier>{3dce36c6-d087-4ee1-bf84-e9cead1598f2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shader\model">
+      <UniqueIdentifier>{68ccfcfa-060b-4c2b-af38-ec2aaefa99b5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="entity.h">
@@ -64,6 +67,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="light.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="mesh_node.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -107,6 +113,9 @@
     <ClCompile Include="light.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="mesh_node.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\resources\shaders\Tessellation\triangle.tes">
@@ -141,6 +150,12 @@
     </None>
     <None Include="..\resources\shaders\light\light.vs">
       <Filter>shader\light</Filter>
+    </None>
+    <None Include="..\resources\shaders\model\fragment.fs">
+      <Filter>shader\model</Filter>
+    </None>
+    <None Include="..\resources\shaders\model\vertex.vs">
+      <Filter>shader\model</Filter>
     </None>
   </ItemGroup>
 </Project>
