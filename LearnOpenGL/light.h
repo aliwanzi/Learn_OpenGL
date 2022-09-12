@@ -24,12 +24,17 @@ public:
 	const glm::vec3& GetSpecular()const;
 	float GetShiness()const;
 
+	void SetColor(const glm::vec3& vec3Color);
+	const glm::vec3& GetColor()const;
+
 private:
 	LightType m_eLightType;
 
 	glm::vec3 m_vec3Ambient;
 	glm::vec3 m_vec3Diffuse;
 	glm::vec3 m_vec3Specular;
+
+	glm::vec3 m_vec3Color;
 	float m_fShininess;
 };
 

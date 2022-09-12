@@ -179,8 +179,11 @@
     <None Include="..\resources\shaders\Geometry\fragment.fs" />
     <None Include="..\resources\shaders\geometry\geometry.gs" />
     <None Include="..\resources\shaders\Geometry\vertex.vs" />
-    <None Include="..\resources\shaders\light\light.fs" />
+    <None Include="..\resources\shaders\light\light_texture.fs" />
     <None Include="..\resources\shaders\light\light.vs" />
+    <None Include="..\resources\shaders\light\light_color.fs" />
+    <None Include="..\resources\shaders\light\light_cube.fs" />
+    <None Include="..\resources\shaders\light\light_cube.vs" />
     <None Include="..\resources\shaders\Tessellation\triangle.tes" />
     <None Include="..\resources\shaders\Tessellation\fragment.fs" />
     <None Include="..\resources\shaders\Tessellation\triangle.tcs" />

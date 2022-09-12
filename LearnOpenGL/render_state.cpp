@@ -146,6 +146,7 @@ void RenderState::ApplyLights(std::shared_ptr<Camera> spCamera)
 					m_spShader->SetVec3("dirLight.ambient", (spDirLight)->GetAmbient());
 					m_spShader->SetVec3("dirLight.diffuse", (spDirLight)->GetDiffuse());
 					m_spShader->SetVec3("dirLight.specular", (spDirLight)->GetSpecular());
+					m_spShader->SetVec3("dirLight.color", (spDirLight)->GetColor());
 					m_spShader->SetFloat("dirLight.shininess", (spDirLight)->GetShiness());
 				}
 				break;
@@ -160,6 +161,7 @@ void RenderState::ApplyLights(std::shared_ptr<Camera> spCamera)
 					m_spShader->SetVec3(sName + ".ambient", (spPointLight)->GetAmbient());
 					m_spShader->SetVec3(sName + ".diffuse", (spPointLight)->GetDiffuse());
 					m_spShader->SetVec3(sName + ".specular", (spPointLight)->GetSpecular());
+					m_spShader->SetVec3(sName + ".color", (spPointLight)->GetColor());
 					m_spShader->SetFloat(sName + ".shininess", (spPointLight)->GetShiness());
 					m_spShader->SetFloat(sName + ".constant", (spPointLight)->GetConstant());
 					m_spShader->SetFloat(sName + ".linear", (spPointLight)->GetLinear());
@@ -177,6 +179,7 @@ void RenderState::ApplyLights(std::shared_ptr<Camera> spCamera)
 					m_spShader->SetVec3("spotLight.ambient", (spSpotLight)->GetAmbient());
 					m_spShader->SetVec3("spotLight.diffuse", (spSpotLight)->GetDiffuse());
 					m_spShader->SetVec3("spotLight.specular", (spSpotLight)->GetSpecular());
+					m_spShader->SetVec3("spotLight.color", (spSpotLight)->GetColor());
 					m_spShader->SetFloat("spotLight.shininess", (spSpotLight)->GetShiness());
 					m_spShader->SetFloat("spotLight.constant", (spSpotLight)->GetConstant());
 					m_spShader->SetFloat("spotLight.linear", (spSpotLight)->GetLinear());
@@ -186,7 +189,6 @@ void RenderState::ApplyLights(std::shared_ptr<Camera> spCamera)
 				}
 				break;
 			}
-
 			default:
 				break;
 			}

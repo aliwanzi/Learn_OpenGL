@@ -3,7 +3,8 @@
 Light::Light() :
 	m_eLightType(LightType::POINT_LIGHT), 
 	m_vec3Ambient(glm::vec3(0.f)), m_vec3Diffuse(glm::vec3(0.f)),
-	m_vec3Specular(glm::vec3(0.f)), m_fShininess(32.f)
+	m_vec3Specular(glm::vec3(0.f)), m_fShininess(32.f),
+	m_vec3Color(glm::vec3(1.f))
 {
 
 }
@@ -57,6 +58,16 @@ const glm::vec3& Light::GetSpecular()const
 float Light::GetShiness()const
 {
 	return m_fShininess;
+}
+
+void Light::SetColor(const glm::vec3& vec3Color)
+{
+	m_vec3Color = vec3Color;
+}
+
+const glm::vec3& Light::GetColor() const
+{
+	return m_vec3Color;
 }
 
 DirLight::DirLight():m_vec3Direction(glm::vec3(0.f))

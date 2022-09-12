@@ -9,35 +9,35 @@ void CreatBoxNode(std::vector<std::shared_ptr<Node>>& vecNode, std::shared_ptr<R
 {
 	std::vector<Vertex> vecVertex
 	{
-		Vertex(glm::vec3(-0.5, -0.5, -0.5),glm::vec2(0.0, 0.0),glm::vec3(0.f,0.f,-1.f)),//0
-		Vertex(glm::vec3(0.5, -0.5, -0.5),glm::vec2(1.0, 0.0),glm::vec3(0.f,0.f,-1.f)),//1
-		Vertex(glm::vec3(0.5,  0.5, -0.5),glm::vec2(1.0, 1.0),glm::vec3(0.f,0.f,-1.f)),//2
-		Vertex(glm::vec3(-0.5,  0.5, -0.5),glm::vec2(0.0, 1.0),glm::vec3(0.f,0.f,-1.f)),//3
+		Vertex(glm::vec3(-0.5, -0.5, -0.5),glm::vec2(0.0, 0.0),glm::vec3(0.f,0.f,-1.f),glm::vec3(0.f,1.f,0.f)),//0
+		Vertex(glm::vec3(0.5, -0.5, -0.5),glm::vec2(1.0, 0.0),glm::vec3(0.f,0.f,-1.f),glm::vec3(0.f,1.f,0.f)),//1
+		Vertex(glm::vec3(0.5,  0.5, -0.5),glm::vec2(1.0, 1.0),glm::vec3(0.f,0.f,-1.f),glm::vec3(0.f,1.f,0.f)),//2
+		Vertex(glm::vec3(-0.5,  0.5, -0.5),glm::vec2(0.0, 1.0),glm::vec3(0.f,0.f,-1.f),glm::vec3(0.f,1.f,0.f)),//3
 
-		Vertex(glm::vec3(-0.5, -0.5, 0.5),glm::vec2(0.0, 0.0),glm::vec3(0.f,0.f,1.f)),//4
-		Vertex(glm::vec3(0.5, -0.5, 0.5),glm::vec2(1.0, 0.0),glm::vec3(0.f,0.f,1.f)),//5
-		Vertex(glm::vec3(0.5,  0.5, 0.5),glm::vec2(1.0, 1.0),glm::vec3(0.f,0.f,1.f)),//6
-		Vertex(glm::vec3(-0.5,  0.5, 0.5),glm::vec2(0.0, 1.0),glm::vec3(0.f,0.f,1.f)),//7
+		Vertex(glm::vec3(-0.5, -0.5, 0.5),glm::vec2(0.0, 0.0),glm::vec3(0.f,0.f,1.f),glm::vec3(0.f,1.f,0.f)),//4
+		Vertex(glm::vec3(0.5, -0.5, 0.5),glm::vec2(1.0, 0.0),glm::vec3(0.f,0.f,1.f),glm::vec3(0.f,1.f,0.f)),//5
+		Vertex(glm::vec3(0.5,  0.5, 0.5),glm::vec2(1.0, 1.0),glm::vec3(0.f,0.f,1.f),glm::vec3(0.f,1.f,0.f)),//6
+		Vertex(glm::vec3(-0.5,  0.5, 0.5),glm::vec2(0.0, 1.0),glm::vec3(0.f,0.f,1.f),glm::vec3(0.f,1.f,0.f)),//7
 
-		Vertex(glm::vec3(-0.5,  0.5,  0.5),glm::vec2(1.0, 0.0),glm::vec3(-1.f,0.f,0.f)),
-		Vertex(glm::vec3(-0.5,  0.5, -0.5),glm::vec2(1.0, 1.0),glm::vec3(-1.f,0.f,0.f)),
-		Vertex(glm::vec3(-0.5, -0.5, -0.5),glm::vec2(0.0, 1.0),glm::vec3(-1.f,0.f,0.f)),
-		Vertex(glm::vec3(-0.5, -0.5,  0.5),glm::vec2(0.0, 0.0),glm::vec3(-1.f,0.f,0.f)),
+		Vertex(glm::vec3(-0.5,  0.5,  0.5),glm::vec2(1.0, 0.0),glm::vec3(-1.f,0.f,0.f),glm::vec3(1.f,0.f,0.f)),
+		Vertex(glm::vec3(-0.5,  0.5, -0.5),glm::vec2(1.0, 1.0),glm::vec3(-1.f,0.f,0.f),glm::vec3(1.f,0.f,0.f)),
+		Vertex(glm::vec3(-0.5, -0.5, -0.5),glm::vec2(0.0, 1.0),glm::vec3(-1.f,0.f,0.f),glm::vec3(1.f,0.f,0.f)),
+		Vertex(glm::vec3(-0.5, -0.5,  0.5),glm::vec2(0.0, 0.0),glm::vec3(-1.f,0.f,0.f),glm::vec3(1.f,01.f,0.f)),
 
-		Vertex(glm::vec3(0.5,  0.5,  0.5),glm::vec2(1.0, 0.0),glm::vec3(1.f,0.f,0.f)),
-		Vertex(glm::vec3(0.5,  0.5, -0.5),glm::vec2(1.0, 1.0),glm::vec3(1.f,0.f,0.f)),
-		Vertex(glm::vec3(0.5, -0.5, -0.5),glm::vec2(0.0, 1.0),glm::vec3(1.f,0.f,0.f)),
-		Vertex(glm::vec3(0.5, -0.5,  0.5),glm::vec2(0.0, 0.0),glm::vec3(1.f,0.f,0.f)),
+		Vertex(glm::vec3(0.5,  0.5,  0.5),glm::vec2(1.0, 0.0),glm::vec3(1.f,0.f,0.f),glm::vec3(1.f,0.f,0.f)),
+		Vertex(glm::vec3(0.5,  0.5, -0.5),glm::vec2(1.0, 1.0),glm::vec3(1.f,0.f,0.f),glm::vec3(1.f,0.f,0.f)),
+		Vertex(glm::vec3(0.5, -0.5, -0.5),glm::vec2(0.0, 1.0),glm::vec3(1.f,0.f,0.f),glm::vec3(1.f,0.f,0.f)),
+		Vertex(glm::vec3(0.5, -0.5,  0.5),glm::vec2(0.0, 0.0),glm::vec3(1.f,0.f,0.f),glm::vec3(1.f,0.f,0.f)),
 
-		Vertex(glm::vec3(-0.5, -0.5, -0.5),glm::vec2(0.0, 1.0),glm::vec3(0.f,-1.f,0.f)),
-		Vertex(glm::vec3(0.5, -0.5, -0.5),glm::vec2(1.0, 1.0),glm::vec3(0.f,-1.f,0.f)),
-		Vertex(glm::vec3(0.5, -0.5,  0.5),glm::vec2(1.0, 0.0),glm::vec3(0.f,-1.f,0.f)),
-		Vertex(glm::vec3(-0.5, -0.5,  0.5),glm::vec2(0.0, 0.0),glm::vec3(0.f,-1.f,0.f)),
+		Vertex(glm::vec3(-0.5, -0.5, -0.5),glm::vec2(0.0, 1.0),glm::vec3(0.f,-1.f,0.f),glm::vec3(0.f,0.f,1.f)),
+		Vertex(glm::vec3(0.5, -0.5, -0.5),glm::vec2(1.0, 1.0),glm::vec3(0.f,-1.f,0.f),glm::vec3(0.f,0.f,1.f)),
+		Vertex(glm::vec3(0.5, -0.5,  0.5),glm::vec2(1.0, 0.0),glm::vec3(0.f,-1.f,0.f),glm::vec3(0.f,0.f,1.f)),
+		Vertex(glm::vec3(-0.5, -0.5,  0.5),glm::vec2(0.0, 0.0),glm::vec3(0.f,-1.f,0.f),glm::vec3(0.f,0.f,1.f)),
 
-		Vertex(glm::vec3(-0.5,  0.5, -0.5),glm::vec2(0.0, 1.0),glm::vec3(0.f,1.f,0.f)),
-		Vertex(glm::vec3(0.5,  0.5, -0.5),glm::vec2(1.0, 1.0),glm::vec3(0.f,1.f,0.f)),
-		Vertex(glm::vec3(0.5,  0.5,  0.5),glm::vec2(1.0, 0.0),glm::vec3(0.f,1.f,0.f)),
-		Vertex(glm::vec3(-0.5,  0.5,  0.5),glm::vec2(0.0, 0.0),glm::vec3(0.f,1.f,0.f))
+		Vertex(glm::vec3(-0.5,  0.5, -0.5),glm::vec2(0.0, 1.0),glm::vec3(0.f,1.f,0.f),glm::vec3(0.f,0.f,1.f)),
+		Vertex(glm::vec3(0.5,  0.5, -0.5),glm::vec2(1.0, 1.0),glm::vec3(0.f,1.f,0.f),glm::vec3(0.f,0.f,1.f)),
+		Vertex(glm::vec3(0.5,  0.5,  0.5),glm::vec2(1.0, 0.0),glm::vec3(0.f,1.f,0.f),glm::vec3(0.f,0.f,1.f)),
+		Vertex(glm::vec3(-0.5,  0.5,  0.5),glm::vec2(0.0, 0.0),glm::vec3(0.f,1.f,0.f),glm::vec3(0.f,0.f,1.f))
 	};
 
 	std::vector<unsigned int> vecIndex
@@ -65,7 +65,7 @@ void CreatBoxNode(std::vector<std::shared_ptr<Node>>& vecNode, std::shared_ptr<R
 		spTransform->SetModelPan(cubePositions[i]);
 		spTransform->SetModelRotAixs(glm::vec3(1.0f, 0.3f, 0.5f));
 		spTransform->SetModelRotAngle(static_cast<float>(20 * i));
-		spTransform->SetModelRotUseTime();
+		//spTransform->SetModelRotUseTime();
 
 		auto spNode = std::make_shared<GeometryNode>(vecVertex, vecIndex, spRenderState, spTransform);
 		vecNode.push_back(spNode);
@@ -115,7 +115,7 @@ void CreatLightsNode(std::vector<std::shared_ptr<Node>>& vecNode,
 
 
 	std::vector<glm::vec3> pointLightPositions = {
-		glm::vec3(0.7f,0.2f,2.0f),
+		glm::vec3(0.7f,0.2f,3.0f),
 		glm::vec3(2.3f,-3.3f,-4.0f),
 		glm::vec3(-4.f,2.f,-12.f),
 		glm::vec3(0.f,0.f,-3.f)
@@ -125,7 +125,7 @@ void CreatLightsNode(std::vector<std::shared_ptr<Node>>& vecNode,
 	{
 		auto spTransform = std::make_shared<Transform>();
 		spTransform->SetModelPan(pointLightPositions[i]);
-		spTransform->SetModelScale(glm::vec3(0.2f));
+		spTransform->SetModelScale(glm::vec3(0.5f));
 		auto spNode = std::make_shared<GeometryNode>(vecVertex, vecIndex, spRenderState, spTransform);
 		vecNode.push_back(spNode);
 
@@ -134,6 +134,7 @@ void CreatLightsNode(std::vector<std::shared_ptr<Node>>& vecNode,
 		spPointLight->SetAmbient(glm::vec3(0.05f));
 		spPointLight->SetDiffuse(glm::vec3(0.8f));
 		spPointLight->SetSpecular(glm::vec3(1.f), 32.f);
+		spPointLight->SetColor(glm::vec3(1.f));
 		spPointLight->SetLightType(LightType::POINT_LIGHT);
 		vecLights.push_back(spPointLight);
 	}
@@ -144,15 +145,20 @@ void CreatLightsNode(std::vector<std::shared_ptr<Node>>& vecNode,
 	spDirLight->SetDiffuse(glm::vec4(0.4f));
 	spDirLight->SetSpecular(glm::vec3(0.5f), 32.f);
 	spDirLight->SetLightType(LightType::DIR_LIGHT);
+	spDirLight->SetColor(glm::vec3(1.f));
 	vecLights.push_back(spDirLight);
 
 	auto spSpotLight = std::make_shared<SpotLight>();
 	spSpotLight->SetAmbient(glm::vec3(0.f));
 	spSpotLight->SetDiffuse(glm::vec3(1.0f));
 	spSpotLight->SetSpecular(glm::vec3(1.f), 32.f);
+	spSpotLight->SetColor(glm::vec3(1.0f));
 	spSpotLight->SetLightType(LightType::SPOT_LIGHT);
 	vecLights.push_back(spSpotLight);
 }
+
+//#define COLOR
+#define TEXTURE
 
 int main()
 {
@@ -166,7 +172,14 @@ int main()
 	spScene->SetBackGround(glm::vec4(0.1, 0.1, 0.1, 1.0));
 
 	//绘制立方体
-	auto spLightingShader = std::make_shared<Shader>("../resources/shaders/light/light.vs", "../resources/shaders/light/light.fs");
+#ifdef COLOR
+	auto spLightingShader = std::make_shared<Shader>("../resources/shaders/light/light.vs", "../resources/shaders/light/light_color.fs");
+#endif // COLOR
+
+#ifdef TEXTURE
+	auto spLightingShader = std::make_shared<Shader>("../resources/shaders/light/light.vs", "../resources/shaders/light/light_texture.fs");
+#endif // TEXTURE
+
 	auto spTexture = std::make_shared<Texture>();
 	spTexture->AddTexture("../resources/textures/container2.png", DIFFUSE);
 	spTexture->AddTexture("../resources/textures/container2_specular.png", SPECULAR);

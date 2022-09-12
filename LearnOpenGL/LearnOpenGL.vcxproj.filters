@@ -136,10 +136,19 @@
     <None Include="..\resources\shaders\geometry\geometry.gs">
       <Filter>shader\geometry</Filter>
     </None>
-    <None Include="..\resources\shaders\light\light.fs">
+    <None Include="..\resources\shaders\light\light_texture.fs">
       <Filter>shader\light</Filter>
     </None>
     <None Include="..\resources\shaders\light\light.vs">
+      <Filter>shader\light</Filter>
+    </None>
+    <None Include="..\resources\shaders\light\light_cube.fs">
+      <Filter>shader\light</Filter>
+    </None>
+    <None Include="..\resources\shaders\light\light_cube.vs">
+      <Filter>shader\light</Filter>
+    </None>
+    <None Include="..\resources\shaders\light\light_color.fs">
       <Filter>shader\light</Filter>
     </None>
   </ItemGroup>
