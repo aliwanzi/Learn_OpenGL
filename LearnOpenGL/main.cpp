@@ -17,14 +17,18 @@ int main()
 	spScene->SetBackGround(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f));
 
 	auto spShader = std::make_shared<Shader>("../resources/shaders/model/vertex.vs", "../resources/shaders/model/fragment.fs");
-	auto spTexture = std::make_shared<Texture>();
-	auto spRenderState = std::make_shared<RenderState>(spShader, spTexture);
-	spRenderState->SetDepthTest(true);
-	spRenderState->SetDrawMode(DRAW_MODE::ELEMENT_MODE);
-	spRenderState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_MODE);
+	auto spCubeTexture = std::make_shared<Texture>();
+	spCubeTexture->AddTexture("resources/textures/marble.jpg", TextureType::DIFFUSE);
+
+	auto spCubeRenderState = std::make_shared<RenderState>(spShader, spCubeTexture);
+	spCubeRenderState->SetDepthTest(true);
+	spCubeRenderState->SetDrawMode(DRAW_MODE::ARRAY_MODE);
+	spCubeRenderState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_MODE);
 
 	auto spEntity = std::make_shared<Entity>();
-	auto spLightingRenderPass = std::make_shared<RenderPass>(spEntity, spRenderState);
+	auto spLightingRenderPass = std::make_shared<RenderPass>(spEntity, spCubeRenderState);
+
+
 	spEntity->AddMeshNode("../resources/objects/backpack/backpack.obj", spRenderState);
 
 	spScene->AddRenderPass(spLightingRenderPass);
