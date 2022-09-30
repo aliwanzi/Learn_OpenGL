@@ -6,8 +6,11 @@ RenderState::RenderState(std::shared_ptr<Shader>spShader, std::shared_ptr<Textur
 	m_bBlend(false),
 	m_iVertices(0),
 	m_bDepthTest(false),
+	m_bStencil(false),
 	m_spShader(spShader),
 	m_spTexture(spTexture),
+	m_spStencil(nullptr),
+	m_matModel(glm::mat4()),
 	m_ePolygonMode(POLYGON_MODE::FACE_MODE),
 	m_eDrawMode(DRAW_MODE::ELEMENT_MODE),
 	m_ePrimitiveMode(PRIMITIVE_MODE::POINTS_MODE)
@@ -20,14 +23,17 @@ RenderState::~RenderState()
 
 }
 
+void RenderState::EnableBlend(bool bBlend)
+{
+	m_bBlend = bBlend;
+}
 
 void RenderState::SetBlend(float fBlend)
 {
 	m_fBlend = fBlend;
-	m_bBlend = true;
 }
 
-void RenderState::SetDepthTest(bool bDepthTest)
+void RenderState::EnableDepthTest(bool bDepthTest)
 {
 	m_bDepthTest = bDepthTest;
 }
@@ -59,15 +65,25 @@ void RenderState::Use()
 
 void RenderState::ApplyState()
 {
-
 	if (m_bBlend)
 	{
 		m_spShader->SetFloat("mixValue", m_fBlend);
 	}
-	if (m_bDepthTest)
+	if (m_bStencil)
 	{
-		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_STENCIL_TEST);
+		glStencilOp(m_spStencil->SFail, m_spStencil->DpFail, m_spStencil->DpPass);
+		glStencilFunc(m_spStencil->SFunc, m_spStencil->RefValue, m_spStencil->Mask);
+		glStencilMask(m_spStencil->WriteMask);
 	}
+	else
+	{
+		glDisable(GL_STENCIL_TEST);
+		glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+	}
+
+	m_bDepthTest ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
+
 	switch (m_ePolygonMode)
 	{
 	case POLYGON_MODE::POINT_MODE:
@@ -82,6 +98,15 @@ void RenderState::ApplyState()
 	default:
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		break;
+	}
+}
+
+void RenderState::ApplyPostState()
+{
+	if (m_bStencil)
+	{
+		glStencilFunc(GL_ALWAYS, 0, 0xFF);
+		glStencilMask(0xFF);
 	}
 }
 
@@ -202,6 +227,26 @@ void RenderState::ApplyLights(std::shared_ptr<Camera> spCamera)
 			}
 		}
 	}
+}
+
+void RenderState::EnableStencil(bool bStencil)
+{
+	m_bStencil = bStencil;
+}
+
+void RenderState::SetStencil(std::shared_ptr<Stencil> spStencil)
+{
+	m_spStencil = spStencil;
+}
+
+std::shared_ptr<Stencil> RenderState::GetStencil() const
+{
+	return m_spStencil;
+}
+
+bool RenderState::IsEnableStencil() const
+{
+	return m_bStencil;
 }
 
 void RenderState::SetPatchVertices(int iVertices)

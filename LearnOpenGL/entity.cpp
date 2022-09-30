@@ -20,6 +20,7 @@ void Entity::DrawSelfAndChild()
 	{
 		child->Prender();
 		child->Draw();
+		child->PostRender();
 	}
 }
 

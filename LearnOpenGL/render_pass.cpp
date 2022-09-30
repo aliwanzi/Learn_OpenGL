@@ -18,4 +18,5 @@ void RenderPass::Apply(std::shared_ptr<Camera> spCamera)
 	m_spRenderState->ApplyTransform(spCamera);
 	m_spRenderState->ApplyLights(spCamera);
 	m_spEntity->DrawSelfAndChild();
+	m_spRenderState->ApplyPostState();
 }

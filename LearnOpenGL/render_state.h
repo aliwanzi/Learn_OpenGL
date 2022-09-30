@@ -29,6 +29,17 @@ enum PRIMITIVE_MODE
 	TRIANGLES_ADJACENCY_MODE
 };
 
+struct Stencil
+{
+	GLint WriteMask;
+	GLenum SFunc;
+	GLint RefValue;
+	GLuint Mask;
+	GLenum SFail;
+	GLenum DpFail;
+	GLenum DpPass;
+};
+
 
 class RenderState
 {
@@ -41,12 +52,20 @@ public:
 
 	void Use();
 	void ApplyState();
+	void ApplyPostState();
 	void ApplyTexture();
 	void ApplyTransform(std::shared_ptr<Camera>spCamera);
 	void ApplyLights(std::shared_ptr<Camera> spCamera);
 
+	void EnableStencil(bool bStencil);
+	void SetStencil(std::shared_ptr<Stencil> spStencil);
+	std::shared_ptr<Stencil> GetStencil()const;
+	bool IsEnableStencil()const;
+
+	void EnableBlend(bool bBlend);
 	void SetBlend(float fBlend);
-	void SetDepthTest(bool bDepthTest);
+
+	void EnableDepthTest(bool bDepthTest);
 
 	void SetTexture(std::shared_ptr<Texture>spTexture);
 	std::shared_ptr<Texture>& GetTexture();
@@ -69,6 +88,9 @@ private:
 	bool m_bBlend;
 
 	bool m_bDepthTest;
+
+	bool m_bStencil;
+	std::shared_ptr<Stencil> m_spStencil;
 
 	int m_iVertices;
 	POLYGON_MODE m_ePolygonMode;

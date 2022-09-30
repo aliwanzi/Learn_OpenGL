@@ -33,6 +33,7 @@ public:
 	void SetTransform(std::shared_ptr<Transform> spTransform);
 	virtual void Prender();
 	virtual void Draw();
+	virtual void PostRender();
 
 protected:
 

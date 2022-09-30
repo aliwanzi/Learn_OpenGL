@@ -69,6 +69,10 @@ void Node::Draw()
 	glActiveTexture(GL_TEXTURE0);
 }
 
+void Node::PostRender()
+{
+}
+
 void Node::SetVertexs(std::vector<Vertex>& vecVertexs)
 {
 	this->m_vecVertexs = vecVertexs;

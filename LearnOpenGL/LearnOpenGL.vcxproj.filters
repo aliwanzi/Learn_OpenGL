@@ -31,6 +31,9 @@
     <Filter Include="shader\model">
       <UniqueIdentifier>{68ccfcfa-060b-4c2b-af38-ec2aaefa99b5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shader\depth">
+      <UniqueIdentifier>{ddfd4fd7-6ed8-4391-bb71-65347b26b52f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="entity.h">
@@ -156,6 +159,15 @@
     </None>
     <None Include="..\resources\shaders\model\vertex.vs">
       <Filter>shader\model</Filter>
+    </None>
+    <None Include="..\resources\shaders\depth\fragment.fs">
+      <Filter>shader\depth</Filter>
+    </None>
+    <None Include="..\resources\shaders\depth\vertex.vs">
+      <Filter>shader\depth</Filter>
+    </None>
+    <None Include="..\resources\shaders\depth\board.fs">
+      <Filter>shader\depth</Filter>
     </None>
   </ItemGroup>
 </Project>

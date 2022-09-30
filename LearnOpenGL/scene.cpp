@@ -33,7 +33,7 @@ void Scene::Draw()
 	while (!glfwWindowShouldClose(pGLFWwindow))
 	{
 		glClearColor(m_vec4BackGround.r, m_vec4BackGround.g, m_vec4BackGround.b, m_vec4BackGround.a);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 		ProcessInput();
 		ProcessMatrix();
