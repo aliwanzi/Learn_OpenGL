@@ -34,6 +34,9 @@
     <Filter Include="shader\depth">
       <UniqueIdentifier>{ddfd4fd7-6ed8-4391-bb71-65347b26b52f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shader\blend">
+      <UniqueIdentifier>{baf52c3b-79ca-45c1-b55e-89b81fb2e34a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="entity.h">
@@ -168,6 +171,15 @@
     </None>
     <None Include="..\resources\shaders\depth\board.fs">
       <Filter>shader\depth</Filter>
+    </None>
+    <None Include="..\resources\shaders\blend\vertex.vs">
+      <Filter>shader\blend</Filter>
+    </None>
+    <None Include="..\resources\shaders\blend\grass.fs">
+      <Filter>shader\blend</Filter>
+    </None>
+    <None Include="..\resources\shaders\blend\window.fs">
+      <Filter>shader\blend</Filter>
     </None>
   </ItemGroup>
 </Project>

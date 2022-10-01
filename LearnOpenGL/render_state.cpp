@@ -2,11 +2,14 @@
 #include "render_state.h"
 
 RenderState::RenderState(std::shared_ptr<Shader>spShader, std::shared_ptr<Texture>spTexture /*= nullptr*/) :
-	m_fBlend(0.f),
 	m_bBlend(false),
+	m_spBlend(nullptr),
 	m_iVertices(0),
 	m_bDepthTest(false),
+	m_glDepthFunc(GL_LESS),
 	m_bStencil(false),
+	m_bCullFace(false),
+	m_spCullFace(nullptr),
 	m_spShader(spShader),
 	m_spTexture(spTexture),
 	m_spStencil(nullptr),
@@ -28,14 +31,29 @@ void RenderState::EnableBlend(bool bBlend)
 	m_bBlend = bBlend;
 }
 
-void RenderState::SetBlend(float fBlend)
+void RenderState::SetBlend(std::shared_ptr<Blend> spBlend)
 {
-	m_fBlend = fBlend;
+	m_spBlend = spBlend;
 }
 
 void RenderState::EnableDepthTest(bool bDepthTest)
 {
 	m_bDepthTest = bDepthTest;
+}
+
+void RenderState::SetDepthFunc(GLenum gDepthFunc)
+{
+	m_glDepthFunc = gDepthFunc;
+}
+
+void RenderState::EnableCullFace(bool bCull)
+{
+	m_bCullFace = bCull;
+}
+
+void RenderState::SetCullFace(std::shared_ptr<CullFace> spCullFace)
+{
+	m_spCullFace = spCullFace;
 }
 
 void RenderState::SetTexture(std::shared_ptr<Texture>spTexture)
@@ -67,8 +85,15 @@ void RenderState::ApplyState()
 {
 	if (m_bBlend)
 	{
-		m_spShader->SetFloat("mixValue", m_fBlend);
+		glEnable(GL_BLEND);
+		glBlendEquation(m_spBlend->BlendFunc);
+		glBlendFuncSeparate(m_spBlend->SRGB, m_spBlend->DRGB, m_spBlend->SAlpha, m_spBlend->DAlpha);
 	}
+	else
+	{
+		glDisable(GL_BLEND);
+	}
+
 	if (m_bStencil)
 	{
 		glEnable(GL_STENCIL_TEST);
@@ -82,7 +107,26 @@ void RenderState::ApplyState()
 		glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
 	}
 
-	m_bDepthTest ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
+	if (m_bCullFace)
+	{
+		glEnable(GL_CULL_FACE);
+		glCullFace(m_spCullFace->FaceMode);
+		glFrontFace(m_spCullFace->FaceOri);
+	}
+	else
+	{
+		glDisable(GL_CULL_FACE);
+	}
+
+	if (m_bDepthTest)
+	{
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(m_glDepthFunc);
+	}
+	else
+	{
+		glDisable(GL_DEPTH_TEST);
+	}
 
 	switch (m_ePolygonMode)
 	{
@@ -237,16 +281,6 @@ void RenderState::EnableStencil(bool bStencil)
 void RenderState::SetStencil(std::shared_ptr<Stencil> spStencil)
 {
 	m_spStencil = spStencil;
-}
-
-std::shared_ptr<Stencil> RenderState::GetStencil() const
-{
-	return m_spStencil;
-}
-
-bool RenderState::IsEnableStencil() const
-{
-	return m_bStencil;
 }
 
 void RenderState::SetPatchVertices(int iVertices)

@@ -178,6 +178,9 @@
     <ClCompile Include="transform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\resources\shaders\blend\grass.fs" />
+    <None Include="..\resources\shaders\blend\vertex.vs" />
+    <None Include="..\resources\shaders\blend\window.fs" />
     <None Include="..\resources\shaders\depth\board.fs" />
     <None Include="..\resources\shaders\depth\fragment.fs" />
     <None Include="..\resources\shaders\depth\vertex.vs" />

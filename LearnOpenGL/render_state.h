@@ -40,6 +40,20 @@ struct Stencil
 	GLenum DpPass;
 };
 
+struct  Blend
+{
+	GLenum SRGB;
+	GLenum DRGB;
+	GLenum SAlpha;
+	GLenum DAlpha;
+	GLenum BlendFunc;
+};
+
+struct CullFace
+{
+	GLenum FaceMode;
+	GLenum FaceOri;
+};
 
 class RenderState
 {
@@ -59,13 +73,15 @@ public:
 
 	void EnableStencil(bool bStencil);
 	void SetStencil(std::shared_ptr<Stencil> spStencil);
-	std::shared_ptr<Stencil> GetStencil()const;
-	bool IsEnableStencil()const;
 
 	void EnableBlend(bool bBlend);
-	void SetBlend(float fBlend);
+	void SetBlend(std::shared_ptr<Blend> spBlend);
 
 	void EnableDepthTest(bool bDepthTest);
+	void SetDepthFunc(GLenum gDepthFunc);
+
+	void EnableCullFace(bool bCull);
+	void SetCullFace(std::shared_ptr<CullFace> spCullFace);
 
 	void SetTexture(std::shared_ptr<Texture>spTexture);
 	std::shared_ptr<Texture>& GetTexture();
@@ -84,13 +100,17 @@ public:
 	void SetPolygonMode(POLYGON_MODE polygonMode);
 
 private:
-	float m_fBlend;
 	bool m_bBlend;
+	std::shared_ptr<Blend> m_spBlend;
 
 	bool m_bDepthTest;
+	GLenum m_glDepthFunc;
 
 	bool m_bStencil;
 	std::shared_ptr<Stencil> m_spStencil;
+
+	bool m_bCullFace;
+	std::shared_ptr<CullFace> m_spCullFace;
 
 	int m_iVertices;
 	POLYGON_MODE m_ePolygonMode;
