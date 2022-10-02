@@ -63,7 +63,7 @@ int main()
 	auto spCamera = std::make_shared<Camera>(glm::vec3(0.f, 10.f, 20.f));
 	auto spScene = std::make_shared<Scene>(spGLResource, spCamera);
 
-	auto spShader = std::make_shared<Shader>("../resources/shaders/model/vertex.vs", "../resources/shaders/model/fragment.fs");
+	auto spShader = std::make_shared<Shader>("../resources/shaders/skybox/vertex.vs", "../resources/shaders/skybox/fragment.fs");
 	auto spTexture = std::make_shared<Texture>();
 	auto spRenderState = std::make_shared<RenderState>(spShader, spTexture);
 	spRenderState->SetBackGround(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f));
@@ -88,7 +88,7 @@ int main()
 	};
 	auto spSkyTexture = std::make_shared<Texture>();
 	spSkyTexture->AddTexture(vecSkyPath);
-	auto spSkyShader = std::make_shared<Shader>("../resources/shaders/skybox/vertex.vs", "../resources/shaders/skybox/fragment.fs");
+	auto spSkyShader = std::make_shared<Shader>("../resources/shaders/skybox/skyvertex.vs", "../resources/shaders/skybox/skyfragment.fs");
 	auto spSkyRenderState = std::make_shared<RenderState>(spSkyShader, spSkyTexture);
 	spSkyRenderState->SetBackGround(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f));
 	spSkyRenderState->EnableDepthTest(true);

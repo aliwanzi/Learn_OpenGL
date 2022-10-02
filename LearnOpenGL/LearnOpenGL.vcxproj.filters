@@ -232,5 +232,11 @@
     <None Include="..\resources\shaders\skybox\vertex.vs">
       <Filter>shader\skybox</Filter>
     </None>
+    <None Include="..\resources\shaders\skybox\skyfragment.fs">
+      <Filter>shader\skybox</Filter>
+    </None>
+    <None Include="..\resources\shaders\skybox\skyvertex.vs">
+      <Filter>shader\skybox</Filter>
+    </None>
   </ItemGroup>
 </Project>

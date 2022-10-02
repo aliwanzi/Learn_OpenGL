@@ -2,13 +2,12 @@
 out vec4 FragColor;
 
 in VS_OUT {
-    vec3 texCoord;
+    vec2 texCoord;
 } fs_in;
 
-uniform samplerCube texture_cube_map1;
+uniform sampler2D texture_diffuse1;
 
 void main()
 {
-    //FragColor = vec4(1.0,0.0,0.0,0.0);
-    FragColor = texture(texture_cube_map1, fs_in.texCoord);
+    FragColor = texture(texture_diffuse1, fs_in.texCoord);
 }
