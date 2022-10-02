@@ -37,6 +37,9 @@
     <Filter Include="shader\blend">
       <UniqueIdentifier>{baf52c3b-79ca-45c1-b55e-89b81fb2e34a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shader\framebuffer">
+      <UniqueIdentifier>{8bb9d9cf-77f4-4838-8c33-484ea14427ed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="entity.h">
@@ -76,6 +79,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="mesh_node.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="framebuffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="common.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -120,6 +129,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="mesh_node.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="framebuffer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -180,6 +192,12 @@
     </None>
     <None Include="..\resources\shaders\blend\window.fs">
       <Filter>shader\blend</Filter>
+    </None>
+    <None Include="..\resources\shaders\framebuffer\fragment.fs">
+      <Filter>shader\framebuffer</Filter>
+    </None>
+    <None Include="..\resources\shaders\framebuffer\vertex.vs">
+      <Filter>shader\framebuffer</Filter>
     </None>
   </ItemGroup>
 </Project>

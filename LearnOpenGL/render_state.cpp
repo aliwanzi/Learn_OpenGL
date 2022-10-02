@@ -14,9 +14,13 @@ RenderState::RenderState(std::shared_ptr<Shader>spShader, std::shared_ptr<Textur
 	m_spTexture(spTexture),
 	m_spStencil(nullptr),
 	m_matModel(glm::mat4()),
+	m_spFrameBuffer(nullptr),
+	m_bFrameBuffer(false),
+	m_bClearFrameBuffer(false),
 	m_ePolygonMode(POLYGON_MODE::FACE_MODE),
 	m_eDrawMode(DRAW_MODE::ELEMENT_MODE),
-	m_ePrimitiveMode(PRIMITIVE_MODE::POINTS_MODE)
+	m_ePrimitiveMode(PRIMITIVE_MODE::POINTS_MODE),
+	m_vec4BackGround(glm::vec4(0.f))
 {
 
 }
@@ -64,6 +68,21 @@ void RenderState::SetTexture(std::shared_ptr<Texture>spTexture)
 std::shared_ptr<Texture>& RenderState::GetTexture()
 {
 	return m_spTexture;
+}
+
+void RenderState::EnableFrameBuffer(bool bFrameBuffer)
+{
+	m_bFrameBuffer = bFrameBuffer;
+}
+
+void RenderState::SetClearBuffer(bool bClearBuffer)
+{
+	m_bClearFrameBuffer = bClearBuffer;
+}
+
+void RenderState::SetFrameBuffer(std::shared_ptr<FrameBuffer> spFrameBuffer)
+{
+	m_spFrameBuffer = spFrameBuffer;
 }
 
 void RenderState::SetLights(const std::vector<std::shared_ptr<Light>>& vecLights)
@@ -145,12 +164,34 @@ void RenderState::ApplyState()
 	}
 }
 
+void RenderState::ApplyPreState()
+{
+	if (m_bFrameBuffer)
+	{
+		glBindFramebuffer(GL_FRAMEBUFFER, m_spFrameBuffer->GetFrameBuffer());
+	}
+	else
+	{
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+
+	if (m_bClearFrameBuffer)
+	{
+		glClearColor(m_vec4BackGround.r, m_vec4BackGround.g, m_vec4BackGround.b, m_vec4BackGround.a);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	}
+}
+
 void RenderState::ApplyPostState()
 {
 	if (m_bStencil)
 	{
 		glStencilFunc(GL_ALWAYS, 0, 0xFF);
 		glStencilMask(0xFF);
+	}
+	if (m_bFrameBuffer)
+	{
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 }
 
@@ -160,7 +201,7 @@ void RenderState::ApplyTexture()
 	{
 		return;
 	}
-	unsigned int diffuseNr(1), specularNr(1), normalNr(1), heightNr(1);
+	unsigned int diffuseNr(1), specularNr(1), normalNr(1), heightNr(1),cubeMap(1);
 	auto vecTextures = m_spTexture->GetTexures();
 	for (size_t i = 0; i < vecTextures.size(); i++)
 	{
@@ -192,11 +233,24 @@ void RenderState::ApplyTexture()
 			sName = "texture_height";
 			break;
 		}
+		case CUBEMAP:
+		{
+			sNumber = std::to_string(cubeMap++);
+			sName = "texture_cube_map";
+			break;
+		}
 		default:
 			break;
 		}
 		m_spShader->SetInt(sName + sNumber, i);
-		glBindTexture(GL_TEXTURE_2D, vecTextures[i].uiID);
+		if (vecTextures[i].eType == TextureType::CUBEMAP)
+		{
+			glBindTexture(GL_TEXTURE_CUBE_MAP, vecTextures[i].uiID);
+		}
+		else
+		{
+			glBindTexture(GL_TEXTURE_2D, vecTextures[i].uiID);
+		}
 	}
 }
 
@@ -316,6 +370,11 @@ PRIMITIVE_MODE RenderState::GetPrimitiveMode() const
 void RenderState::SetPolygonMode(POLYGON_MODE polygonMode)
 {
 	m_ePolygonMode = polygonMode;
+}
+
+void RenderState::SetBackGround(const glm::vec4& vec4BackGround)
+{
+	m_vec4BackGround = vec4BackGround;
 }
 
 void RenderState::SetModelMatrix(const glm::mat4& matModel)

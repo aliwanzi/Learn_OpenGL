@@ -6,7 +6,7 @@ namespace
 }
 
 Scene::Scene(std::shared_ptr<GLResource> spGLResource,std::shared_ptr<Camera> spCamera)
-	:m_spGLResource(spGLResource),m_spCamera(spCamera),m_vec4BackGround(glm::vec4(0.f))
+	:m_spGLResource(spGLResource),m_spCamera(spCamera)
 {
 	spGLResource->SetCamera(spCamera);
 }
@@ -21,20 +21,12 @@ Scene::~Scene()
 
 }
 
-void Scene::SetBackGround(const glm::vec4& vec4BackGround)
-{
-	m_vec4BackGround = vec4BackGround;
-}
-
 void Scene::Draw()
 {
 	auto pGLFWwindow = m_spGLResource->GetGLFWWindow();
 
 	while (!glfwWindowShouldClose(pGLFWwindow))
 	{
-		glClearColor(m_vec4BackGround.r, m_vec4BackGround.g, m_vec4BackGround.b, m_vec4BackGround.a);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
 		ProcessInput();
 		ProcessMatrix();
 		for (auto& iter : m_vecRenderPass)

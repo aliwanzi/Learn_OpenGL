@@ -1,10 +1,11 @@
 #pragma once
-#include "glm/glm.hpp"
+#include "common.h"
 #include "shader.h"
 #include "texture.h"
 #include "camera.h"
 #include "transform.h"
 #include "light.h"
+#include "framebuffer.h"
 
 enum POLYGON_MODE
 {
@@ -66,6 +67,7 @@ public:
 
 	void Use();
 	void ApplyState();
+	void ApplyPreState();
 	void ApplyPostState();
 	void ApplyTexture();
 	void ApplyTransform(std::shared_ptr<Camera>spCamera);
@@ -86,6 +88,10 @@ public:
 	void SetTexture(std::shared_ptr<Texture>spTexture);
 	std::shared_ptr<Texture>& GetTexture();
 
+	void EnableFrameBuffer(bool bFrameBuffer);
+	void SetFrameBuffer(std::shared_ptr<FrameBuffer> spFrameBuffer);
+	void SetClearBuffer(bool bClearBuffer);
+
 	void SetModelMatrix(const glm::mat4& matModel);
 
 	void SetPatchVertices(int iVertices);
@@ -99,7 +105,11 @@ public:
 
 	void SetPolygonMode(POLYGON_MODE polygonMode);
 
+	void SetBackGround(const glm::vec4& vec4BackGround);
 private:
+
+	glm::vec4 m_vec4BackGround;
+
 	bool m_bBlend;
 	std::shared_ptr<Blend> m_spBlend;
 
@@ -122,4 +132,8 @@ private:
 	std::shared_ptr<Shader> m_spShader;
 	std::shared_ptr<Texture> m_spTexture;
 	std::vector<std::shared_ptr<Light>> m_vecLights;
+
+	bool m_bFrameBuffer;
+	bool m_bClearFrameBuffer;
+	std::shared_ptr<FrameBuffer> m_spFrameBuffer;
 };

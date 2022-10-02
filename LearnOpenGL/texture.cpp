@@ -14,12 +14,26 @@ Texture::~Texture()
 
 }
 
-void Texture::AddTexture(const char* pcPath, TextureType eType, bool bflip /*= false*/, bool gamma /*= false*/)
+void Texture::AddTexture(const TextureStruct& texture)
+{
+	m_vecTextures.push_back(texture);
+}
+
+void Texture::AddTexture(const std::string& sPath, TextureType eType, bool bflip /*= false*/, bool gamma /*= false*/)
 {
 	TextureStruct texture;
-	texture.sPath = std::string(pcPath);
-	texture.uiID = TextureFromFile(pcPath,bflip, gamma);
+	texture.sPath = sPath;
+	texture.uiID = TextureFromFile(sPath,bflip, gamma);
 	texture.eType = eType;
+	m_vecTextures.push_back(texture);
+}
+
+void Texture::AddTexture(std::vector<std::string>& vecCubeMap)
+{
+	TextureStruct texture;
+	texture.sPath = "";
+	texture.uiID = TextureFromCube(vecCubeMap);
+	texture.eType = TextureType::CUBEMAP;
 	m_vecTextures.push_back(texture);
 }
 
@@ -28,14 +42,14 @@ const std::vector<TextureStruct>& Texture::GetTexures()const
 	return m_vecTextures;
 }
 
-unsigned int Texture::TextureFromFile(const char* pcPath, bool bflip, bool gamma)
+unsigned int Texture::TextureFromFile(const std::string& sPath, bool bflip, bool gamma)
 {
 	unsigned int uiID;
 	glGenTextures(1, &uiID);
 
 	int iWidth(0), iHeight(0), iComponent(0);
 	stbi_set_flip_vertically_on_load(bflip);
-	unsigned char* pImageData = stbi_load(pcPath, &iWidth, &iHeight, &iComponent, 0);
+	unsigned char* pImageData = stbi_load(sPath.c_str(), &iWidth, &iHeight, &iComponent, 0);
 	if (pImageData != nullptr)
 	{
 		GLenum eFormat(GL_RED);
@@ -73,9 +87,37 @@ unsigned int Texture::TextureFromFile(const char* pcPath, bool bflip, bool gamma
 	}
 	else
 	{
-		std::cout << "Texture failed to load at path:" << pcPath << std::endl;
+		std::cout << "Texture failed to load at path:" << sPath << std::endl;
 		stbi_image_free(pImageData);
 	}
 
+	return uiID;
+}
+
+unsigned int Texture::TextureFromCube(std::vector<std::string>& vecCubeMap)
+{
+	unsigned int uiID;
+	glGenTextures(1, &uiID);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, uiID);
+
+	int iWidth(0), iHeight(0), iComponent(0);
+	for (unsigned int i = 0; i < vecCubeMap.size(); i++)
+	{
+		unsigned char* pImageData = stbi_load(vecCubeMap[i].c_str(), &iWidth, &iHeight, &iComponent, 0);
+		if (pImageData)
+		{
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, iWidth, iHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, pImageData);
+		}
+		else
+		{
+			std::cout << "Texture failed to load at path:" << vecCubeMap[i] << std::endl;
+			stbi_image_free(pImageData);
+		}
+	}
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 	return uiID;
 }

@@ -1,7 +1,5 @@
 #pragma once
-#include "glm/glm.hpp"
-#include <vector>
-#include <string>
+#include "common.h"
 #include "render_state.h"
 #include "transform.h"
 

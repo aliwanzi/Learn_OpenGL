@@ -85,14 +85,14 @@ void CreatPlaneNode(std::vector<std::shared_ptr<Node>>& vecNode, std::shared_ptr
 	vecNode.push_back(spNode);
 }
 
-void CreatGrassNode(std::vector<std::shared_ptr<Node>>& vecNode, std::shared_ptr<RenderState> spRenderState)
+void CreatScreenNode(std::vector<std::shared_ptr<Node>>& vecNode, std::shared_ptr<RenderState> spRenderState)
 {
 	std::vector<Vertex> vecVertex
 	{
-		Vertex(glm::vec3(0.0,  0.5, 0.0),glm::vec2(0.0, 0.0)),//0
-		Vertex(glm::vec3(0.0, -0.5, 0.0),glm::vec2(0.0, 1.0)),//1
-		Vertex(glm::vec3(1.0, -0.5, 0.0),glm::vec2(1.0, 1.0)),//2
-		Vertex(glm::vec3(1.0,  0.5, 0.0),glm::vec2(1.0, 0.0)),//3
+		Vertex(glm::vec3(-1.0, 1.0, 0.0),glm::vec2(0.0, 1.0)),//0
+		Vertex(glm::vec3(-1.0, -1.0, 0.0),glm::vec2(0.0, 0.0)),//1
+		Vertex(glm::vec3(1.0, -1.0, 0.0),glm::vec2(1.0, 0.0)),//2
+		Vertex(glm::vec3(1.0, 1.0, 0.0),glm::vec2(1.0, 1.0)),//3
 	};
 
 	std::vector<unsigned int> vecIndex
@@ -100,63 +100,9 @@ void CreatGrassNode(std::vector<std::shared_ptr<Node>>& vecNode, std::shared_ptr
 		0,1,2,0,2,3
 	};
 
-	std::vector<glm::vec3> vecPosition
-	{
-		glm::vec3(-1.5f, 0.0f, -0.48f),
-		glm::vec3(1.5f, 0.0f, 0.51f),
-		glm::vec3(0.0f, 0.0f, 0.7f),
-		glm::vec3(-0.3f, 0.0f, -2.3f),
-		glm::vec3(0.5f, 0.0f, -0.6f)
-	};
-
-	for (int i = 0; i < vecPosition.size(); i++)
-	{
-		auto spTransform = std::make_shared<Transform>();
-		spTransform->SetModelPan(vecPosition[i]);
-		auto spNode = std::make_shared<GeometryNode>(vecVertex, vecIndex, spRenderState, spTransform);
-		vecNode.push_back(spNode);
-	}
-}
-
-void CreatWindowNode(std::vector<std::shared_ptr<Node>>& vecNode, std::shared_ptr<RenderState> spRenderState,
-	const glm::vec3& camera)
-{
-	std::vector<Vertex> vecVertex
-	{
-		Vertex(glm::vec3(0.0,  0.5, 0.0),glm::vec2(0.0, 0.0)),//0
-		Vertex(glm::vec3(0.0, -0.5, 0.0),glm::vec2(0.0, 1.0)),//1
-		Vertex(glm::vec3(1.0, -0.5, 0.0),glm::vec2(1.0, 1.0)),//2
-		Vertex(glm::vec3(1.0,  0.5, 0.0),glm::vec2(1.0, 0.0)),//3
-	};
-
-	std::vector<unsigned int> vecIndex
-	{
-		0,1,2,0,3,2
-	};
-
-	std::vector<glm::vec3> vecPosition
-	{
-		glm::vec3(-1.5f, 0.0f, -0.18f),
-		glm::vec3(1.5f, 0.0f, 0.81f),
-		glm::vec3(0.0f, 0.0f, 1.0f),
-		glm::vec3(-0.3f, 0.0f, -2.0f),
-		glm::vec3(0.5f, 0.0f, -0.3f)
-	};
-
-	std::map<float, glm::vec3> sorted;
-	for (unsigned int i = 0; i < vecPosition.size(); i++)
-	{
-		float distance = glm::length(camera - vecPosition[i]);
-		sorted[distance] = vecPosition[i];
-	}
-
-	for (auto iter = sorted.rbegin(); iter != sorted.rend(); iter++)
-	{
-		auto spTransform = std::make_shared<Transform>();
-		spTransform->SetModelPan(iter->second);
-		auto spNode = std::make_shared<GeometryNode>(vecVertex, vecIndex, spRenderState, spTransform);
-		vecNode.push_back(spNode);
-	}
+	auto spTransform = std::make_shared<Transform>();
+	auto spNode = std::make_shared<GeometryNode>(vecVertex, vecIndex, spRenderState, spTransform);
+	vecNode.push_back(spNode);
 }
 
 int main()
@@ -168,7 +114,11 @@ int main()
 
 	auto spCamera = std::make_shared<Camera>(glm::vec3(0.f, 0.f, 3.f));
 	auto spScene = std::make_shared<Scene>(spGLResource, spCamera);
-	spScene->SetBackGround(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f));
+
+	auto spFrameBufferInfo = std::make_shared<FrameBufferInfo>();
+	spFrameBufferInfo->Width = SCR_WIDTH;
+	spFrameBufferInfo->Height = SCR_HEIGHT;
+	auto spFrameBuffer = std::make_shared<FrameBuffer>(spFrameBufferInfo);
 
 	auto spShader = std::make_shared<Shader>("../resources/shaders/depth/vertex.vs",
 		"../resources/shaders/depth/fragment.fs");
@@ -177,9 +127,16 @@ int main()
 	spPlaneTexture->AddTexture("../resources/textures/metal.png", TextureType::DIFFUSE);
 
 	auto spPlaneRenderState = std::make_shared<RenderState>(spShader, spPlaneTexture);
+	spPlaneRenderState->SetBackGround(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f));
 	spPlaneRenderState->EnableDepthTest(true);
-	spPlaneRenderState->SetDrawMode(DRAW_MODE::ELEMENT_MODE);
+	//spPlaneRenderState->SetDrawMode(DRAW_MODE::ELEMENT_MODE);
+	spPlaneRenderState->SetDrawMode(DRAW_MODE::ARRAY_MODE);
 	spPlaneRenderState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_MODE);
+
+	spPlaneRenderState->EnableFrameBuffer(true);
+	spPlaneRenderState->SetFrameBuffer(spFrameBuffer);
+	spPlaneRenderState->SetClearBuffer(true);
+	//spPlaneRenderState->SetPolygonMode(POLYGON_MODE::POINT_MODE);
 
 	auto spPlaneEntity = std::make_shared<Entity>();
 	auto spPalneRenderPass = std::make_shared<RenderPass>(spPlaneEntity, spPlaneRenderState);
@@ -191,23 +148,16 @@ int main()
 	}
 
 	auto spCubeTexture = std::make_shared<Texture>();
-	spCubeTexture->AddTexture("../resources/textures/marble.jpg", TextureType::DIFFUSE);
+	spCubeTexture->AddTexture("../resources/textures/container.jpg", TextureType::DIFFUSE);
 
 	auto spCubeRenderState = std::make_shared<RenderState>(spShader, spCubeTexture);
-	auto spCubeStencil = std::make_shared<Stencil>();
-	spCubeStencil->WriteMask = 0xFF;
-	spCubeStencil->SFunc = GL_ALWAYS;
-	spCubeStencil->RefValue = 1;
-	spCubeStencil->Mask = 0xFF;
-	spCubeStencil->SFail = GL_KEEP;
-	spCubeStencil->DpFail = GL_KEEP;
-	spCubeStencil->DpPass = GL_REPLACE;
-	spCubeRenderState->EnableStencil(true);
-	spCubeRenderState->SetStencil(spCubeStencil);
-
 	spCubeRenderState->EnableDepthTest(true);
-	spCubeRenderState->SetDrawMode(DRAW_MODE::ELEMENT_MODE);
+	//spCubeRenderState->SetDrawMode(DRAW_MODE::ELEMENT_MODE);
+	spCubeRenderState->SetDrawMode(DRAW_MODE::ARRAY_MODE);
 	spCubeRenderState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_MODE);
+	spCubeRenderState->EnableFrameBuffer(true);
+	spCubeRenderState->SetFrameBuffer(spFrameBuffer);
+	spCubeRenderState->SetPolygonMode(POLYGON_MODE::POINT_MODE);
 
 	auto spCubeEntity = std::make_shared<Entity>();
 	auto spCubeRenderPass = std::make_shared<RenderPass>(spCubeEntity, spCubeRenderState);
@@ -218,91 +168,32 @@ int main()
 		spCubeEntity->AddGeometryNode(vecCubeNode[i]);
 	}
 
-	auto spBoardShader = std::make_shared<Shader>("../resources/shaders/depth/vertex.vs",
-		"../resources/shaders/depth/board.fs");
-	auto spBoardCubeTexture = std::make_shared<Texture>();
-	auto spBoardRenderState = std::make_shared<RenderState>(spBoardShader, spBoardCubeTexture);
-	auto spBoardStencil = std::make_shared<Stencil>();
-	spBoardStencil->WriteMask = 0x00;
-	spBoardStencil->SFunc = GL_NOTEQUAL;
-	spBoardStencil->RefValue = 1;
-	spBoardStencil->Mask = 0xFF;
-	spBoardStencil->SFail = GL_KEEP;
-	spBoardStencil->DpFail = GL_KEEP;
-	spBoardStencil->DpPass = GL_REPLACE;
-	spBoardRenderState->EnableStencil(true);
-	spBoardRenderState->SetStencil(spBoardStencil);
-	spBoardRenderState->EnableDepthTest(false);
-	spBoardRenderState->SetDrawMode(DRAW_MODE::ELEMENT_MODE);
-	spBoardRenderState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_MODE);
-	auto spBoardEntity = std::make_shared<Entity>();
-	auto spBoardRenderPass = std::make_shared<RenderPass>(spBoardEntity, spBoardRenderState);
-	std::vector<std::shared_ptr<Node>> vecBoardNode;
-	CreatCubeNode(vecBoardNode, spBoardRenderState, true);
-	for (size_t i = 0; i < vecBoardNode.size(); i++)
+	auto spScreenTexture = std::make_shared<Texture>();
+	TextureStruct texture;
+	texture.uiID = spFrameBuffer->GetColorAttachment();
+	texture.eType = TextureType::DIFFUSE;
+	texture.sPath = "";
+	spScreenTexture->AddTexture(texture);
+
+	auto spFrameShader = std::make_shared<Shader>("../resources/shaders/framebuffer/vertex.vs",
+	"../resources/shaders/framebuffer/fragment.fs");
+	auto spScreenRenderState = std::make_shared<RenderState>(spFrameShader, spScreenTexture);
+	spScreenRenderState->SetDrawMode(DRAW_MODE::ELEMENT_MODE);
+	spScreenRenderState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_MODE);
+	spScreenRenderState->SetClearBuffer(true);
+
+	auto spScreenEntity = std::make_shared<Entity>();
+	auto spScreenRenderPass = std::make_shared<RenderPass>(spScreenEntity, spScreenRenderState);
+	std::vector<std::shared_ptr<Node>> vecScreenNode;
+	CreatScreenNode(vecScreenNode, spScreenRenderState);
+	for (size_t i = 0; i < vecScreenNode.size(); i++)
 	{
-		spBoardEntity->AddGeometryNode(vecBoardNode[i]);
-	}
-
-	auto spGrassShader = std::make_shared<Shader>("../resources/shaders/blend/vertex.vs",
-		"../resources/shaders/blend/grass.fs");
-	auto spGrassTexture = std::make_shared<Texture>();
-	spGrassTexture->AddTexture("../resources/textures/grass.png", TextureType::DIFFUSE);
-
-	auto spGrassRenderState = std::make_shared<RenderState>(spGrassShader, spGrassTexture);
-	spGrassRenderState->EnableDepthTest(true);
-	spGrassRenderState->SetDrawMode(DRAW_MODE::ELEMENT_MODE);
-	spGrassRenderState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_MODE);
-
-	auto spGrassEntity = std::make_shared<Entity>();
-	auto spGrassRenderPass = std::make_shared<RenderPass>(spGrassEntity, spGrassRenderState);
-	std::vector<std::shared_ptr<Node>> vecGrassNode;
-	CreatGrassNode(vecGrassNode, spGrassRenderState);
-	for (size_t i = 0; i < vecGrassNode.size(); i++)
-	{
-		spGrassEntity->AddGeometryNode(vecGrassNode[i]);
-	}
-
-	auto spWindowShader = std::make_shared<Shader>("../resources/shaders/blend/vertex.vs",
-		"../resources/shaders/blend/window.fs");
-	auto spWindowTexture = std::make_shared<Texture>();
-	spWindowTexture->AddTexture("../resources/textures/window.png", TextureType::DIFFUSE);
-
-	auto spWindowRenderState = std::make_shared<RenderState>(spWindowShader, spWindowTexture);
-	spWindowRenderState->EnableDepthTest(true);
-	spWindowRenderState->SetDrawMode(DRAW_MODE::ELEMENT_MODE);
-	spWindowRenderState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_MODE);
-	auto spBlend = std::make_shared<Blend>();
-	spBlend->SRGB = GL_SRC_ALPHA;
-	spBlend->DRGB = GL_ONE_MINUS_SRC_ALPHA;
-	spBlend->SAlpha = GL_ONE;
-	spBlend->DAlpha = GL_ZERO;
-	spBlend->BlendFunc = GL_FUNC_ADD;
-
-	spWindowRenderState->EnableBlend(true);
-	spWindowRenderState->SetBlend(spBlend);
-
-	auto spCullFace = std::make_shared<CullFace>();
-	spCullFace->FaceMode = GL_BACK;
-	spCullFace->FaceOri = GL_CCW;
-	spWindowRenderState->EnableCullFace(true);
-	spWindowRenderState->SetCullFace(spCullFace);
-
-	auto spWindowEntity = std::make_shared<Entity>();
-	auto spWindowRenderPass = std::make_shared<RenderPass>(spWindowEntity, spWindowRenderState);
-	std::vector<std::shared_ptr<Node>> vecWindowNode;
-	CreatWindowNode(vecWindowNode, spWindowRenderState,spCamera->GetEye());
-
-	for (size_t i = 0; i < vecWindowNode.size(); i++)
-	{
-		spWindowEntity->AddGeometryNode(vecWindowNode[i]);
+		spScreenEntity->AddGeometryNode(vecScreenNode[i]);
 	}
 
 	spScene->AddRenderPass(spPalneRenderPass);
 	spScene->AddRenderPass(spCubeRenderPass);
-	spScene->AddRenderPass(spBoardRenderPass);
-	spScene->AddRenderPass(spGrassRenderPass);
-	spScene->AddRenderPass(spWindowRenderPass);
+	spScene->AddRenderPass(spScreenRenderPass);
 
 	spScene->Draw();
 }
