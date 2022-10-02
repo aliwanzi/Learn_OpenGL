@@ -23,7 +23,8 @@ RenderState::RenderState(std::shared_ptr<Shader>spShader, std::shared_ptr<Textur
 	m_vec4BackGround(glm::vec4(0.f)),
 	m_spUniformBuffer(nullptr),
 	m_bUniformBuffer(false),
-	m_bUpdateUniformBuffer(true)
+	m_bUpdateUniformBuffer(true),
+	m_bSkyBox(false)
 {
 
 }
@@ -211,64 +212,9 @@ void RenderState::ApplyPostState()
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
-}
-
-void RenderState::ApplyTexture()
-{
-	if (m_spTexture == nullptr)
+	if (m_glDepthFunc != GL_LESS)
 	{
-		return;
-	}
-	unsigned int diffuseNr(1), specularNr(1), normalNr(1), heightNr(1),cubeMap(1);
-	auto vecTextures = m_spTexture->GetTexures();
-	for (size_t i = 0; i < vecTextures.size(); i++)
-	{
-		glActiveTexture(GL_TEXTURE0 + i);
-		std::string sNumber(""), sName("");
-		switch (vecTextures[i].eType)
-		{
-		case DIFFUSE:
-		{
-			sNumber = std::to_string(diffuseNr++);
-			sName = "texture_diffuse";
-			break;
-		}
-		case SPECULAR:
-		{
-			sNumber = std::to_string(specularNr++);
-			sName = "texture_specular";
-			break;
-		}
-		case NORMAL:
-		{
-			sNumber = std::to_string(normalNr++);
-			sName = "texture_normal";
-			break;
-		}
-		case HEIGHT:
-		{
-			sNumber = std::to_string(heightNr++);
-			sName = "texture_height";
-			break;
-		}
-		case CUBEMAP:
-		{
-			sNumber = std::to_string(cubeMap++);
-			sName = "texture_cube_map";
-			break;
-		}
-		default:
-			break;
-		}
-		m_spShader->SetInt(sName + sNumber, i);
-		if (vecTextures[i].eType == TextureType::CUBEMAP)
-		{
-			glBindTexture(GL_TEXTURE_CUBE_MAP, vecTextures[i].uiID);
-		}
-		else
-		{
-			glBindTexture(GL_TEXTURE_2D, vecTextures[i].uiID);
-		}
+		glDepthFunc(GL_LESS);
 	}
 }
 
@@ -279,14 +225,30 @@ void RenderState::ApplyTransform(std::shared_ptr<Camera>spCamera)
 		if (m_bUpdateUniformBuffer)
 		{
 			glBindBuffer(GL_UNIFORM_BUFFER, m_spUniformBuffer->GetUniformBuffer());
-			glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(spCamera->GetViewMatrix()));
+			if (m_bSkyBox)
+			{
+				glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(spCamera->GetViewMatrixRemoveTranslate()));
+			}
+			else
+			{
+				glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(spCamera->GetViewMatrix()));
+			}
+
 			glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(spCamera->GetProjectionMatrix()));
 			glBindBuffer(GL_UNIFORM_BUFFER, 0);
 		}
 	}
 	else
 	{
-		m_spShader->SetMat4("matView", spCamera->GetViewMatrix());
+		if (m_bSkyBox)
+		{
+			m_spShader->SetMat4("matView", spCamera->GetViewMatrixRemoveTranslate());
+		}
+		else
+		{
+			m_spShader->SetMat4("matView", spCamera->GetViewMatrix());
+		}
+		
 		m_spShader->SetMat4("matProjection", spCamera->GetProjectionMatrix());
 	}
 }
@@ -421,6 +383,16 @@ void RenderState::UpdateUniformBuffer(bool bUpdate)
 void RenderState::SetUniformBuffer(std::shared_ptr<UniformBuffer> spUniformBuffer)
 {
 	m_spUniformBuffer = spUniformBuffer;
+}
+
+std::shared_ptr<Shader> RenderState::GetShader() const
+{
+	return m_spShader;
+}
+
+void RenderState::SetDrawSkyBox(bool bSkyBox)
+{
+	m_bSkyBox = bSkyBox;
 }
 
 void RenderState::SetModelMatrix(const glm::mat4& matModel)

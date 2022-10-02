@@ -43,6 +43,9 @@
     <Filter Include="shader\uniformbuffer">
       <UniqueIdentifier>{1f5a6a71-7ebd-40cd-ad7a-0bce454ba0fe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shader\skybox">
+      <UniqueIdentifier>{1ec33561-797c-4f42-af59-7bc677867299}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="entity.h">
@@ -222,6 +225,12 @@
     </None>
     <None Include="..\resources\shaders\uniformbuffer\yellow.fs">
       <Filter>shader\uniformbuffer</Filter>
+    </None>
+    <None Include="..\resources\shaders\skybox\fragment.fs">
+      <Filter>shader\skybox</Filter>
+    </None>
+    <None Include="..\resources\shaders\skybox\vertex.vs">
+      <Filter>shader\skybox</Filter>
     </None>
   </ItemGroup>
 </Project>

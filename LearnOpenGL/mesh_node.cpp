@@ -72,17 +72,20 @@ void MeshNode::LoadMaterialTextures(std::shared_ptr<Texture>&spTexture, aiMateri
 		aiMat->GetTexture(aiTexture, i,&path);
 		std::string sPath = strPath + "/" + path.C_Str();
 		bool skip(false);
-		for (unsigned int j = 0; j < spTexture->GetTexures().size(); j++)
+		auto& mapTextures = spTexture->GetTexures();
+		for (auto iter = mapTextures.begin(); iter != mapTextures.end(); iter++)
 		{
-			if (std::strcmp(spTexture->GetTexures()[j].sPath.data(), sPath.c_str()) == 0)
+			if (std::strcmp(iter->second->sPath.data(), sPath.c_str()) == 0)
 			{
 				skip = true;
+				m_vecTexture.push_back(iter->second->uiID);
 				break;
 			}
 		}
 		if (!skip)
 		{
-			spTexture->AddTexture(sPath.c_str(), eTextureType, true);
+			GLuint texture = spTexture->AddTexture(sPath.c_str(), eTextureType, true);
+			m_vecTexture.push_back(texture);
 		}
 	}
 }

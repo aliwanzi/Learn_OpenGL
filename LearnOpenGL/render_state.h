@@ -70,7 +70,6 @@ public:
 	void ApplyState();
 	void ApplyPreState();
 	void ApplyPostState();
-	void ApplyTexture();
 	void ApplyTransform(std::shared_ptr<Camera>spCamera);
 	void ApplyLights(std::shared_ptr<Camera> spCamera);
 
@@ -111,6 +110,10 @@ public:
 	void EnableUniformBuffer(bool bUniformBuffer);
 	void UpdateUniformBuffer(bool bUpdate);
 	void SetUniformBuffer(std::shared_ptr<UniformBuffer> spUniformBuffer);
+
+	std::shared_ptr<Shader> GetShader()const;
+
+	void SetDrawSkyBox(bool bSkyBox);
 private:
 
 	glm::vec4 m_vec4BackGround;
@@ -145,4 +148,6 @@ private:
 	std::shared_ptr<UniformBuffer> m_spUniformBuffer;
 	bool m_bUniformBuffer;
 	bool m_bUpdateUniformBuffer;
+
+	bool m_bSkyBox;
 };

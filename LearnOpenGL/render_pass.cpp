@@ -14,7 +14,6 @@ void RenderPass::Apply(std::shared_ptr<Camera> spCamera)
 {
 	m_spRenderState->Use();
 	m_spRenderState->ApplyState();
-	m_spRenderState->ApplyTexture();
 	m_spRenderState->ApplyTransform(spCamera);
 	m_spRenderState->ApplyLights(spCamera);
 	m_spRenderState->ApplyPreState();

@@ -21,27 +21,9 @@ Node::~Node()
 
 void Node::Prender()
 {
-	if (m_spTransform != nullptr)
-	{
-		if (m_spTransform->GetModelRotUseTime())
-		{
-			auto rotAngel = static_cast<float>(glm::degrees(glfwGetTime()));
-			m_spTransform->SetModelRotAngle(rotAngel);
-		}
-
-		if (m_spTransform->GetModelScalUseTime())
-		{
-			auto scaleAmount = static_cast<float>(sin(glfwGetTime()));
-			m_spTransform->SetModelScale(glm::vec3(scaleAmount, scaleAmount, scaleAmount));
-		}
-		m_spRenderState->SetModelMatrix(m_spTransform->GetModelMatrix());
-	}
-	else
-	{
-		m_spRenderState->SetModelMatrix(glm::mat4(1.0));
-	}
+	ApplyTexture();
+	ApplyTransform();
 }
-
 
 void Node::Draw()
 {
@@ -71,6 +53,89 @@ void Node::Draw()
 
 void Node::PostRender()
 {
+}
+
+void Node::ApplyTexture()
+{
+	unsigned int diffuseNr(1), specularNr(1), normalNr(1), heightNr(1), cubeMap(1);
+	auto mapTextures = m_spRenderState->GetTexture()->GetTexures();
+	for (size_t i = 0; i < m_vecTexture.size(); i++)
+	{
+		auto iter = mapTextures.find(m_vecTexture[i]);
+		if (iter!=mapTextures.end())
+		{
+			glActiveTexture(GL_TEXTURE0 + i);
+			std::string sNumber(""), sName("");
+			switch (iter->second->eType)
+			{
+			case DIFFUSE:
+			{
+				sNumber = std::to_string(diffuseNr++);
+				sName = "texture_diffuse";
+				break;
+			}
+			case SPECULAR:
+			{
+				sNumber = std::to_string(specularNr++);
+				sName = "texture_specular";
+				break;
+			}
+			case NORMAL:
+			{
+				sNumber = std::to_string(normalNr++);
+				sName = "texture_normal";
+				break;
+			}
+			case HEIGHT:
+			{
+				sNumber = std::to_string(heightNr++);
+				sName = "texture_height";
+				break;
+			}
+			case CUBEMAP:
+			{
+				sNumber = std::to_string(cubeMap++);
+				sName = "texture_cube_map";
+				break;
+			}
+			default:
+				break;
+			}
+			auto spShader = m_spRenderState->GetShader();
+			spShader->SetInt(sName + sNumber, i);
+			if (iter->second->eType == TextureType::CUBEMAP)
+			{
+				glBindTexture(GL_TEXTURE_CUBE_MAP, iter->second->uiID);
+			}
+			else
+			{
+				glBindTexture(GL_TEXTURE_2D, iter->second->uiID);
+			}
+		}
+	}
+}
+
+void Node::ApplyTransform()
+{
+	if (m_spTransform != nullptr)
+	{
+		if (m_spTransform->GetModelRotUseTime())
+		{
+			auto rotAngel = static_cast<float>(glm::degrees(glfwGetTime()));
+			m_spTransform->SetModelRotAngle(rotAngel);
+		}
+
+		if (m_spTransform->GetModelScalUseTime())
+		{
+			auto scaleAmount = static_cast<float>(sin(glfwGetTime()));
+			m_spTransform->SetModelScale(glm::vec3(scaleAmount, scaleAmount, scaleAmount));
+		}
+		m_spRenderState->SetModelMatrix(m_spTransform->GetModelMatrix());
+	}
+	else
+	{
+		m_spRenderState->SetModelMatrix(glm::mat4(1.0));
+	}
 }
 
 void Node::SetVertexs(std::vector<Vertex>& vecVertexs)

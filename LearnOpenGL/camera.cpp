@@ -3,10 +3,15 @@
 
 Camera::Camera(glm::vec3 vec3Eye, float fYaw /*= -90.f*/, float fPicth /*= 0.0f*/) :
 	m_vec3Eye(vec3Eye), m_fYaw(fYaw), m_fPitch(fPicth),
-	m_fMovementSpeed(2.5f), m_fMouseSensitivity(0.1f), m_fZoom(45.0f),
+	m_fMovementSpeed(5.0f), m_fMouseSensitivity(0.1f), m_fZoom(45.0f),
 	m_iWidth(0.f), m_iHeight(0.f), m_bUseViewTime(false)
 {
 	UpdateCameraVectors();
+}
+
+glm::mat4 Camera::GetViewMatrixRemoveTranslate()
+{
+	return glm::mat4(glm::mat3(glm::lookAt(m_vec3Eye, m_vec3LookAt, m_vec3Up)));
 }
 
 glm::mat4 Camera::GetViewMatrix()const

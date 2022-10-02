@@ -33,6 +33,10 @@ public:
 	virtual void Draw();
 	virtual void PostRender();
 
+private:
+	void ApplyTexture();
+	void ApplyTransform();
+
 protected:
 
 	void SetVertexs(std::vector<Vertex>& vecVertexs);
@@ -42,6 +46,7 @@ protected:
 protected:
 	std::shared_ptr<RenderState> m_spRenderState;
 	std::shared_ptr<Transform> m_spTransform;
+	std::vector<GLuint> m_vecTexture;
 
 private:
 	std::vector<Vertex> m_vecVertexs;

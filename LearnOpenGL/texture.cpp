@@ -14,32 +14,33 @@ Texture::~Texture()
 
 }
 
-void Texture::AddTexture(const TextureStruct& texture)
+void Texture::AddTexture(std::shared_ptr<TextureStruct> spTexture)
 {
-	m_vecTextures.push_back(texture);
+	m_mapTextures[spTexture->uiID] = spTexture;
 }
 
-void Texture::AddTexture(const std::string& sPath, TextureType eType, bool bflip /*= false*/, bool gamma /*= false*/)
+GLuint Texture::AddTexture(const std::string& sPath, TextureType eType, bool bflip /*= false*/, bool gamma /*= false*/)
 {
-	TextureStruct texture;
-	texture.sPath = sPath;
-	texture.uiID = TextureFromFile(sPath,bflip, gamma);
-	texture.eType = eType;
-	m_vecTextures.push_back(texture);
+	auto spTexture = std::make_shared<TextureStruct>();
+	spTexture->sPath = sPath;
+	spTexture->uiID = TextureFromFile(sPath, bflip, gamma);
+	spTexture->eType = eType;
+	m_mapTextures[spTexture->uiID] = spTexture;
+	return spTexture->uiID;
 }
 
 void Texture::AddTexture(std::vector<std::string>& vecCubeMap)
 {
-	TextureStruct texture;
-	texture.sPath = "";
-	texture.uiID = TextureFromCube(vecCubeMap);
-	texture.eType = TextureType::CUBEMAP;
-	m_vecTextures.push_back(texture);
+	auto spTexture = std::make_shared<TextureStruct>();
+	spTexture->sPath = "";
+	spTexture->uiID = TextureFromCube(vecCubeMap);
+	spTexture->eType = TextureType::CUBEMAP;
+	m_mapTextures[spTexture->uiID] = spTexture;
 }
 
-const std::vector<TextureStruct>& Texture::GetTexures()const
+const std::map<GLuint, std::shared_ptr<TextureStruct>>& Texture::GetTexures()const
 {
-	return m_vecTextures;
+	return m_mapTextures;
 }
 
 unsigned int Texture::TextureFromFile(const std::string& sPath, bool bflip, bool gamma)
@@ -48,7 +49,7 @@ unsigned int Texture::TextureFromFile(const std::string& sPath, bool bflip, bool
 	glGenTextures(1, &uiID);
 
 	int iWidth(0), iHeight(0), iComponent(0);
-	stbi_set_flip_vertically_on_load(bflip);
+	//stbi_set_flip_vertically_on_load(bflip);
 	unsigned char* pImageData = stbi_load(sPath.c_str(), &iWidth, &iHeight, &iComponent, 0);
 	if (pImageData != nullptr)
 	{
@@ -104,9 +105,31 @@ unsigned int Texture::TextureFromCube(std::vector<std::string>& vecCubeMap)
 	for (unsigned int i = 0; i < vecCubeMap.size(); i++)
 	{
 		unsigned char* pImageData = stbi_load(vecCubeMap[i].c_str(), &iWidth, &iHeight, &iComponent, 0);
+		GLenum eFormat(GL_RED);
+		switch (iComponent)
+		{
+		case 1:
+		{
+			eFormat = GL_RED;
+			break;
+		}
+		case 3:
+		{
+			eFormat = GL_RGB;
+			break;
+		}
+		case 4:
+		{
+			eFormat = GL_RGBA;
+			break;
+		}
+		default:
+			break;
+		}
+
 		if (pImageData)
 		{
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, iWidth, iHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, pImageData);
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, eFormat, iWidth, iHeight, 0, eFormat, GL_UNSIGNED_BYTE, pImageData);
 		}
 		else
 		{

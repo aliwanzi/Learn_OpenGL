@@ -22,6 +22,7 @@ public:
 	void SetEye(const glm::vec3& vec3Eye);
 	void SetLookAt(const glm::vec3& vec3LookAt);
 
+	glm::mat4 GetViewMatrixRemoveTranslate();
 	glm::mat4 GetViewMatrix() const;
 	void SetViewUseTime(bool bUseTime = true);
 	bool GetViewUseTime()const;
