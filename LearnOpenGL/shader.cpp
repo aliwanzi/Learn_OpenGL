@@ -179,6 +179,12 @@ void Shader::SetMat4(const std::string& sName, const glm::mat4& mat)const
 	glUniformMatrix4fv(glGetUniformLocation(m_iProgramID, sName.c_str()), 1, GL_FALSE, &mat[0][0]);
 }
 
+void Shader::SetUniformBlock(const std::string& sName,int iBlockBinding)
+{
+	auto uiBlockIndex = glGetUniformBlockIndex(m_iProgramID, sName.c_str());
+	glUniformBlockBinding(m_iProgramID, uiBlockIndex, iBlockBinding);
+}
+
 void Shader::ReadShaderCode(const std::string& sPath, std::string& sShaderCode)
 {
 	std::ifstream iFileStream;

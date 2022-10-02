@@ -150,7 +150,7 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="common.h" />
     <ClInclude Include="entity.h" />
-    <ClInclude Include="framebuffer.h" />
+    <ClInclude Include="frame_buffer.h" />
     <ClInclude Include="geometry_node.h" />
     <ClInclude Include="gl_resource.h" />
     <ClInclude Include="light.h" />
@@ -162,11 +162,12 @@
     <ClInclude Include="shader.h" />
     <ClInclude Include="texture.h" />
     <ClInclude Include="transform.h" />
+    <ClInclude Include="uniform_buffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="entity.cpp" />
-    <ClCompile Include="framebuffer.cpp" />
+    <ClCompile Include="frame_buffer.cpp" />
     <ClCompile Include="geometry_node.cpp" />
     <ClCompile Include="gl_resource.cpp" />
     <ClCompile Include="light.cpp" />
@@ -179,6 +180,7 @@
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="texture.cpp" />
     <ClCompile Include="transform.cpp" />
+    <ClCompile Include="uniform_buffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\resources\shaders\blend\grass.fs" />
@@ -202,6 +204,11 @@
     <None Include="..\resources\shaders\Tessellation\vertex.vs" />
     <None Include="..\resources\shaders\texture\fragment.fs" />
     <None Include="..\resources\shaders\texture\vertex.vs" />
+    <None Include="..\resources\shaders\uniformbuffer\blue.fs" />
+    <None Include="..\resources\shaders\uniformbuffer\green.fs" />
+    <None Include="..\resources\shaders\uniformbuffer\red.fs" />
+    <None Include="..\resources\shaders\uniformbuffer\vertex.vs" />
+    <None Include="..\resources\shaders\uniformbuffer\yellow.fs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

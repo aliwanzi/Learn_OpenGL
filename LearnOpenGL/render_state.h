@@ -5,7 +5,8 @@
 #include "camera.h"
 #include "transform.h"
 #include "light.h"
-#include "framebuffer.h"
+#include "frame_buffer.h"
+#include "uniform_buffer.h"
 
 enum POLYGON_MODE
 {
@@ -106,6 +107,10 @@ public:
 	void SetPolygonMode(POLYGON_MODE polygonMode);
 
 	void SetBackGround(const glm::vec4& vec4BackGround);
+
+	void EnableUniformBuffer(bool bUniformBuffer);
+	void UpdateUniformBuffer(bool bUpdate);
+	void SetUniformBuffer(std::shared_ptr<UniformBuffer> spUniformBuffer);
 private:
 
 	glm::vec4 m_vec4BackGround;
@@ -136,4 +141,8 @@ private:
 	bool m_bFrameBuffer;
 	bool m_bClearFrameBuffer;
 	std::shared_ptr<FrameBuffer> m_spFrameBuffer;
+
+	std::shared_ptr<UniformBuffer> m_spUniformBuffer;
+	bool m_bUniformBuffer;
+	bool m_bUpdateUniformBuffer;
 };

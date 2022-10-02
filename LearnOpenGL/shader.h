@@ -21,6 +21,7 @@ public:
 	void SetMat2(const std::string& sName, const glm::mat2& mat)const;
 	void SetMat3(const std::string& sName, const glm::mat3& mat)const;
 	void SetMat4(const std::string& sName, const glm::mat4& mat)const;
+	void SetUniformBlock(const std::string& sName, int iBlockBinding);
 private:
 	void ReadShaderCode(const std::string& sPath, std::string& sShaderCode);
 	void CheckCompileErrors(GLuint uiShader, const std::string& sType);

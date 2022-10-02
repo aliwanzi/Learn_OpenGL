@@ -16,11 +16,14 @@ RenderState::RenderState(std::shared_ptr<Shader>spShader, std::shared_ptr<Textur
 	m_matModel(glm::mat4()),
 	m_spFrameBuffer(nullptr),
 	m_bFrameBuffer(false),
-	m_bClearFrameBuffer(false),
+	m_bClearFrameBuffer(true),
 	m_ePolygonMode(POLYGON_MODE::FACE_MODE),
 	m_eDrawMode(DRAW_MODE::ELEMENT_MODE),
 	m_ePrimitiveMode(PRIMITIVE_MODE::POINTS_MODE),
-	m_vec4BackGround(glm::vec4(0.f))
+	m_vec4BackGround(glm::vec4(0.f)),
+	m_spUniformBuffer(nullptr),
+	m_bUniformBuffer(false),
+	m_bUpdateUniformBuffer(true)
 {
 
 }
@@ -105,8 +108,11 @@ void RenderState::ApplyState()
 	if (m_bBlend)
 	{
 		glEnable(GL_BLEND);
-		glBlendEquation(m_spBlend->BlendFunc);
-		glBlendFuncSeparate(m_spBlend->SRGB, m_spBlend->DRGB, m_spBlend->SAlpha, m_spBlend->DAlpha);
+		if (m_spBlend)
+		{
+			glBlendEquation(m_spBlend->BlendFunc);
+			glBlendFuncSeparate(m_spBlend->SRGB, m_spBlend->DRGB, m_spBlend->SAlpha, m_spBlend->DAlpha);
+		}
 	}
 	else
 	{
@@ -116,9 +122,12 @@ void RenderState::ApplyState()
 	if (m_bStencil)
 	{
 		glEnable(GL_STENCIL_TEST);
-		glStencilOp(m_spStencil->SFail, m_spStencil->DpFail, m_spStencil->DpPass);
-		glStencilFunc(m_spStencil->SFunc, m_spStencil->RefValue, m_spStencil->Mask);
-		glStencilMask(m_spStencil->WriteMask);
+		if (m_spStencil)
+		{
+			glStencilOp(m_spStencil->SFail, m_spStencil->DpFail, m_spStencil->DpPass);
+			glStencilFunc(m_spStencil->SFunc, m_spStencil->RefValue, m_spStencil->Mask);
+			glStencilMask(m_spStencil->WriteMask);
+		}
 	}
 	else
 	{
@@ -129,8 +138,11 @@ void RenderState::ApplyState()
 	if (m_bCullFace)
 	{
 		glEnable(GL_CULL_FACE);
-		glCullFace(m_spCullFace->FaceMode);
-		glFrontFace(m_spCullFace->FaceOri);
+		if (m_spCullFace)
+		{
+			glCullFace(m_spCullFace->FaceMode);
+			glFrontFace(m_spCullFace->FaceOri);
+		}
 	}
 	else
 	{
@@ -150,8 +162,11 @@ void RenderState::ApplyState()
 	switch (m_ePolygonMode)
 	{
 	case POLYGON_MODE::POINT_MODE:
+	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+		glEnable(GL_PROGRAM_POINT_SIZE);
 		break;
+	}
 	case POLYGON_MODE::LINE_MODE:
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		break;
@@ -168,7 +183,10 @@ void RenderState::ApplyPreState()
 {
 	if (m_bFrameBuffer)
 	{
-		glBindFramebuffer(GL_FRAMEBUFFER, m_spFrameBuffer->GetFrameBuffer());
+		if (m_spFrameBuffer)
+		{
+			glBindFramebuffer(GL_FRAMEBUFFER, m_spFrameBuffer->GetFrameBuffer());
+		}
 	}
 	else
 	{
@@ -256,8 +274,21 @@ void RenderState::ApplyTexture()
 
 void RenderState::ApplyTransform(std::shared_ptr<Camera>spCamera)
 {
-	m_spShader->SetMat4("matView", spCamera->GetViewMatrix());
-	m_spShader->SetMat4("matProjection", spCamera->GetProjectionMatrix());
+	if (m_bUniformBuffer)
+	{
+		if (m_bUpdateUniformBuffer)
+		{
+			glBindBuffer(GL_UNIFORM_BUFFER, m_spUniformBuffer->GetUniformBuffer());
+			glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(spCamera->GetViewMatrix()));
+			glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(spCamera->GetProjectionMatrix()));
+			glBindBuffer(GL_UNIFORM_BUFFER, 0);
+		}
+	}
+	else
+	{
+		m_spShader->SetMat4("matView", spCamera->GetViewMatrix());
+		m_spShader->SetMat4("matProjection", spCamera->GetProjectionMatrix());
+	}
 }
 
 void RenderState::ApplyLights(std::shared_ptr<Camera> spCamera)
@@ -375,6 +406,21 @@ void RenderState::SetPolygonMode(POLYGON_MODE polygonMode)
 void RenderState::SetBackGround(const glm::vec4& vec4BackGround)
 {
 	m_vec4BackGround = vec4BackGround;
+}
+
+void RenderState::EnableUniformBuffer(bool bUniformBuffer)
+{
+	m_bUniformBuffer = bUniformBuffer;
+}
+
+void RenderState::UpdateUniformBuffer(bool bUpdate)
+{
+	m_bUpdateUniformBuffer = bUpdate;
+}
+
+void RenderState::SetUniformBuffer(std::shared_ptr<UniformBuffer> spUniformBuffer)
+{
+	m_spUniformBuffer = spUniformBuffer;
 }
 
 void RenderState::SetModelMatrix(const glm::mat4& matModel)

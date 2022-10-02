@@ -26,7 +26,7 @@ vec4 Edge();
 
 void main()
 {
-    FragColor = texture(texture_diffuse1, fs_in.texCoord);
+    //FragColor = texture(texture_diffuse1, fs_in.texCoord);
 
     //反相
     //FragColor = vec4(vec3(1.0-texture(texture_diffuse1, fs_in.texCoord)),1.0);
@@ -37,7 +37,7 @@ void main()
     //FragColor = vec4(vec3(average),1.0);
 
     //锐化
-    //FragColor=Sharpen();
+    FragColor=Sharpen();
 
     //模糊
     //FragColor=Blur();

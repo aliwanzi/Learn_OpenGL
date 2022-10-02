@@ -1,4 +1,4 @@
-#include "framebuffer.h"
+#include "frame_buffer.h"
 
 FrameBuffer::FrameBuffer(std::shared_ptr<FrameBufferInfo> spFrameBufferInfo):
 	m_uiFrameBuffer(0),
