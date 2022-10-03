@@ -57,6 +57,16 @@ struct CullFace
 	GLenum FaceOri;
 };
 
+struct MSAAInfo
+{
+	GLuint Source;
+	unsigned int SourceWidth;
+	unsigned int SourceHeight;
+	GLuint Target;
+	unsigned int TargetWidth;
+	unsigned int TargetHeight;
+};
+
 class RenderState
 {
 public:
@@ -111,6 +121,10 @@ public:
 	void EnableUniformBuffer(bool bUniformBuffer);
 	void UpdateUniformBuffer(bool bUpdate);
 	void SetUniformBuffer(std::shared_ptr<UniformBuffer> spUniformBuffer);
+
+	void EnableMultiSample(bool bMultiSample);
+	void EnableMSAA(bool bMSAA);
+	void SetMSAAInfor(std::shared_ptr<MSAAInfo> spMSAAInfo);
 private:
 
 	glm::vec4 m_vec4BackGround;
@@ -145,4 +159,8 @@ private:
 	std::shared_ptr<UniformBuffer> m_spUniformBuffer;
 	bool m_bUniformBuffer;
 	bool m_bUpdateUniformBuffer;
+
+	bool m_bMultiSample;
+	bool m_bMASS;
+	std::shared_ptr<MSAAInfo> m_spMSAAInfo;
 };

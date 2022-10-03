@@ -204,7 +204,8 @@ void CreateTriangleNode(std::shared_ptr<Node>& spNode, std::shared_ptr<RenderSta
 }
 
 void CreateRenderPass(
-	std::shared_ptr<Shader> spShader, std::shared_ptr<UniformBuffer> spUniformBuffer, std::shared_ptr<Scene> spScene,NodeType nodetype)
+	std::shared_ptr<Shader> spShader, std::shared_ptr<UniformBuffer> spUniformBuffer, std::shared_ptr<FrameBuffer> spFrameBuffer,
+	std::shared_ptr<Scene> spScene,NodeType nodetype,std::shared_ptr<MSAAInfo> spMSAAInfo = nullptr)
 {
 	auto spRenderState = std::make_shared<RenderState>(spShader);
 	spRenderState->EnableDepthTest(true);
@@ -212,10 +213,18 @@ void CreateRenderPass(
 	spRenderState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_MODE);
 	spRenderState->SetUniformBuffer(spUniformBuffer);
 	spRenderState->EnableUniformBuffer(true);
+	spRenderState->EnableMultiSample(true);
+	spRenderState->SetFrameBuffer(spFrameBuffer);
+	//spRenderState->EnableFrameBuffer(true);
 	if (nodetype != NodeType::Red)
 	{
 		spRenderState->SetClearBuffer(false);
 		spRenderState->UpdateUniformBuffer(false);
+	}
+	if (nodetype == NodeType::Yellow && spMSAAInfo != nullptr)
+	{
+		//spRenderState->EnableMSAA(true);
+		spRenderState->SetMSAAInfor(spMSAAInfo);
 	}
 	auto spEntity = std::make_shared<Entity>();
 	auto spRenderPass = std::make_shared<RenderPass>(spEntity, spRenderState);
@@ -224,9 +233,9 @@ void CreateRenderPass(
 	spScene->AddRenderPass(spRenderPass);
 }
 
-#define CASE1
+//#define CASE1
 //#define CASE2
-//#define CASE3
+#define CASE3
 
 int main()
 {
@@ -239,10 +248,8 @@ int main()
 	auto spScene = std::make_shared<Scene>(spGLResource, spCamera);
 
 #ifdef CASE1
-	auto spFrameBufferInfo = std::make_shared<FrameBufferInfo>();
-	spFrameBufferInfo->Width = SCR_WIDTH;
-	spFrameBufferInfo->Height = SCR_HEIGHT;
-	auto spFrameBuffer = std::make_shared<FrameBuffer>(spFrameBufferInfo);
+	auto spFrameBuffer = std::make_shared<FrameBuffer>();
+	spFrameBuffer->CreateFrameBuffer(SCR_WIDTH, SCR_HEIGHT);
 
 	auto spShader = std::make_shared<Shader>("../resources/shaders/depth/vertex.vs",
 		"../resources/shaders/depth/fragment.fs");
@@ -334,7 +341,6 @@ int main()
 	spRenderState->SetDrawMode(DRAW_MODE::ELEMENT_MODE);
 	spRenderState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_MODE);
 	//spRenderState->SetPolygonMode(POLYGON_MODE::POINT_MODE);
-	//spRenderState->EnableCullFace(true);
 	auto spRenderPass = std::make_shared<RenderPass>(spEntity, spRenderState);
 	spScene->AddRenderPass(spRenderPass);
 #endif // CASE2
@@ -353,12 +359,48 @@ int main()
 		("../resources/shaders/uniformbuffer/vertex.vs", "../resources/shaders/uniformbuffer/yellow.fs");
 	spYellowShader->SetUniformBlock("Matrices",2);
 
-	auto spUniformBuffer = std::make_shared<UniformBuffer>(2, sizeof(glm::mat4), 2);
-	CreateRenderPass(spRedShader, spUniformBuffer, spScene, NodeType::Red);
-	CreateRenderPass(spGreenShader, spUniformBuffer, spScene, NodeType::Green);
-	CreateRenderPass(spBlueShader, spUniformBuffer, spScene, NodeType::Blue);
-	CreateRenderPass(spYellowShader, spUniformBuffer, spScene, NodeType::Yellow);
+	auto spMultiSamplerFrameBuffer = std::make_shared<FrameBuffer>();
+	spMultiSamplerFrameBuffer->CreateMultiSampleFrameBuffer(SCR_WIDTH, SCR_HEIGHT, 4);
+	auto spFrameBuffer = std::make_shared<FrameBuffer>();
+	spFrameBuffer->CreateFrameBuffer(SCR_WIDTH, SCR_HEIGHT);
 
+	auto spMSAAInfo = std::make_shared<MSAAInfo>();
+	spMSAAInfo->Source = spMultiSamplerFrameBuffer->GetFrameBuffer();
+	spMSAAInfo->Target = spFrameBuffer->GetFrameBuffer();
+	spMSAAInfo->SourceWidth = SCR_WIDTH;
+	spMSAAInfo->SourceHeight = SCR_HEIGHT;
+	spMSAAInfo->TargetWidth = SCR_WIDTH;
+	spMSAAInfo->TargetHeight = SCR_HEIGHT;
+
+	auto spUniformBuffer = std::make_shared<UniformBuffer>(2, sizeof(glm::mat4), 2);
+	CreateRenderPass(spRedShader, spUniformBuffer, spMultiSamplerFrameBuffer, spScene, NodeType::Red);
+	CreateRenderPass(spGreenShader, spUniformBuffer, spMultiSamplerFrameBuffer, spScene, NodeType::Green);
+	CreateRenderPass(spBlueShader, spUniformBuffer, spMultiSamplerFrameBuffer, spScene, NodeType::Blue);
+	CreateRenderPass(spYellowShader, spUniformBuffer, spMultiSamplerFrameBuffer, spScene, NodeType::Yellow, spMSAAInfo);
+
+	auto spScreenTexture = std::make_shared<Texture>();
+	TextureStruct texture;
+	texture.uiID = spFrameBuffer->GetColorAttachment();
+	texture.eType = TextureType::DIFFUSE;
+	texture.sPath = "";
+	spScreenTexture->AddTexture(texture);
+
+	auto spFrameShader = std::make_shared<Shader>("../resources/shaders/framebuffer/vertex.vs",
+		"../resources/shaders/framebuffer/fragment.fs");
+	auto spScreenRenderState = std::make_shared<RenderState>(spFrameShader, spScreenTexture);
+	spScreenRenderState->SetDrawMode(DRAW_MODE::ELEMENT_MODE);
+	spScreenRenderState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_MODE);
+	spScreenRenderState->SetBackGround(glm::vec4(1.0));
+
+	auto spScreenEntity = std::make_shared<Entity>();
+	auto spScreenRenderPass = std::make_shared<RenderPass>(spScreenEntity, spScreenRenderState);
+	std::vector<std::shared_ptr<Node>> vecScreenNode;
+	CreatScreenNode(vecScreenNode, spScreenRenderState);
+	for (size_t i = 0; i < vecScreenNode.size(); i++)
+	{
+		spScreenEntity->AddGeometryNode(vecScreenNode[i]);
+	}
+	//spScene->AddRenderPass(spScreenRenderPass);
 #endif // CASE3
 
 	spScene->Draw();

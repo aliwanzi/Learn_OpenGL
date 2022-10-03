@@ -67,6 +67,7 @@ void Node::Draw()
 	}
 	glBindVertexArray(0);
 	glActiveTexture(GL_TEXTURE0);
+	glGetError();
 }
 
 void Node::PostRender()

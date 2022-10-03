@@ -11,8 +11,8 @@ in VS_OUT {
 
 void main()
 {
-   if(gl_FragCoord.x < 400)
-   //if(gl_FrontFacing)
+   //if(gl_FragCoord.x < 400)
+   if(gl_FrontFacing)
        FragColor = texture(texture_diffuse1, fs_in.texCoord);
    else
        FragColor = texture(texture_diffuse2, fs_in.texCoord);

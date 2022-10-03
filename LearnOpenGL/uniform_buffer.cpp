@@ -9,8 +9,6 @@ UniformBuffer::UniformBuffer(int count, GLuint size, int iBlockBinding)
 	glBindBufferRange(GL_UNIFORM_BUFFER, iBlockBinding, m_uiUniformBuffer, 0, count * size);
 
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
-
-
 }
 
 GLuint UniformBuffer::GetUniformBuffer() const

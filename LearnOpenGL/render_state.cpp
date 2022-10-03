@@ -23,7 +23,10 @@ RenderState::RenderState(std::shared_ptr<Shader>spShader, std::shared_ptr<Textur
 	m_vec4BackGround(glm::vec4(0.f)),
 	m_spUniformBuffer(nullptr),
 	m_bUniformBuffer(false),
-	m_bUpdateUniformBuffer(true)
+	m_bUpdateUniformBuffer(true),
+	m_bMultiSample(false),
+	m_bMASS(false),
+	m_spMSAAInfo(nullptr)
 {
 
 }
@@ -159,6 +162,15 @@ void RenderState::ApplyState()
 		glDisable(GL_DEPTH_TEST);
 	}
 
+	if (m_bMultiSample)
+	{
+		glEnable(GL_MULTISAMPLE);
+	}
+	else
+	{
+		glDisable(GL_MULTISAMPLE);
+	}
+
 	switch (m_ePolygonMode)
 	{
 	case POLYGON_MODE::POINT_MODE:
@@ -202,6 +214,13 @@ void RenderState::ApplyPreState()
 
 void RenderState::ApplyPostState()
 {
+	if (m_bMASS)
+	{
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, m_spMSAAInfo->Source);
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_spMSAAInfo->Target);
+		glBlitFramebuffer(0, 0, m_spMSAAInfo->SourceWidth, m_spMSAAInfo->SourceHeight,
+			0, 0, m_spMSAAInfo->TargetWidth, m_spMSAAInfo->TargetHeight, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+	}
 	if (m_bStencil)
 	{
 		glStencilFunc(GL_ALWAYS, 0, 0xFF);
@@ -422,6 +441,22 @@ void RenderState::SetUniformBuffer(std::shared_ptr<UniformBuffer> spUniformBuffe
 {
 	m_spUniformBuffer = spUniformBuffer;
 }
+
+void RenderState::EnableMultiSample(bool bMultiSample)
+{
+	m_bMultiSample = bMultiSample;
+}
+
+void RenderState::EnableMSAA(bool bMSAA)
+{
+	m_bMASS = bMSAA;
+}
+
+void RenderState::SetMSAAInfor(std::shared_ptr<MSAAInfo> spMSAAInfo)
+{
+	m_spMSAAInfo = spMSAAInfo;
+}
+
 
 void RenderState::SetModelMatrix(const glm::mat4& matModel)
 {
