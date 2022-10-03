@@ -131,7 +131,6 @@ public:
 	void EnableMultiSample(bool bMultiSample);
 	void EnableMSAA(bool bMSAA);
 	void SetMSAAInfor(std::shared_ptr<MSAAInfo> spMSAAInfo);
-
 private:
 
 	glm::vec4 m_vec4BackGround;
@@ -167,5 +166,10 @@ private:
 	bool m_bUniformBuffer;
 	bool m_bUpdateUniformBuffer;
 
+	bool m_bSkyBox;
+	bool m_bExplode;
+
+	bool m_bMultiSample;
+	bool m_bMASS;
 	std::shared_ptr<MSAAInfo> m_spMSAAInfo;
 };

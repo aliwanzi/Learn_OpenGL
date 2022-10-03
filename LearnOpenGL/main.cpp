@@ -125,15 +125,15 @@ void CrateRockInstance(std::shared_ptr<Entity> spEntity)
 	spEntity->SetInstanceOffset(vecOffset);
 }
 
-//#define CASE1
+#define CASE1
 #define environment_map
 //#define explode_face
 //#define explode_vertex
 #define view_normal
 
-#define CASE2
-//#define triangle_instance
-#define rock_instance
+//#define CASE2
+#define triangle_instance
+//#define rock_instance
 
 int main()
 {
@@ -227,6 +227,8 @@ int main()
 
 #ifdef CASE2
 #ifdef triangle_instance
+	auto spCamera = std::make_shared<Camera>(glm::vec3(0.f, 10.f, 20.f));
+	auto spScene = std::make_shared<Scene>(spGLResource, spCamera);
 	auto spTexture = std::make_shared<Texture>();
 	auto spShader = std::make_shared<Shader>("../resources/shaders/instance/vertex.vs",
 		"../resources/shaders/instance/fragment.fs");

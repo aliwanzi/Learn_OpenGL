@@ -25,7 +25,7 @@ RenderState::RenderState(std::shared_ptr<Shader>spShader, std::shared_ptr<Textur
 	m_bUniformBuffer(false),
 	m_bUpdateUniformBuffer(true),
 	m_bSkyBox(false),
-	m_bExplode(false)£¬
+	m_bExplode(false),
 	m_bMultiSample(false),
 	m_bMASS(false),
 	m_spMSAAInfo(nullptr)
@@ -418,6 +418,12 @@ void RenderState::SetDrawSkyBox(bool bSkyBox)
 {
 	m_bSkyBox = bSkyBox;
 }
+
+void RenderState::SetExplode(bool bExplode)
+{
+	m_bExplode = bExplode;
+}
+
 void RenderState::EnableMultiSample(bool bMultiSample)
 {
 	m_bMultiSample = bMultiSample;
@@ -428,7 +434,10 @@ void RenderState::EnableMSAA(bool bMSAA)
 	m_bMASS = bMSAA;
 }
 
-
+void RenderState::SetMSAAInfor(std::shared_ptr<MSAAInfo> spMSAAInfo)
+{
+	m_spMSAAInfo = spMSAAInfo;
+}
 
 void RenderState::SetModelMatrix(const glm::mat4& matModel)
 {
