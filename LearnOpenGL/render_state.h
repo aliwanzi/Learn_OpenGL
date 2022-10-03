@@ -59,6 +59,16 @@ struct CullFace
 	GLenum FaceOri;
 };
 
+struct MSAAInfo
+{
+	GLuint Source;
+	unsigned int SourceWidth;
+	unsigned int SourceHeight;
+	GLuint Target;
+	unsigned int TargetWidth;
+	unsigned int TargetHeight;
+};
+
 class RenderState
 {
 public:
@@ -117,6 +127,11 @@ public:
 
 	void SetDrawSkyBox(bool bSkyBox);
 	void SetExplode(bool bExplode);
+		
+	void EnableMultiSample(bool bMultiSample);
+	void EnableMSAA(bool bMSAA);
+	void SetMSAAInfor(std::shared_ptr<MSAAInfo> spMSAAInfo);
+
 private:
 
 	glm::vec4 m_vec4BackGround;
@@ -152,6 +167,5 @@ private:
 	bool m_bUniformBuffer;
 	bool m_bUpdateUniformBuffer;
 
-	bool m_bSkyBox;
-	bool m_bExplode;
+	std::shared_ptr<MSAAInfo> m_spMSAAInfo;
 };

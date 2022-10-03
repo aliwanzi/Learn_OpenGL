@@ -37,10 +37,10 @@ void main()
     //FragColor = vec4(vec3(average),1.0);
 
     //Èñ»¯
-    FragColor=Sharpen();
+    //FragColor=Sharpen();
 
     //Ä£ºý
-    //FragColor=Blur();
+    FragColor=Blur();
 
     //±ßÔµ¼ì²â
     //FragColor=Edge();
