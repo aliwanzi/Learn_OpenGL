@@ -61,6 +61,9 @@
     <Filter Include="shader\skybox\view_normal">
       <UniqueIdentifier>{bca8fa97-f3f7-49a8-9eb7-af2fd5803cbc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shader\instance">
+      <UniqueIdentifier>{30c8674b-9c0c-4a6a-8ff8-ecda1f882b80}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="entity.h">
@@ -279,6 +282,18 @@
     </None>
     <None Include="..\resources\shaders\skybox\view_normal\vertex.vs">
       <Filter>shader\skybox\view_normal</Filter>
+    </None>
+    <None Include="..\resources\shaders\instance\fragment.fs">
+      <Filter>shader\instance</Filter>
+    </None>
+    <None Include="..\resources\shaders\instance\vertex.vs">
+      <Filter>shader\instance</Filter>
+    </None>
+    <None Include="..\resources\shaders\instance\rock_fragment.fs">
+      <Filter>shader\instance</Filter>
+    </None>
+    <None Include="..\resources\shaders\instance\rock_vertex.vs">
+      <Filter>shader\instance</Filter>
     </None>
   </ItemGroup>
 </Project>

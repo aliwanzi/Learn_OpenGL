@@ -4,7 +4,8 @@
 Camera::Camera(glm::vec3 vec3Eye, float fYaw /*= -90.f*/, float fPicth /*= 0.0f*/) :
 	m_vec3Eye(vec3Eye), m_fYaw(fYaw), m_fPitch(fPicth),
 	m_fMovementSpeed(5.0f), m_fMouseSensitivity(0.1f), m_fZoom(45.0f),
-	m_iWidth(0.f), m_iHeight(0.f), m_bUseViewTime(false)
+	m_iWidth(0.f), m_iHeight(0.f), m_bUseViewTime(false),
+	m_fNear(0.1f), m_fFar(100.f)
 {
 	UpdateCameraVectors();
 }
@@ -28,7 +29,7 @@ void Camera::SetFOV(int iWidth, int iHeight)
 glm::mat4 Camera::GetProjectionMatrix()const
 {
 	return glm::perspective(glm::radians(m_fZoom),
-		static_cast<float>(m_iWidth) / static_cast<float>(m_iHeight), 0.1f, 100.0f);
+		static_cast<float>(m_iWidth) / static_cast<float>(m_iHeight), m_fNear, m_fFar);
 }
 
 void Camera::ProcessKeyboard(Movement direction, float deltaTime)
@@ -96,6 +97,12 @@ void Camera::SetEye(const glm::vec3& vec3Eye)
 void Camera::SetLookAt(const glm::vec3& vec3LookAt)
 {
 	m_vec3LookAt = vec3LookAt;
+}
+
+void Camera::SetNearAndFar(float fNear, float fFar)
+{
+	m_fNear = fNear;
+	m_fFar = fFar;
 }
 
 void Camera::SetViewUseTime(bool bUseTime /*= true*/)

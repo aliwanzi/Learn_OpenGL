@@ -47,6 +47,10 @@ void Node::Draw()
 			glDrawElements(GL_TRIANGLES, static_cast<unsigned int>(m_vecIndexs.size()), GL_UNSIGNED_INT, 0);
 		}
 	}
+	else if(m_spRenderState->GetDrawMode() == DRAW_MODE::ELEMENT_INSTANCE_MODE)
+	{
+		glDrawElementsInstanced(GL_TRIANGLES, static_cast<unsigned int>(m_vecIndexs.size()), GL_UNSIGNED_INT, 0, m_uiInstance);
+	}
 	glBindVertexArray(0);
 	glActiveTexture(GL_TEXTURE0);
 }
@@ -167,6 +171,58 @@ void Node::SetTransform(std::shared_ptr<Transform> spTransform)
 	this->m_spTransform = spTransform;
 }
 
+void Node::SetInstanceOffset(const std::vector<glm::vec2>& vecOffset)
+{
+	glBindVertexArray(m_uiVAO);
+	GLuint uiInstanceVBO;
+	glGenBuffers(1, &uiInstanceVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, uiInstanceVBO);
+	glBufferData(GL_ARRAY_BUFFER, vecOffset.size() * sizeof(glm::vec2), &vecOffset[0], GL_STATIC_DRAW);
+	
+	glEnableVertexAttribArray(5);
+	glVertexAttribPointer(5, 2, GL_FLOAT, GL_FALSE, sizeof(glm::vec2), (void*)0);
+	glVertexAttribDivisor(5, 1);
+
+	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	if (m_spRenderState->GetDrawMode() == DRAW_MODE::ELEMENT_INSTANCE_MODE)
+	{
+		m_uiInstance = vecOffset.size();
+	}
+}
+
+void Node::SetInstanceOffset(const std::vector<glm::mat4>& vecOffset)
+{
+	glBindVertexArray(m_uiVAO);
+	GLuint uiInstanceVBO;
+	glGenBuffers(1, &uiInstanceVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, uiInstanceVBO);
+	glBufferData(GL_ARRAY_BUFFER, vecOffset.size() * sizeof(glm::mat4), &vecOffset[0], GL_STATIC_DRAW);
+
+	glEnableVertexAttribArray(5);
+	glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)0);
+	glEnableVertexAttribArray(6);
+	glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(glm::vec4)));
+	glEnableVertexAttribArray(7);
+	glVertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(2 * sizeof(glm::vec4)));
+	glEnableVertexAttribArray(8);
+	glVertexAttribPointer(8, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(3 * sizeof(glm::vec4)));
+
+	glVertexAttribDivisor(5, 1);
+	glVertexAttribDivisor(6, 1);
+	glVertexAttribDivisor(7, 1);
+	glVertexAttribDivisor(8, 1);
+
+	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	if (m_spRenderState->GetDrawMode() == DRAW_MODE::ELEMENT_INSTANCE_MODE)
+	{
+		m_uiInstance = vecOffset.size();
+	}
+}
+
 void Node::SetVAOVBO()
 {
 	glGenVertexArrays(1, &m_uiVAO);
@@ -190,7 +246,7 @@ void Node::SetVAOVBO()
 	glEnableVertexAttribArray(2);
 	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
 
-	glEnableVertexAttribArray(4);
+	glEnableVertexAttribArray(3);
 	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Tangent));
 
 	glEnableVertexAttribArray(4);

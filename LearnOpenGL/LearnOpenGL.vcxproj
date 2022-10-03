@@ -194,6 +194,10 @@
     <None Include="..\resources\shaders\Geometry\fragment.fs" />
     <None Include="..\resources\shaders\geometry\geometry.gs" />
     <None Include="..\resources\shaders\Geometry\vertex.vs" />
+    <None Include="..\resources\shaders\instance\fragment.fs" />
+    <None Include="..\resources\shaders\instance\rock_fragment.fs" />
+    <None Include="..\resources\shaders\instance\rock_vertex.vs" />
+    <None Include="..\resources\shaders\instance\vertex.vs" />
     <None Include="..\resources\shaders\light\light.fs" />
     <None Include="..\resources\shaders\light\light.vs" />
     <None Include="..\resources\shaders\model\fragment.fs" />

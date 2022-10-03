@@ -21,6 +21,7 @@ public:
 
 	void SetEye(const glm::vec3& vec3Eye);
 	void SetLookAt(const glm::vec3& vec3LookAt);
+	void SetNearAndFar(float fNear, float fFar);
 
 	glm::mat4 GetViewMatrixRemoveTranslate();
 	glm::mat4 GetViewMatrix() const;
@@ -45,6 +46,8 @@ private:
 
 	float m_fYaw;
 	float m_fPitch;
+	float m_fNear;
+	float m_fFar;
 
 	float m_fMovementSpeed;
 	float m_fMouseSensitivity;

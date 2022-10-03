@@ -29,6 +29,9 @@ public:
 	~Node();
 	void SetRenderState(std::shared_ptr<RenderState> spRenderState);
 	void SetTransform(std::shared_ptr<Transform> spTransform);
+	void SetInstanceOffset(const std::vector<glm::vec2>& vecOffset);
+	void SetInstanceOffset(const std::vector<glm::mat4>& vecOffset);
+
 	virtual void Prender();
 	virtual void Draw();
 	virtual void PostRender();
@@ -55,4 +58,5 @@ private:
 	unsigned int m_uiVAO;
 	unsigned int m_uiVBO;
 	unsigned int m_uiEBO;
+	unsigned int m_uiInstance;
 };

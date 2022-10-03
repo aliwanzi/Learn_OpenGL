@@ -13,7 +13,9 @@ public:
 	void DrawSelfAndChild();
 	void AddMeshNode(const std::string& strPath, std::shared_ptr<RenderState>& spRenderState);
 	void AddGeometryNode(std::shared_ptr<Node> spNode);
-
+	void SetInstanceOffset(const std::vector<glm::vec2>& vecOffset);
+	void SetInstanceOffset(const std::vector<glm::mat4>& vecOffset);
+	void SetTransform(std::shared_ptr<Transform> spTransform);
 private:
 	void ProcessMeshNode(aiNode* node, const aiScene* scene, const std::string& strPath, 
 		std::shared_ptr<RenderState>& spRenderState);

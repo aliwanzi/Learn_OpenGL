@@ -14,6 +14,30 @@ void Entity::AddGeometryNode(std::shared_ptr<Node> spNode)
 	m_listNode.push_back(spNode);
 }
 
+void Entity::SetInstanceOffset(const std::vector<glm::vec2>& vecOffset)
+{
+	for (auto& child : m_listNode)
+	{
+		child->SetInstanceOffset(vecOffset);
+	}
+}
+
+void Entity::SetInstanceOffset(const std::vector<glm::mat4>& vecOffset)
+{
+	for (auto& child : m_listNode)
+	{
+		child->SetInstanceOffset(vecOffset);
+	}
+}
+
+void Entity::SetTransform(std::shared_ptr<Transform> spTransform)
+{
+	for (auto& child : m_listNode)
+	{
+		child->SetTransform(spTransform);
+	}
+}
+
 void Entity::DrawSelfAndChild()
 {
 	for (auto& child : m_listNode)
