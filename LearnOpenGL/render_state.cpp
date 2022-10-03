@@ -24,7 +24,8 @@ RenderState::RenderState(std::shared_ptr<Shader>spShader, std::shared_ptr<Textur
 	m_spUniformBuffer(nullptr),
 	m_bUniformBuffer(false),
 	m_bUpdateUniformBuffer(true),
-	m_bSkyBox(false)
+	m_bSkyBox(false),
+	m_bExplode(false)
 {
 
 }
@@ -251,14 +252,18 @@ void RenderState::ApplyTransform(std::shared_ptr<Camera>spCamera)
 		
 		m_spShader->SetMat4("matProjection", spCamera->GetProjectionMatrix());
 	}
+	if (m_bExplode)
+	{
+		m_spShader->SetFloat("time", glm::sin(glfwGetTime()));
+	}
 }
 
 void RenderState::ApplyLights(std::shared_ptr<Camera> spCamera)
 {
+	m_spShader->SetVec3("viewPos", spCamera->GetEye());
 	if (m_vecLights.size() > 0)
 	{
 		unsigned int uiPoint(0);
-		m_spShader->SetVec3("viewPos", spCamera->GetEye());
 		for (int i = 0; i < m_vecLights.size(); i++)
 		{
 			switch (m_vecLights[i]->GetLightType())
@@ -393,6 +398,11 @@ std::shared_ptr<Shader> RenderState::GetShader() const
 void RenderState::SetDrawSkyBox(bool bSkyBox)
 {
 	m_bSkyBox = bSkyBox;
+}
+
+void RenderState::SetExplode(bool bExplode)
+{
+	m_bExplode = bExplode;
 }
 
 void RenderState::SetModelMatrix(const glm::mat4& matModel)

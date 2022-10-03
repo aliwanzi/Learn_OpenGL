@@ -5,9 +5,9 @@
 
 Shader::Shader(const std::string& sVertexPath, 
 	const std::string& sFragmentPath,
-	const std::string& sTcsPath /*= ""*/, 
+	const std::string& sGeometryPath /*= ""*/,
 	const std::string& sTesPath/* = ""*/,
-	const std::string& sGeometryPath/*=""*/)
+	const std::string& sTcsPath/*=""*/)
 {
 	std::string sVertexCode(""), sFragmentCode(""), sTcsCode(""), sTesCode(""), sGeometryCode("");;
 

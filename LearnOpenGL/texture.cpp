@@ -29,13 +29,14 @@ GLuint Texture::AddTexture(const std::string& sPath, TextureType eType, bool bfl
 	return spTexture->uiID;
 }
 
-void Texture::AddTexture(std::vector<std::string>& vecCubeMap)
+GLuint Texture::AddTexture(std::vector<std::string>& vecCubeMap)
 {
 	auto spTexture = std::make_shared<TextureStruct>();
 	spTexture->sPath = "";
 	spTexture->uiID = TextureFromCube(vecCubeMap);
 	spTexture->eType = TextureType::CUBEMAP;
 	m_mapTextures[spTexture->uiID] = spTexture;
+	return spTexture->uiID;
 }
 
 const std::map<GLuint, std::shared_ptr<TextureStruct>>& Texture::GetTexures()const

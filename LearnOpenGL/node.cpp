@@ -151,6 +151,15 @@ void Node::SetIndexs(std::vector<unsigned int>& vecIndexs)
 void Node::SetRenderState(std::shared_ptr<RenderState> spRenderState)
 {
 	this->m_spRenderState = spRenderState;
+
+	auto& mapTexture = spRenderState->GetTexture()->GetTexures();
+	for (auto iter = mapTexture.begin(); iter != mapTexture.end(); iter++)
+	{
+		if (iter->second->eType==TextureType::CUBEMAP)
+		{
+			m_vecTexture.push_back(iter->second->uiID);
+		}
+	}
 }
 
 void Node::SetTransform(std::shared_ptr<Transform> spTransform)

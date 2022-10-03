@@ -5,8 +5,8 @@ class Shader
 {
 public:
 	Shader(const std::string& sVertexPath, const std::string& sFragmentPath,
-		const std::string& sTcsPath = "", const std::string& sTesPath = "",
-		const std::string& sGeometryPath = "");
+		const std::string& sGeometryPath = "", const std::string& sTesPath = "",
+		const std::string& sTcsPath = "");
 	~Shader();
 	void Use();
 	void SetBool(const std::string& sName, bool bValue)const;

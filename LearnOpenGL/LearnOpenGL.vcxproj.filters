@@ -46,6 +46,21 @@
     <Filter Include="shader\skybox">
       <UniqueIdentifier>{1ec33561-797c-4f42-af59-7bc677867299}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shader\skybox\environment_map">
+      <UniqueIdentifier>{65d52d47-16bf-419a-a939-2bb4afd17c3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shader\skybox\skybox">
+      <UniqueIdentifier>{46e60f5b-6aa8-4aef-adb2-4173c59b08f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shader\skybox\explode_face">
+      <UniqueIdentifier>{09566a91-0e53-479d-81e1-1da8b5cacc7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shader\skybox\explode_vertex">
+      <UniqueIdentifier>{242ba0ef-aa2a-4cd1-9e53-9f050e55670b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shader\skybox\view_normal">
+      <UniqueIdentifier>{bca8fa97-f3f7-49a8-9eb7-af2fd5803cbc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="entity.h">
@@ -226,17 +241,44 @@
     <None Include="..\resources\shaders\uniformbuffer\yellow.fs">
       <Filter>shader\uniformbuffer</Filter>
     </None>
-    <None Include="..\resources\shaders\skybox\fragment.fs">
-      <Filter>shader\skybox</Filter>
+    <None Include="..\resources\shaders\skybox\environment_mapping\fragment.fs">
+      <Filter>shader\skybox\environment_map</Filter>
     </None>
-    <None Include="..\resources\shaders\skybox\vertex.vs">
-      <Filter>shader\skybox</Filter>
+    <None Include="..\resources\shaders\skybox\environment_mapping\vertex.vs">
+      <Filter>shader\skybox\environment_map</Filter>
     </None>
-    <None Include="..\resources\shaders\skybox\skyfragment.fs">
-      <Filter>shader\skybox</Filter>
+    <None Include="..\resources\shaders\skybox\skybox\skyfragment.fs">
+      <Filter>shader\skybox\skybox</Filter>
     </None>
-    <None Include="..\resources\shaders\skybox\skyvertex.vs">
-      <Filter>shader\skybox</Filter>
+    <None Include="..\resources\shaders\skybox\skybox\skyvertex.vs">
+      <Filter>shader\skybox\skybox</Filter>
+    </None>
+    <None Include="..\resources\shaders\skybox\explode_face\fragment.fs">
+      <Filter>shader\skybox\explode_face</Filter>
+    </None>
+    <None Include="..\resources\shaders\skybox\explode_face\geometry_face.gs">
+      <Filter>shader\skybox\explode_face</Filter>
+    </None>
+    <None Include="..\resources\shaders\skybox\explode_face\vertex.vs">
+      <Filter>shader\skybox\explode_face</Filter>
+    </None>
+    <None Include="..\resources\shaders\skybox\explode_vertex\fragment.fs">
+      <Filter>shader\skybox\explode_vertex</Filter>
+    </None>
+    <None Include="..\resources\shaders\skybox\explode_vertex\geometry_vertex.gs">
+      <Filter>shader\skybox\explode_vertex</Filter>
+    </None>
+    <None Include="..\resources\shaders\skybox\explode_vertex\vertex.vs">
+      <Filter>shader\skybox\explode_vertex</Filter>
+    </None>
+    <None Include="..\resources\shaders\skybox\view_normal\fragment.fs">
+      <Filter>shader\skybox\view_normal</Filter>
+    </None>
+    <None Include="..\resources\shaders\skybox\view_normal\geometry_normal.gs">
+      <Filter>shader\skybox\view_normal</Filter>
+    </None>
+    <None Include="..\resources\shaders\skybox\view_normal\vertex.vs">
+      <Filter>shader\skybox\view_normal</Filter>
     </None>
   </ItemGroup>
 </Project>

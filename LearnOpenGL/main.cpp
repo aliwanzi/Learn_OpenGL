@@ -52,7 +52,10 @@ std::shared_ptr<Node> CreatCubeNode(std::shared_ptr<RenderState> spRenderState)
 	return std::make_shared<GeometryNode>(vecVertex, vecIndex, spRenderState, spTransform);
 }
 
-
+#define environment_map
+//#define explode_face
+//#define explode_vertex
+#define view_normal
 int main()
 {
 	//≥ı ºªØglfw°¢glad
@@ -63,19 +66,22 @@ int main()
 	auto spCamera = std::make_shared<Camera>(glm::vec3(0.f, 10.f, 20.f));
 	auto spScene = std::make_shared<Scene>(spGLResource, spCamera);
 
-	auto spShader = std::make_shared<Shader>("../resources/shaders/skybox/vertex.vs", "../resources/shaders/skybox/fragment.fs");
-	auto spTexture = std::make_shared<Texture>();
-	auto spRenderState = std::make_shared<RenderState>(spShader, spTexture);
-	spRenderState->SetBackGround(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f));
-	spRenderState->EnableDepthTest(true);
-	spRenderState->SetDrawMode(DRAW_MODE::ELEMENT_MODE);
-	spRenderState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_MODE);
+#ifdef environment_map
+	auto spShader = std::make_shared<Shader>("../resources/shaders/skybox/environment_mapping/vertex.vs",
+		"../resources/shaders/skybox/environment_mapping/fragment.fs");
+#endif // environment_map
 
-	auto spEntity = std::make_shared<Entity>();
-	auto spRenderPass = std::make_shared<RenderPass>(spEntity, spRenderState);
-	spEntity->AddMeshNode("../resources/objects/nanosuit/nanosuit.obj", spRenderState);
+#ifdef explode_face
+	auto spShader = std::make_shared<Shader>("../resources/shaders/skybox/explode_face/vertex.vs",
+		"../resources/shaders/skybox/explode_face/fragment.fs",
+		"../resources/shaders/skybox/explode_face/geometry_face.gs");
+#endif // 
 
-	spScene->AddRenderPass(spRenderPass);
+#ifdef explode_vertex
+	auto spShader = std::make_shared<Shader>("../resources/shaders/skybox/explode_vertex/vertex.vs",
+		"../resources/shaders/skybox/explode_vertex/fragment.fs",
+		"../resources/shaders/skybox/explode_vertex/geometry_vertex.gs");
+#endif // 
 
 	std::vector<std::string> vecSkyPath
 	{
@@ -86,9 +92,45 @@ int main()
 		"../resources/textures/skybox/front.jpg",
 		"../resources/textures/skybox/back.jpg",
 	};
+	auto spTexture = std::make_shared<Texture>();
+	auto glTexture = spTexture->AddTexture(vecSkyPath);
+	auto spRenderState = std::make_shared<RenderState>(spShader, spTexture);
+	spRenderState->SetBackGround(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f));
+	spRenderState->EnableDepthTest(true);
+	spRenderState->SetExplode(true);
+	spRenderState->SetDrawMode(DRAW_MODE::ELEMENT_MODE);
+	spRenderState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_MODE);
+
+	auto spEntity = std::make_shared<Entity>();
+	auto spRenderPass = std::make_shared<RenderPass>(spEntity, spRenderState);
+	spEntity->AddMeshNode("../resources/objects/nanosuit/nanosuit.obj", spRenderState);
+
+	spScene->AddRenderPass(spRenderPass);
+
+#ifdef view_normal
+	auto spNormalShader = std::make_shared<Shader>("../resources/shaders/skybox/view_normal/vertex.vs",
+		"../resources/shaders/skybox/view_normal/fragment.fs",
+		"../resources/shaders/skybox/view_normal/geometry_normal.gs");
+#endif
+	auto spNormalRenderState = std::make_shared<RenderState>(spNormalShader);
+	spNormalRenderState->SetBackGround(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f));
+	spNormalRenderState->EnableDepthTest(true);
+	spNormalRenderState->SetDrawMode(DRAW_MODE::ELEMENT_MODE);
+	spNormalRenderState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_MODE);
+	spNormalRenderState->SetClearBuffer(false);
+
+	auto spNormalRenderPass = std::make_shared<RenderPass>(spEntity, spNormalRenderState);
+	spScene->AddRenderPass(spNormalRenderPass);
+
+
 	auto spSkyTexture = std::make_shared<Texture>();
-	spSkyTexture->AddTexture(vecSkyPath);
-	auto spSkyShader = std::make_shared<Shader>("../resources/shaders/skybox/skyvertex.vs", "../resources/shaders/skybox/skyfragment.fs");
+	auto spTextureStruct = std::make_shared<TextureStruct>();
+	spTextureStruct->eType = TextureType::CUBEMAP;
+	spTextureStruct->sPath = "";
+	spTextureStruct->uiID = glTexture;
+	spSkyTexture->AddTexture(spTextureStruct);
+
+	auto spSkyShader = std::make_shared<Shader>("../resources/shaders/skybox/skybox/skyvertex.vs", "../resources/shaders/skybox/skybox/skyfragment.fs");
 	auto spSkyRenderState = std::make_shared<RenderState>(spSkyShader, spSkyTexture);
 	spSkyRenderState->SetBackGround(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f));
 	spSkyRenderState->EnableDepthTest(true);

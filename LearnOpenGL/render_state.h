@@ -114,6 +114,7 @@ public:
 	std::shared_ptr<Shader> GetShader()const;
 
 	void SetDrawSkyBox(bool bSkyBox);
+	void SetExplode(bool bExplode);
 private:
 
 	glm::vec4 m_vec4BackGround;
@@ -150,4 +151,5 @@ private:
 	bool m_bUpdateUniformBuffer;
 
 	bool m_bSkyBox;
+	bool m_bExplode;
 };
