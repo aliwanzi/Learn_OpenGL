@@ -130,6 +130,16 @@ float PointLight::GetQuartic()const
 	return m_fQuaratic;
 }
 
+void PointLight::SetRadius(float fRadius)
+{
+	m_fRadius = fRadius;
+}
+
+float PointLight::GetRadius() const
+{
+	return m_fRadius;
+}
+
 SpotLight::SpotLight() :m_vec3Position(glm::vec3(0.f)), m_vec3ViewDirection(glm::vec3(0.f)),
 m_fConstant(1.f), m_fLinear(0.09f), m_fQuaratic(0.032f),
 m_fCutOff(12.5f), m_fOuterCutOff(15.f)

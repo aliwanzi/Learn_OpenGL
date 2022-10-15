@@ -55,7 +55,7 @@ bool GLResource::CreateGLFWWindow(unsigned int uiWidth, unsigned int uiHeight, c
 	iWidth = uiWidth;
 	iHeight = uiHeight;
 
-	glfwWindowHint(GLFW_SAMPLES, 4);
+	//glfwWindowHint(GLFW_SAMPLES, 4);
 	m_pGLFWwindow = glfwCreateWindow(uiWidth, uiHeight, sWindowName.c_str(), NULL, NULL);
 	if (m_pGLFWwindow == NULL)
 	{

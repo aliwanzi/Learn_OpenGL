@@ -50,7 +50,7 @@ unsigned int Texture::TextureFromFile(const std::string& sPath, bool bflip, bool
 	glGenTextures(1, &uiID);
 
 	int iWidth(0), iHeight(0), iComponent(0);
-	//stbi_set_flip_vertically_on_load(bflip);
+	stbi_set_flip_vertically_on_load(bflip);
 	unsigned char* pImageData = stbi_load(sPath.c_str(), &iWidth, &iHeight, &iComponent, 0);
 	if (pImageData != nullptr)
 	{

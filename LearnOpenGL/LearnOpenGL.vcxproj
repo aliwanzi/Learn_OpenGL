@@ -151,6 +151,7 @@
     <ClInclude Include="common.h" />
     <ClInclude Include="entity.h" />
     <ClInclude Include="frame_buffer.h" />
+    <ClInclude Include="GBuffer.h" />
     <ClInclude Include="geometry_node.h" />
     <ClInclude Include="gl_resource.h" />
     <ClInclude Include="light.h" />
@@ -168,6 +169,7 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="entity.cpp" />
     <ClCompile Include="frame_buffer.cpp" />
+    <ClCompile Include="GBuffer.cpp" />
     <ClCompile Include="geometry_node.cpp" />
     <ClCompile Include="gl_resource.cpp" />
     <ClCompile Include="light.cpp" />
@@ -186,6 +188,12 @@
     <None Include="..\resources\shaders\blend\grass.fs" />
     <None Include="..\resources\shaders\blend\vertex.vs" />
     <None Include="..\resources\shaders\blend\window.fs" />
+    <None Include="..\resources\shaders\deferred\deffered_light_box.fs" />
+    <None Include="..\resources\shaders\deferred\deffered_light_box.vs" />
+    <None Include="..\resources\shaders\deferred\deffered_shading.fs" />
+    <None Include="..\resources\shaders\deferred\deffered_shading.vs" />
+    <None Include="..\resources\shaders\deferred\g_buffer.fs" />
+    <None Include="..\resources\shaders\deferred\g_buffer.vs" />
     <None Include="..\resources\shaders\depth\board.fs" />
     <None Include="..\resources\shaders\depth\fragment.fs" />
     <None Include="..\resources\shaders\depth\vertex.vs" />

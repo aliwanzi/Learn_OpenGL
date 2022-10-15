@@ -28,7 +28,10 @@ RenderState::RenderState(std::shared_ptr<Shader>spShader, std::shared_ptr<Textur
 	m_bExplode(false),
 	m_bMultiSample(false),
 	m_bMASS(false),
-	m_spMSAAInfo(nullptr)
+	m_spMSAAInfo(nullptr),
+	m_bGBuffer(false),
+	m_spGBuffer(nullptr),
+	m_bCopyGBufferDepth(false)
 {
 
 }
@@ -46,6 +49,11 @@ void RenderState::EnableBlend(bool bBlend)
 void RenderState::SetBlend(std::shared_ptr<Blend> spBlend)
 {
 	m_spBlend = spBlend;
+}
+
+const std::vector<std::shared_ptr<Light>>& RenderState::GetLights() const
+{
+	return m_vecLights;
 }
 
 void RenderState::EnableDepthTest(bool bDepthTest)
@@ -207,6 +215,20 @@ void RenderState::ApplyPreState()
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
+	if (m_bCopyGBufferDepth)
+	{
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, m_spGBuffer->GetGBuffer());
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+		glBlitFramebuffer(0, 0, m_spGBuffer->GetWidth(), m_spGBuffer->GetHeight(), 0, 0,
+			m_spGBuffer->GetWidth(), m_spGBuffer->GetHeight(), GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+
+	if (m_bGBuffer)
+	{
+		glBindFramebuffer(GL_FRAMEBUFFER, m_spGBuffer->GetGBuffer());
+	}
+
 	if (m_bClearFrameBuffer)
 	{
 		glClearColor(m_vec4BackGround.r, m_vec4BackGround.g, m_vec4BackGround.b, m_vec4BackGround.a);
@@ -314,6 +336,7 @@ void RenderState::ApplyLights(std::shared_ptr<Camera> spCamera)
 					m_spShader->SetFloat(sName + ".constant", (spPointLight)->GetConstant());
 					m_spShader->SetFloat(sName + ".linear", (spPointLight)->GetLinear());
 					m_spShader->SetFloat(sName + ".quadratic", (spPointLight)->GetQuartic());
+					m_spShader->SetFloat(sName + ".radius", spPointLight->GetRadius());
 				}
 				break;
 			}
@@ -387,6 +410,21 @@ PRIMITIVE_MODE RenderState::GetPrimitiveMode() const
 void RenderState::SetPolygonMode(POLYGON_MODE polygonMode)
 {
 	m_ePolygonMode = polygonMode;
+}
+
+void RenderState::EnableGBuffer(bool bGBuffer)
+{
+	m_bGBuffer = bGBuffer;
+}
+
+void RenderState::SetGBuffer(std::shared_ptr<GBuffer> spGBuffer)
+{
+	m_spGBuffer = spGBuffer;
+}
+
+void RenderState::CopyGBufferDepth(bool bCopy)
+{
+	m_bCopyGBufferDepth = bCopy;
 }
 
 void RenderState::SetBackGround(const glm::vec4& vec4BackGround)

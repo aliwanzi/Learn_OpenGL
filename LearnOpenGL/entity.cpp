@@ -38,12 +38,28 @@ void Entity::SetTransform(std::shared_ptr<Transform> spTransform)
 	}
 }
 
+void Entity::SetMultiTransform(std::vector<std::shared_ptr<Transform>>& vecTransform)
+{
+	m_vecTransform = vecTransform;
+}
+
 void Entity::DrawSelfAndChild()
 {
 	for (auto& child : m_listNode)
 	{
 		child->Prender();
-		child->Draw();
+		if (m_vecTransform.size() > 0)
+		{
+			for (int i = 0; i < m_vecTransform.size(); ++i)
+			{
+				child->SetTransform(m_vecTransform[i]);
+				child->Draw();
+			}
+		}
+		else
+		{
+			child->Draw();
+		}
 		child->PostRender();
 	}
 }

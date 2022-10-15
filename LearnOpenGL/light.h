@@ -60,12 +60,15 @@ public:
 	float GetLinear()const;
 	void SetQuartic(float fQuaric);
 	float GetQuartic()const;
+	void SetRadius(float fRadius);
+	float GetRadius()const;
 
 private:
 	glm::vec3 m_vec3Position;
 	float m_fConstant;
 	float m_fLinear;
 	float m_fQuaratic;
+	float m_fRadius;
 };
 
 class SpotLight :public Light

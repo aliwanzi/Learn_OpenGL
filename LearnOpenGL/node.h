@@ -31,6 +31,7 @@ public:
 	void SetTransform(std::shared_ptr<Transform> spTransform);
 	void SetInstanceOffset(const std::vector<glm::vec2>& vecOffset);
 	void SetInstanceOffset(const std::vector<glm::mat4>& vecOffset);
+	void SetUniformColor(const glm::vec3& color,bool bUniformColor);
 
 	virtual void Prender();
 	virtual void Draw();
@@ -39,6 +40,7 @@ public:
 private:
 	void ApplyTexture();
 	void ApplyTransform();
+	void ApplyUniform();
 
 protected:
 
@@ -50,6 +52,9 @@ protected:
 	std::shared_ptr<RenderState> m_spRenderState;
 	std::shared_ptr<Transform> m_spTransform;
 	std::vector<GLuint> m_vecTexture;
+
+	bool m_bUniformColor;
+	glm::vec3 m_vec3Color;
 
 private:
 	std::vector<Vertex> m_vecVertexs;

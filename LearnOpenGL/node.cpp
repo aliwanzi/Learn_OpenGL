@@ -9,7 +9,8 @@ m_spRenderState(nullptr), m_spTransform(nullptr)
 
 Node::Node(std::vector<Vertex>& vecVertexs, std::vector<unsigned int>& vecIndexs,
 	std::shared_ptr<RenderState> spRenderState, std::shared_ptr<Transform> spTransform) :
-	m_vecVertexs(vecVertexs), m_vecIndexs(vecIndexs), m_spRenderState(spRenderState), m_spTransform(spTransform)
+	m_vecVertexs(vecVertexs), m_vecIndexs(vecIndexs), m_spRenderState(spRenderState), m_spTransform(spTransform),
+	m_bUniformColor(false)
 {
 	SetVAOVBO();
 }
@@ -23,6 +24,7 @@ void Node::Prender()
 {
 	ApplyTexture();
 	ApplyTransform();
+	ApplyUniform();
 }
 
 void Node::Draw()
@@ -143,6 +145,15 @@ void Node::ApplyTransform()
 	}
 }
 
+void Node::ApplyUniform()
+{
+	if (m_bUniformColor)
+	{
+		auto spShader = m_spRenderState->GetShader();
+		spShader->SetVec3("lightColor", m_vec3Color);
+	}
+}
+
 void Node::SetVertexs(std::vector<Vertex>& vecVertexs)
 {
 	this->m_vecVertexs = vecVertexs;
@@ -222,6 +233,12 @@ void Node::SetInstanceOffset(const std::vector<glm::mat4>& vecOffset)
 	{
 		m_uiInstance = vecOffset.size();
 	}
+}
+
+void Node::SetUniformColor(const glm::vec3& color, bool bUniformColor)
+{
+	m_bUniformColor = bUniformColor;
+	m_vec3Color = color;
 }
 
 void Node::SetVAOVBO()

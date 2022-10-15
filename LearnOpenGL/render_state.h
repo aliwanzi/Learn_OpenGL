@@ -7,6 +7,7 @@
 #include "light.h"
 #include "frame_buffer.h"
 #include "uniform_buffer.h"
+#include "GBuffer.h"
 
 enum POLYGON_MODE
 {
@@ -77,6 +78,7 @@ public:
 
 	void SetLights(const std::vector<std::shared_ptr<Light>>& vecLights);
 	void AddLight(std::shared_ptr<Light> spLight);
+	const std::vector<std::shared_ptr<Light>>& GetLights()const;
 
 	void Use();
 	void ApplyState();
@@ -103,6 +105,10 @@ public:
 	void EnableFrameBuffer(bool bFrameBuffer);
 	void SetFrameBuffer(std::shared_ptr<FrameBuffer> spFrameBuffer);
 	void SetClearBuffer(bool bClearBuffer);
+
+	void EnableGBuffer(bool bGBuffer);
+	void SetGBuffer(std::shared_ptr<GBuffer> spGBuffer);
+	void CopyGBufferDepth(bool bCopy);
 
 	void SetModelMatrix(const glm::mat4& matModel);
 
@@ -131,6 +137,7 @@ public:
 	void EnableMultiSample(bool bMultiSample);
 	void EnableMSAA(bool bMSAA);
 	void SetMSAAInfor(std::shared_ptr<MSAAInfo> spMSAAInfo);
+
 private:
 
 	glm::vec4 m_vec4BackGround;
@@ -161,6 +168,10 @@ private:
 	bool m_bFrameBuffer;
 	bool m_bClearFrameBuffer;
 	std::shared_ptr<FrameBuffer> m_spFrameBuffer;
+
+	bool m_bGBuffer;
+	bool m_bCopyGBufferDepth;
+	std::shared_ptr<GBuffer> m_spGBuffer;
 
 	std::shared_ptr<UniformBuffer> m_spUniformBuffer;
 	bool m_bUniformBuffer;
