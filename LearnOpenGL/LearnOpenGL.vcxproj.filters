@@ -67,6 +67,9 @@
     <Filter Include="shader\deferred">
       <UniqueIdentifier>{fabd48cd-ddd3-440d-9174-7d49a019cdcf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shader\bloom">
+      <UniqueIdentifier>{16cb1e44-a6b0-4e12-868f-b1d7f99084ee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="entity.h">
@@ -120,6 +123,12 @@
     <ClInclude Include="GBuffer.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="HDRBuffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BlurBuffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="entity.cpp">
@@ -171,6 +180,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="GBuffer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="HDRBuffer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BlurBuffer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -321,6 +336,27 @@
     </None>
     <None Include="..\resources\shaders\deferred\deffered_shading.vs">
       <Filter>shader\deferred</Filter>
+    </None>
+    <None Include="..\resources\shaders\bloom\vertex.vs">
+      <Filter>shader\bloom</Filter>
+    </None>
+    <None Include="..\resources\shaders\bloom\box.fs">
+      <Filter>shader\bloom</Filter>
+    </None>
+    <None Include="..\resources\shaders\bloom\light.fs">
+      <Filter>shader\bloom</Filter>
+    </None>
+    <None Include="..\resources\shaders\bloom\blur.fs">
+      <Filter>shader\bloom</Filter>
+    </None>
+    <None Include="..\resources\shaders\bloom\blur.vs">
+      <Filter>shader\bloom</Filter>
+    </None>
+    <None Include="..\resources\shaders\bloom\bloom.fs">
+      <Filter>shader\bloom</Filter>
+    </None>
+    <None Include="..\resources\shaders\bloom\bloom.vs">
+      <Filter>shader\bloom</Filter>
     </None>
   </ItemGroup>
 </Project>

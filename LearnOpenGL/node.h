@@ -31,7 +31,7 @@ public:
 	void SetTransform(std::shared_ptr<Transform> spTransform);
 	void SetInstanceOffset(const std::vector<glm::vec2>& vecOffset);
 	void SetInstanceOffset(const std::vector<glm::mat4>& vecOffset);
-	void SetUniformColor(const glm::vec3& color,bool bUniformColor);
+	void SetUniformColor(const glm::vec3& color, bool bUniformColor = true);
 
 	virtual void Prender();
 	virtual void Draw();

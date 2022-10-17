@@ -8,6 +8,8 @@
 #include "frame_buffer.h"
 #include "uniform_buffer.h"
 #include "GBuffer.h"
+#include "HDRBuffer.h"
+#include "BlurBuffer.h"
 
 enum POLYGON_MODE
 {
@@ -138,6 +140,11 @@ public:
 	void EnableMSAA(bool bMSAA);
 	void SetMSAAInfor(std::shared_ptr<MSAAInfo> spMSAAInfo);
 
+	void SetHDRBuffer(std::shared_ptr<HDRBuffer> spHDRBuffer);
+	void EnabelHDRBuffer(bool bHDRBuffer);
+	void SetBlurBuffer(std::shared_ptr<BlurBuffer> spBlurBuffer);
+	void EnabelBlurBuffer(bool bBlurBuffer);
+	void SetBlurFrame(int frame);
 private:
 
 	glm::vec4 m_vec4BackGround;
@@ -183,4 +190,10 @@ private:
 	bool m_bMultiSample;
 	bool m_bMASS;
 	std::shared_ptr<MSAAInfo> m_spMSAAInfo;
+
+	bool m_bHDRBuffer;
+	std::shared_ptr<HDRBuffer> m_spHDRBuffer;
+	bool m_bBlurBuffer, m_bHorizontal, m_bFirst;
+	std::shared_ptr<BlurBuffer> m_spBlurBuffer;
+	int m_iFrame;
 };

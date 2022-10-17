@@ -80,7 +80,7 @@ const glm::vec3& DirLight::GetLightDirction()const
 }
 
 PointLight::PointLight() :m_vec3Position(glm::vec3(0.f)),
-m_fConstant(1.f), m_fLinear(0.09f), m_fQuaratic(0.032f)
+m_fConstant(1.f), m_fLinear(0.09f), m_fQuaratic(0.032f),m_fRadius(0.f)
 {
 
 }

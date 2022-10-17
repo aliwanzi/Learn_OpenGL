@@ -31,7 +31,14 @@ RenderState::RenderState(std::shared_ptr<Shader>spShader, std::shared_ptr<Textur
 	m_spMSAAInfo(nullptr),
 	m_bGBuffer(false),
 	m_spGBuffer(nullptr),
-	m_bCopyGBufferDepth(false)
+	m_bCopyGBufferDepth(false),
+	m_bHDRBuffer(false),
+	m_spHDRBuffer(nullptr),
+	m_spBlurBuffer(nullptr),
+	m_bBlurBuffer(false),
+	m_bHorizontal(true),
+	m_bFirst(true),
+	m_iFrame(0)
 {
 
 }
@@ -210,6 +217,10 @@ void RenderState::ApplyPreState()
 			glBindFramebuffer(GL_FRAMEBUFFER, m_spFrameBuffer->GetFrameBuffer());
 		}
 	}
+	else if (m_bHDRBuffer)
+	{
+		glBindFramebuffer(GL_FRAMEBUFFER, m_spHDRBuffer->GetHDRBuffer());
+	}
 	else
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -222,6 +233,28 @@ void RenderState::ApplyPreState()
 		glBlitFramebuffer(0, 0, m_spGBuffer->GetWidth(), m_spGBuffer->GetHeight(), 0, 0,
 			m_spGBuffer->GetWidth(), m_spGBuffer->GetHeight(), GL_DEPTH_BUFFER_BIT, GL_NEAREST);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+
+	if (m_bBlurBuffer)
+	{
+		static int num(0);
+		static bool first(true);
+		int frame = num % 2;
+		glBindFramebuffer(GL_FRAMEBUFFER, m_spBlurBuffer->GetBlurBuffer()[frame]);
+		m_spShader->SetInt("horiontal", frame);
+		glBindTexture(GL_TEXTURE_2D, first ? m_spHDRBuffer->GetBrightness() : m_spBlurBuffer->GetRendering()[(num+1) % 2]);
+		num++;
+		if (first)
+		{
+			glClearColor(m_vec4BackGround.r, m_vec4BackGround.g, m_vec4BackGround.b, m_vec4BackGround.a);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+			first = false;
+		}
+		if (num == m_iFrame)
+		{
+			first = true;
+			num = 0;
+		}
 	}
 
 	if (m_bGBuffer)
@@ -460,6 +493,31 @@ void RenderState::SetDrawSkyBox(bool bSkyBox)
 void RenderState::SetExplode(bool bExplode)
 {
 	m_bExplode = bExplode;
+}
+
+void RenderState::SetHDRBuffer(std::shared_ptr<HDRBuffer> spHDRBuffer)
+{
+	m_spHDRBuffer = spHDRBuffer;
+}
+
+void RenderState::EnabelHDRBuffer(bool bHDRBuffer)
+{
+	m_bHDRBuffer = bHDRBuffer;
+}
+
+void RenderState::SetBlurBuffer(std::shared_ptr<BlurBuffer> spBlurBuffer)
+{
+	m_spBlurBuffer = spBlurBuffer;
+}
+
+void RenderState::EnabelBlurBuffer(bool bBlurBuffer)
+{
+	m_bBlurBuffer = bBlurBuffer;
+}
+
+void RenderState::SetBlurFrame(int frame)
+{
+	m_iFrame = frame;
 }
 
 void RenderState::EnableMultiSample(bool bMultiSample)
