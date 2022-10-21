@@ -3,6 +3,10 @@ namespace
 {
 	float DeltaFrame(0.f);
 	float LastFrame(0.f);
+	float exposure(1.f);
+	bool bloomKeyPressed(false);
+	bool gammaKeyPressed(false);
+	bool blinnKeyPressed(false);
 }
 
 Scene::Scene(std::shared_ptr<GLResource> spGLResource,std::shared_ptr<Camera> spCamera)
@@ -68,4 +72,59 @@ void Scene::ProcessInput()
 		m_spCamera->ProcessKeyboard(Movement::LEFT, DeltaFrame);
 	if (glfwGetKey(pGLFWwindow, GLFW_KEY_D) == GLFW_PRESS)
 		m_spCamera->ProcessKeyboard(Movement::RIGHT, DeltaFrame);
+
+	for (auto& iter : m_vecRenderPass)
+	{
+		auto spRenderState = iter->GetRenderState();
+		if (spRenderState->GetExpusure())
+		{
+			if (glfwGetKey(pGLFWwindow, GLFW_KEY_Z) == GLFW_PRESS && !bloomKeyPressed)
+			{
+  				auto bloom = spRenderState->GetBloom();
+				spRenderState->EnableBloom(!bloom);
+				bloomKeyPressed = true;
+			}
+			if (glfwGetKey(pGLFWwindow, GLFW_KEY_Z) == GLFW_RELEASE)
+			{
+ 				bloomKeyPressed = false;
+			}
+
+			if (glfwGetKey(pGLFWwindow, GLFW_KEY_C) == GLFW_PRESS && !gammaKeyPressed)
+			{
+				auto gamma = spRenderState->GetGamma();
+				spRenderState->EnableGamma(!gamma);
+				gammaKeyPressed = true;
+			}
+			if (glfwGetKey(pGLFWwindow, GLFW_KEY_C) == GLFW_RELEASE)
+			{
+				gammaKeyPressed = false;
+			}
+
+			if (glfwGetKey(pGLFWwindow, GLFW_KEY_Q) == GLFW_PRESS)
+			{
+				if (exposure > 0.0f)
+					exposure -= 0.01f;
+				else
+					exposure = 0.0f;
+			}
+			else if (glfwGetKey(pGLFWwindow, GLFW_KEY_E) == GLFW_PRESS)
+			{
+				exposure += 0.01f;
+			}
+			spRenderState->SetExposure(exposure);
+		}
+		if (spRenderState->GetUseBlinn())
+		{
+			if (glfwGetKey(pGLFWwindow, GLFW_KEY_X) == GLFW_PRESS && !blinnKeyPressed)
+			{
+				auto blinn = spRenderState->GetBlinn();
+				spRenderState->SetBlinn(!blinn);
+				blinnKeyPressed = true;
+			}
+			if (glfwGetKey(pGLFWwindow, GLFW_KEY_X) == GLFW_RELEASE)
+			{
+				blinnKeyPressed = false;
+			}
+		}
+	}
 }

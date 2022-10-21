@@ -38,7 +38,13 @@ RenderState::RenderState(std::shared_ptr<Shader>spShader, std::shared_ptr<Textur
 	m_bBlurBuffer(false),
 	m_bHorizontal(true),
 	m_bFirst(true),
-	m_iFrame(0)
+	m_iFrame(0),
+	m_bBloom(false),
+	m_bExposure(false),
+	m_bGamma(false),
+	m_fExposure(0.f),
+	m_blinn(true),
+	m_bUseBlinn(false)
 {
 
 }
@@ -241,7 +247,7 @@ void RenderState::ApplyPreState()
 		static bool first(true);
 		int frame = num % 2;
 		glBindFramebuffer(GL_FRAMEBUFFER, m_spBlurBuffer->GetBlurBuffer()[frame]);
-		m_spShader->SetInt("horiontal", frame);
+		m_spShader->SetInt("horizontal", frame);
 		glBindTexture(GL_TEXTURE_2D, first ? m_spHDRBuffer->GetBrightness() : m_spBlurBuffer->GetRendering()[(num+1) % 2]);
 		num++;
 		if (first)
@@ -329,6 +335,18 @@ void RenderState::ApplyTransform(std::shared_ptr<Camera>spCamera)
 	if (m_bExplode)
 	{
 		m_spShader->SetFloat("time", glm::sin(glfwGetTime()));
+	}
+
+	if (m_bExposure)
+	{
+		m_spShader->SetBool("bloom", m_bBloom);
+		m_spShader->SetFloat("exposure", m_fExposure);
+		m_spShader->SetBool("bgamma", m_bGamma);
+	}
+	if (m_bUseBlinn)
+	{
+		m_spShader->SetBool("blinn", m_blinn);
+		m_blinn ? std::cout << "use blinn" << std::endl : std::cout << "not use blinn" << std::endl;
 	}
 }
 
@@ -518,6 +536,62 @@ void RenderState::EnabelBlurBuffer(bool bBlurBuffer)
 void RenderState::SetBlurFrame(int frame)
 {
 	m_iFrame = frame;
+}
+
+void RenderState::EnableBloom(bool bBloom)
+{
+	m_bBloom = bBloom;
+}
+
+void RenderState::EnabelExposure(bool bExposure)
+{
+	m_bExposure = bExposure;
+}
+
+bool RenderState::GetBloom() const
+{
+	return m_bBloom;
+}
+
+bool RenderState::GetBlinn() const
+{
+	return m_blinn;
+}
+
+bool RenderState::GetUseBlinn() const
+{
+	return m_bUseBlinn;
+}
+
+void RenderState::EnableUseBlinn(bool bUseLinn)
+{
+	m_bUseBlinn = bUseLinn;
+}
+
+void RenderState::SetBlinn(bool blinn)
+{
+	m_blinn = blinn;
+}
+
+
+void RenderState::EnableGamma(bool bEnable)
+{
+	m_bGamma = bEnable;
+}
+
+bool RenderState::GetExpusure() const
+{
+	return m_bExposure;
+}
+
+bool RenderState::GetGamma() const
+{
+	return m_bGamma;
+}
+
+void RenderState::SetExposure(float fExposure)
+{
+	m_fExposure = fExposure;
 }
 
 void RenderState::EnableMultiSample(bool bMultiSample)

@@ -27,24 +27,22 @@ in VS_OUT {
 } fs_in;
 
 uniform sampler2D texture_diffuse1;
-uniform sampler2D texture_specular1;
 uniform bool blinn;
 
 void main()
 {
-    vec3 colorDiffuse = texture(texture_diffuse1, fs_in.TexCoords).rgb;
-    vec3 colorSpecular = texture(texture_specular1, fs_in.TexCoords).rgb;
+    vec3 color = texture(texture_diffuse1, fs_in.TexCoords).rgb;
     vec3 normal = normalize(fs_in.Normal);
 
     vec3 lighting = vec3(0.0);
 
     for(int i =0;i<NR_POINT_LIGHTS;i++)
     {
-        vec3 ambient =  pointLights[i].ambient * colorDiffuse;
+        vec3 ambient =  pointLights[i].ambient * color;
 
         vec3 lightDir = normalize(pointLights[i].position - fs_in.FragPos);
         float diff = max(dot(lightDir,normal),0.0);
-        vec3 diffuse = pointLights[i].diffuse * diff * colorDiffuse;
+        vec3 diffuse = pointLights[i].diffuse * diff * color;
 
         vec3 viewDir = normalize(viewPos - fs_in.FragPos);
         float spec = 0.0;
@@ -58,7 +56,7 @@ void main()
             vec3 reflectDir = reflect(-lightDir,normal);
             spec = pow(max(dot(viewDir,reflectDir),0.0),pointLights[i].shininess);
         }
-        vec3 specular = pointLights[i].specular * spec * colorSpecular;
+        vec3 specular = pointLights[i].specular * spec;
 
 
         float distance = length(fs_in.FragPos - pointLights[i].position);

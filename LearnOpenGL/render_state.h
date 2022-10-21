@@ -145,6 +145,21 @@ public:
 	void SetBlurBuffer(std::shared_ptr<BlurBuffer> spBlurBuffer);
 	void EnabelBlurBuffer(bool bBlurBuffer);
 	void SetBlurFrame(int frame);
+
+	void EnableUseBlinn(bool bUseLinn);
+	bool GetUseBlinn()const;
+	bool GetBlinn()const;
+	void SetBlinn(bool blinn);
+
+	void EnableBloom(bool bBloom);
+	bool GetBloom()const;
+
+	void EnableGamma(bool bEnable);
+	bool GetGamma()const;
+
+	void EnabelExposure(bool bExposure);
+	bool GetExpusure()const;
+	void SetExposure(float fExposure);
 private:
 
 	glm::vec4 m_vec4BackGround;
@@ -180,6 +195,9 @@ private:
 	bool m_bCopyGBufferDepth;
 	std::shared_ptr<GBuffer> m_spGBuffer;
 
+	bool m_bUseBlinn;
+	bool m_blinn;
+
 	std::shared_ptr<UniformBuffer> m_spUniformBuffer;
 	bool m_bUniformBuffer;
 	bool m_bUpdateUniformBuffer;
@@ -196,4 +214,9 @@ private:
 	bool m_bBlurBuffer, m_bHorizontal, m_bFirst;
 	std::shared_ptr<BlurBuffer> m_spBlurBuffer;
 	int m_iFrame;
+
+	bool m_bBloom;
+	bool m_bGamma;
+	bool m_bExposure;
+	float m_fExposure;
 };

@@ -9,17 +9,20 @@ uniform sampler2D texture_diffuse1;
 uniform sampler2D texture_diffuse2;
 uniform bool bloom;
 uniform float exposure;
+uniform bool bgamma;
 
 void main()
 {
     const float gamma = 2.2;
     vec3 hdrColor = texture(texture_diffuse1,fs_in.TexCoords).rgb;
     vec3 bloomColor = texture(texture_diffuse2,fs_in.TexCoords).rgb;
-    //if(bloom)
-        //hdrColor +=bloomColor;
-    //vec3 result = vec3(1.0) - exp(-hdrColor * exposure);
+    if(bloom)
+        hdrColor +=bloomColor;
 
-    //result = pow(result,vec3(1.0/gamma));
+    vec3 result = vec3(1.0) - exp(-hdrColor * exposure);
 
-    FragColor = vec4(bloomColor,1.0);
+    //if(bgamma)
+     result = pow(result,vec3(1.0/gamma));
+
+    FragColor = vec4(result,1.0);
 }

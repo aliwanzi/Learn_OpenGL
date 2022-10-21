@@ -199,6 +199,7 @@
     <None Include="..\resources\shaders\bloom\box.fs" />
     <None Include="..\resources\shaders\bloom\light.fs" />
     <None Include="..\resources\shaders\bloom\vertex.vs" />
+    <None Include="..\resources\shaders\bloom\wood.fs" />
     <None Include="..\resources\shaders\deferred\deffered_light_box.fs" />
     <None Include="..\resources\shaders\deferred\deffered_light_box.vs" />
     <None Include="..\resources\shaders\deferred\deffered_shading.fs" />

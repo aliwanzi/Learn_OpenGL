@@ -68,35 +68,35 @@ std::vector<glm::vec3> lightColor
 
 std::vector<Vertex> vecVertex
 {
-	Vertex(glm::vec3(-0.5, -0.5, -0.5),glm::vec2(0.0, 0.0),glm::vec3(0.f,0.f,-1.f)),//0
-	Vertex(glm::vec3(0.5, -0.5, -0.5),glm::vec2(1.0, 0.0),glm::vec3(0.f,0.f,-1.f)),//1
-	Vertex(glm::vec3(0.5,  0.5, -0.5),glm::vec2(1.0, 1.0),glm::vec3(0.f,0.f,-1.f)),//2
-	Vertex(glm::vec3(-0.5,  0.5, -0.5),glm::vec2(0.0, 1.0),glm::vec3(0.f,0.f,-1.f)),//3
+	Vertex(glm::vec3(-1.0, -1.0, -1.0),glm::vec2(0.0, 0.0),glm::vec3(0.f,0.f,-1.f)),//0
+	Vertex(glm::vec3(1.0, -1.0, -1.0),glm::vec2(1.0, 0.0),glm::vec3(0.f,0.f,-1.f)),//1
+	Vertex(glm::vec3(1.0,  1.0, -1.0),glm::vec2(1.0, 1.0),glm::vec3(0.f,0.f,-1.f)),//2
+	Vertex(glm::vec3(-1.0,  1.0, -1.0),glm::vec2(0.0, 1.0),glm::vec3(0.f,0.f,-1.f)),//3
 
-	Vertex(glm::vec3(-0.5, -0.5, 0.5),glm::vec2(0.0, 0.0),glm::vec3(0.f,0.f,1.f)),//4
-	Vertex(glm::vec3(0.5, -0.5, 0.5),glm::vec2(1.0, 0.0),glm::vec3(0.f,0.f,1.f)),//5
-	Vertex(glm::vec3(0.5,  0.5, 0.5),glm::vec2(1.0, 1.0),glm::vec3(0.f,0.f,1.f)),//6
-	Vertex(glm::vec3(-0.5,  0.5, 0.5),glm::vec2(0.0, 1.0),glm::vec3(0.f,0.f,1.f)),//7
+	Vertex(glm::vec3(-1.0, -1.0, 1.0),glm::vec2(0.0, 0.0),glm::vec3(0.f,0.f,1.f)),//4
+	Vertex(glm::vec3(1.0, -1.0, 1.0),glm::vec2(1.0, 0.0),glm::vec3(0.f,0.f,1.f)),//5
+	Vertex(glm::vec3(1.0,  1.0, 1.0),glm::vec2(1.0, 1.0),glm::vec3(0.f,0.f,1.f)),//6
+	Vertex(glm::vec3(-1.0,  1.0, 1.0),glm::vec2(0.0, 1.0),glm::vec3(0.f,0.f,1.f)),//7
 
-	Vertex(glm::vec3(-0.5,  0.5,  0.5),glm::vec2(1.0, 0.0),glm::vec3(-1.f,0.f,0.f)),
-	Vertex(glm::vec3(-0.5,  0.5, -0.5),glm::vec2(1.0, 1.0),glm::vec3(-1.f,0.f,0.f)),
-	Vertex(glm::vec3(-0.5, -0.5, -0.5),glm::vec2(0.0, 1.0),glm::vec3(-1.f,0.f,0.f)),
-	Vertex(glm::vec3(-0.5, -0.5,  0.5),glm::vec2(0.0, 0.0),glm::vec3(-1.f,0.f,0.f)),
+	Vertex(glm::vec3(-1.0,  1.0,  1.0),glm::vec2(1.0, 0.0),glm::vec3(-1.f,0.f,0.f)),
+	Vertex(glm::vec3(-1.0,  1.0, -1.0),glm::vec2(1.0, 1.0),glm::vec3(-1.f,0.f,0.f)),
+	Vertex(glm::vec3(-1.0, -1.0, -1.0),glm::vec2(0.0, 1.0),glm::vec3(-1.f,0.f,0.f)),
+	Vertex(glm::vec3(-1.0, -1.0,  1.0),glm::vec2(0.0, 0.0),glm::vec3(-1.f,0.f,0.f)),
 
-	Vertex(glm::vec3(0.5,  0.5,  0.5),glm::vec2(1.0, 0.0),glm::vec3(1.f,0.f,0.f)),
-	Vertex(glm::vec3(0.5,  0.5, -0.5),glm::vec2(1.0, 1.0),glm::vec3(1.f,0.f,0.f)),
-	Vertex(glm::vec3(0.5, -0.5, -0.5),glm::vec2(0.0, 1.0),glm::vec3(1.f,0.f,0.f)),
-	Vertex(glm::vec3(0.5, -0.5,  0.5),glm::vec2(0.0, 0.0),glm::vec3(1.f,0.f,0.f)),
+	Vertex(glm::vec3(1.0,  1.0,  1.0),glm::vec2(1.0, 0.0),glm::vec3(1.f,0.f,0.f)),
+	Vertex(glm::vec3(1.0,  1.0, -1.0),glm::vec2(1.0, 1.0),glm::vec3(1.f,0.f,0.f)),
+	Vertex(glm::vec3(1.0, -1.0, -1.0),glm::vec2(0.0, 1.0),glm::vec3(1.f,0.f,0.f)),
+	Vertex(glm::vec3(1.0, -1.0,  1.0),glm::vec2(0.0, 0.0),glm::vec3(1.f,0.f,0.f)),
 
-	Vertex(glm::vec3(-0.5, -0.5, -0.5),glm::vec2(0.0, 1.0),glm::vec3(0.f,-1.f,0.f)),
-	Vertex(glm::vec3(0.5, -0.5, -0.5),glm::vec2(1.0, 1.0),glm::vec3(0.f,-1.f,0.f)),
-	Vertex(glm::vec3(0.5, -0.5,  0.5),glm::vec2(1.0, 0.0),glm::vec3(0.f,-1.f,0.f)),
-	Vertex(glm::vec3(-0.5, -0.5,  0.5),glm::vec2(0.0, 0.0),glm::vec3(0.f,-1.f,0.f)),
+	Vertex(glm::vec3(-1.0, -1.0, -1.0),glm::vec2(0.0, 1.0),glm::vec3(0.f,-1.f,0.f)),
+	Vertex(glm::vec3(1.0, -1.0, -1.0),glm::vec2(1.0, 1.0),glm::vec3(0.f,-1.f,0.f)),
+	Vertex(glm::vec3(1.0, -1.0,  1.0),glm::vec2(1.0, 0.0),glm::vec3(0.f,-1.f,0.f)),
+	Vertex(glm::vec3(-1.0, -1.0,  1.0),glm::vec2(0.0, 0.0),glm::vec3(0.f,-1.f,0.f)),
 
-	Vertex(glm::vec3(-0.5,  0.5, -0.5),glm::vec2(0.0, 1.0),glm::vec3(0.f,1.f,0.f)),
-	Vertex(glm::vec3(0.5,  0.5, -0.5),glm::vec2(1.0, 1.0),glm::vec3(0.f,1.f,0.f)),
-	Vertex(glm::vec3(0.5,  0.5,  0.5),glm::vec2(1.0, 0.0),glm::vec3(0.f,1.f,0.f)),
-	Vertex(glm::vec3(-0.5,  0.5,  0.5),glm::vec2(0.0, 0.0),glm::vec3(0.f,1.f,0.f))
+	Vertex(glm::vec3(-1.0,  1.0, -1.0),glm::vec2(0.0, 1.0),glm::vec3(0.f,1.f,0.f)),
+	Vertex(glm::vec3(1.0,  1.0, -1.0),glm::vec2(1.0, 1.0),glm::vec3(0.f,1.f,0.f)),
+	Vertex(glm::vec3(1.0,  1.0,  1.0),glm::vec2(1.0, 0.0),glm::vec3(0.f,1.f,0.f)),
+	Vertex(glm::vec3(-1.0,  1.0,  1.0),glm::vec2(0.0, 0.0),glm::vec3(0.f,1.f,0.f))
 };
 
 std::vector<unsigned int> vecIndex
@@ -108,7 +108,7 @@ std::vector<unsigned int> vecIndex
 void CreatBoxNode(std::shared_ptr<RenderState> spRenderState,
 	std::vector<std::shared_ptr<Node>>& vecBoxNode)
 {
-	for (int i = 0; i < objectPosition.size(); i++)
+	for (int i = 1; i < objectPosition.size(); i++)
 	{
 		auto spTransform = std::make_shared<Transform>();
 		spTransform->SetModelPan(objectPosition[i]);
@@ -126,13 +126,39 @@ void CreatBoxNode(std::shared_ptr<RenderState> spRenderState,
 		auto spPointLight = std::make_shared<PointLight>();
 		spPointLight->SetLightType(LightType::POINT_LIGHT);
 
-		spPointLight->SetLightPosition(lightPosition[0]);
-		spPointLight->SetAmbient(glm::vec3(0.0f));
+		spPointLight->SetLightPosition(lightPosition[i]);
+		spPointLight->SetAmbient(glm::vec3(0.05f));
 		spPointLight->SetDiffuse(lightColor[i]);
+		spPointLight->SetSpecular(glm::vec3(1.0), 32);
 		vecLights.emplace_back(spPointLight);
 	}
 
 	spRenderState->SetLights(vecLights);
+}
+
+std::shared_ptr<Node> CreatWoodNode(std::shared_ptr<RenderState> spRenderState)
+{
+	auto spTransform = std::make_shared<Transform>();
+	spTransform->SetModelPan(objectPosition[0]);
+	spTransform->SetModelScale(objectScale[0]);
+	spTransform->SetModelRotAngle(objectRotateAngle[0]);
+	spTransform->SetModelRotAixs(objectRotateAxis[0]);
+
+	std::vector<std::shared_ptr<Light>> vecLights;
+	for (int i = 0; i < lightPosition.size(); i++)
+	{
+		auto spPointLight = std::make_shared<PointLight>();
+		spPointLight->SetLightType(LightType::POINT_LIGHT);
+
+		spPointLight->SetLightPosition(lightPosition[i]);
+		spPointLight->SetAmbient(glm::vec3(0.05f));
+		spPointLight->SetDiffuse(lightColor[i]);
+		spPointLight->SetSpecular(glm::vec3(1.0), 32);
+		vecLights.emplace_back(spPointLight);
+	}
+
+	spRenderState->SetLights(vecLights);
+	return std::make_shared<GeometryNode>(vecVertex, vecIndex, spRenderState, spTransform);
 }
 
 void CreatLightNode(std::shared_ptr<RenderState> spRenderState,
@@ -143,6 +169,7 @@ void CreatLightNode(std::shared_ptr<RenderState> spRenderState,
 	{
 		auto spTransform = std::make_shared<Transform>();
 		spTransform->SetModelPan(lightPosition[i]);
+		spTransform->SetModelScale(glm::vec3(0.25f));
 
 		auto spNode = std::make_shared<GeometryNode>(vecVertex, vecIndex, spRenderState, spTransform);
 		spNode->SetUniformColor(lightColor[i]);
@@ -164,6 +191,7 @@ std::shared_ptr<Node> CreateBlurNode(std::shared_ptr<RenderState> spRenderState)
 		0,1,2, 1,3,2
 	};
 
+
 	auto spTransform = std::make_shared<Transform>();
 	return std::make_shared<GeometryNode>(quarVertices, quardIndex, spRenderState, spTransform);
 }
@@ -184,7 +212,8 @@ int main()
 	auto spBoxShader = std::make_shared<Shader>("../resources/shaders/bloom/vertex.vs",
 		"../resources/shaders/bloom/box.fs");
 	auto spBoxTexture = std::make_shared<Texture>();
-	spBoxTexture->AddTexture("../resources/textures/wood.png", TextureType::DIFFUSE);
+	spBoxTexture->AddTexture("../resources/textures/container2.png", TextureType::DIFFUSE, true, true);
+	spBoxTexture->AddTexture("../resources/textures/container2_specular.png", TextureType::SPECULAR, true, true);
 	auto spBoxRenderState = std::make_shared<RenderState>(spBoxShader, spBoxTexture);
 	spBoxRenderState->SetBackGround(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
 	spBoxRenderState->EnableDepthTest(true);
@@ -192,6 +221,7 @@ int main()
 	spBoxRenderState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_MODE);
 	spBoxRenderState->SetHDRBuffer(spHDRBuffer);
 	spBoxRenderState->EnabelHDRBuffer(true);
+	spBoxRenderState->EnableUseBlinn(true);
 	auto spBoxEntity = std::make_shared<Entity>();
 	auto spBoxRenderPass = std::make_shared<RenderPass>(spBoxEntity, spBoxRenderState);
 	std::vector<std::shared_ptr<Node>> vecBoxNode;
@@ -200,7 +230,27 @@ int main()
 	{
 		spBoxEntity->AddGeometryNode(vecBoxNode[i]);
 	}
-	spScene->AddRenderPass(spBoxRenderPass);
+	//spScene->AddRenderPass(spBoxRenderPass);
+
+
+	auto spWoodShader = std::make_shared<Shader>("../resources/shaders/bloom/vertex.vs",
+		"../resources/shaders/bloom/wood.fs");
+	auto spWoodTexture = std::make_shared<Texture>();
+	spWoodTexture->AddTexture("../resources/textures/wood.png", TextureType::DIFFUSE, true, true);
+	auto spWoodRenderState = std::make_shared<RenderState>(spWoodShader, spWoodTexture);
+	spWoodRenderState->SetBackGround(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+	spWoodRenderState->EnableDepthTest(true);
+	spWoodRenderState->SetDrawMode(DRAW_MODE::ELEMENT_MODE);
+	spWoodRenderState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_MODE);
+	//spWoodRenderState->SetClearBuffer(false);
+	spWoodRenderState->SetHDRBuffer(spHDRBuffer);
+	//spWoodRenderState->EnabelHDRBuffer(true);
+	spWoodRenderState->EnableUseBlinn(true);
+	auto spWoodEntity = std::make_shared<Entity>();
+	auto spWoodRenderPass = std::make_shared<RenderPass>(spWoodEntity, spWoodRenderState);
+	spWoodEntity->AddGeometryNode(CreatWoodNode(spWoodRenderState));
+	spScene->AddRenderPass(spWoodRenderPass);
+
 
 	auto spLightShader = std::make_shared<Shader>("../resources/shaders/bloom/vertex.vs",
 		"../resources/shaders/bloom/light.fs");
@@ -212,7 +262,7 @@ int main()
 	spLightRenderState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_MODE);
 	spLightRenderState->SetClearBuffer(false);
 	spLightRenderState->SetHDRBuffer(spHDRBuffer);
-	spLightRenderState->EnabelHDRBuffer(true);
+	//spLightRenderState->EnabelHDRBuffer(true);
 	auto spLightEntity = std::make_shared<Entity>();
 	auto spLightRenderPass = std::make_shared<RenderPass>(spLightEntity, spLightRenderState);
 	std::vector<std::shared_ptr<Node>> vecLightNode;
@@ -244,7 +294,7 @@ int main()
 	spBlurEntity->AddGeometryNode(spNode);
 	for (int i = 0; i < 10; i++)
 	{
-		spScene->AddRenderPass(spBlurPass);
+		//spScene->AddRenderPass(spBlurPass);
 	}
 
 	auto spBloomShader = std::make_shared<Shader>("../resources/shaders/bloom/bloom.vs",
@@ -255,7 +305,7 @@ int main()
 	spColor->uiID = spHDRBuffer->GetRendering();
 	auto spBlur = std::make_shared<TextureStruct>();
 	spBlur->eType = TextureType::DIFFUSE;
-	spBlur->uiID = spBlurBuffer->GetRendering()[1];
+	spBlur->uiID = spBlurBuffer->GetRendering()[0];
 	auto spBloomTexture = std::make_shared<Texture>();
 	spBloomTexture->AddTexture(spColor);
 	spBloomTexture->AddTexture(spBlur);
@@ -264,10 +314,11 @@ int main()
 	spBloomRenderState->EnableDepthTest(true);
 	spBloomRenderState->SetDrawMode(DRAW_MODE::ELEMENT_MODE);
 	spBloomRenderState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_MODE);
+	spBloomRenderState->EnabelExposure(true);
 	auto spBloomEntity = std::make_shared<Entity>();
 	spBloomEntity->AddGeometryNode(CreateBlurNode(spBloomRenderState));
 	auto spBloomPass = std::make_shared<RenderPass>(spBloomEntity, spBloomRenderState);
-	spScene->AddRenderPass(spBloomPass);
+	//spScene->AddRenderPass(spBloomPass);
 
 	spScene->Draw();
 }

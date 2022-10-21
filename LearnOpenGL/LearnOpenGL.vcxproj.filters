@@ -358,5 +358,8 @@
     <None Include="..\resources\shaders\bloom\bloom.vs">
       <Filter>shader\bloom</Filter>
     </None>
+    <None Include="..\resources\shaders\bloom\wood.fs">
+      <Filter>shader\bloom</Filter>
+    </None>
   </ItemGroup>
 </Project>

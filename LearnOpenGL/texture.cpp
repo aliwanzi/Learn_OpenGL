@@ -54,22 +54,26 @@ unsigned int Texture::TextureFromFile(const std::string& sPath, bool bflip, bool
 	unsigned char* pImageData = stbi_load(sPath.c_str(), &iWidth, &iHeight, &iComponent, 0);
 	if (pImageData != nullptr)
 	{
-		GLenum eFormat(GL_RED);
+		GLenum internalFormat(GL_RED);
+		GLenum dataFormat(GL_RED);
 		switch (iComponent)
 		{
 		case 1:
 		{
-			eFormat = GL_RED;
+			dataFormat = GL_RED;
+			internalFormat = GL_RED;
 			break;
 		}
 		case 3:
 		{
-			eFormat = GL_RGB;
+			dataFormat = GL_RGB;
+			internalFormat = gamma ? GL_SRGB : GL_RGB;
 			break;
 		}
 		case 4:
 		{
-			eFormat = GL_RGBA;
+			dataFormat = GL_RGBA;
+			internalFormat = gamma ? GL_SRGB_ALPHA : GL_RGBA;
 			break;
 		}
 		default:
@@ -77,11 +81,11 @@ unsigned int Texture::TextureFromFile(const std::string& sPath, bool bflip, bool
 		}
 
 		glBindTexture(GL_TEXTURE_2D, uiID);
-		glTexImage2D(GL_TEXTURE_2D, 0, eFormat, iWidth, iHeight, 0, eFormat, GL_UNSIGNED_BYTE, pImageData);
+		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, iWidth, iHeight, 0, dataFormat, GL_UNSIGNED_BYTE, pImageData);
 		glGenerateMipmap(GL_TEXTURE_2D);
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, eFormat == GL_RGBA ? GL_CLAMP_TO_EDGE : GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, eFormat == GL_RGBA ? GL_CLAMP_TO_EDGE : GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, dataFormat == GL_RGBA ? GL_CLAMP_TO_EDGE : GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, dataFormat == GL_RGBA ? GL_CLAMP_TO_EDGE : GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 

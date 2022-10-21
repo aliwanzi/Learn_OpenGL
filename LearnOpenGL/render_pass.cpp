@@ -20,3 +20,8 @@ void RenderPass::Apply(std::shared_ptr<Camera> spCamera)
 	m_spEntity->DrawSelfAndChild();
 	m_spRenderState->ApplyPostState();
 }
+
+std::shared_ptr<RenderState> RenderPass::GetRenderState() const
+{
+	return m_spRenderState;
+}

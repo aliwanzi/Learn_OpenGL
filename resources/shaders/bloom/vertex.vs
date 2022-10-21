@@ -16,10 +16,12 @@ uniform mat4 matProjection;
 
 void main()
 {
-	vs_out.FragPos = vec3(matModel * vec4(aPos,1.0));
-	vs_out.Normal = mat3(transpose(inverse(matModel)))* aNormal;
-	vs_out.TexCoords = aTexCoord;
-
-	gl_Position = matProjection * matView * vec4(vs_out.FragPos, 1.0);
+    vs_out.FragPos = vec3(matModel * vec4(aPos, 1.0));   
+    vs_out.TexCoords = aTexCoord;
+        
+    mat3 normalMatrix = transpose(inverse(mat3(matModel)));
+    vs_out.Normal = normalize(normalMatrix * aNormal);
+    
+    gl_Position = matProjection * matView * matModel * vec4(aPos, 1.0);
 }
 	
