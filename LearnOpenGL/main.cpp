@@ -222,6 +222,7 @@ int main()
 	spBoxRenderState->SetHDRBuffer(spHDRBuffer);
 	spBoxRenderState->EnabelHDRBuffer(true);
 	spBoxRenderState->EnableUseBlinn(true);
+	spBoxRenderState->EnableUseGamma(true);
 	auto spBoxEntity = std::make_shared<Entity>();
 	auto spBoxRenderPass = std::make_shared<RenderPass>(spBoxEntity, spBoxRenderState);
 	std::vector<std::shared_ptr<Node>> vecBoxNode;
@@ -230,7 +231,7 @@ int main()
 	{
 		spBoxEntity->AddGeometryNode(vecBoxNode[i]);
 	}
-	//spScene->AddRenderPass(spBoxRenderPass);
+	spScene->AddRenderPass(spBoxRenderPass);
 
 
 	auto spWoodShader = std::make_shared<Shader>("../resources/shaders/bloom/vertex.vs",
@@ -242,10 +243,11 @@ int main()
 	spWoodRenderState->EnableDepthTest(true);
 	spWoodRenderState->SetDrawMode(DRAW_MODE::ELEMENT_MODE);
 	spWoodRenderState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_MODE);
-	//spWoodRenderState->SetClearBuffer(false);
+	spWoodRenderState->SetClearBuffer(false);
 	spWoodRenderState->SetHDRBuffer(spHDRBuffer);
-	//spWoodRenderState->EnabelHDRBuffer(true);
+	spWoodRenderState->EnabelHDRBuffer(true);
 	spWoodRenderState->EnableUseBlinn(true);
+	spWoodRenderState->EnableUseGamma(true);
 	auto spWoodEntity = std::make_shared<Entity>();
 	auto spWoodRenderPass = std::make_shared<RenderPass>(spWoodEntity, spWoodRenderState);
 	spWoodEntity->AddGeometryNode(CreatWoodNode(spWoodRenderState));
@@ -262,7 +264,7 @@ int main()
 	spLightRenderState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_MODE);
 	spLightRenderState->SetClearBuffer(false);
 	spLightRenderState->SetHDRBuffer(spHDRBuffer);
-	//spLightRenderState->EnabelHDRBuffer(true);
+	spLightRenderState->EnabelHDRBuffer(true);
 	auto spLightEntity = std::make_shared<Entity>();
 	auto spLightRenderPass = std::make_shared<RenderPass>(spLightEntity, spLightRenderState);
 	std::vector<std::shared_ptr<Node>> vecLightNode;
@@ -294,7 +296,7 @@ int main()
 	spBlurEntity->AddGeometryNode(spNode);
 	for (int i = 0; i < 10; i++)
 	{
-		//spScene->AddRenderPass(spBlurPass);
+		spScene->AddRenderPass(spBlurPass);
 	}
 
 	auto spBloomShader = std::make_shared<Shader>("../resources/shaders/bloom/bloom.vs",
@@ -314,11 +316,13 @@ int main()
 	spBloomRenderState->EnableDepthTest(true);
 	spBloomRenderState->SetDrawMode(DRAW_MODE::ELEMENT_MODE);
 	spBloomRenderState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_MODE);
-	spBloomRenderState->EnabelExposure(true);
+	spBloomRenderState->EnabelUseExposure(true);
+	spBloomRenderState->EnableUseBloom(true);
+	spBloomRenderState->EnableUseGamma(true);
 	auto spBloomEntity = std::make_shared<Entity>();
 	spBloomEntity->AddGeometryNode(CreateBlurNode(spBloomRenderState));
 	auto spBloomPass = std::make_shared<RenderPass>(spBloomEntity, spBloomRenderState);
-	//spScene->AddRenderPass(spBloomPass);
+	spScene->AddRenderPass(spBloomPass);
 
 	spScene->Draw();
 }

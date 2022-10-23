@@ -3,10 +3,6 @@ namespace
 {
 	float DeltaFrame(0.f);
 	float LastFrame(0.f);
-	float exposure(1.f);
-	bool bloomKeyPressed(false);
-	bool gammaKeyPressed(false);
-	bool blinnKeyPressed(false);
 }
 
 Scene::Scene(std::shared_ptr<GLResource> spGLResource,std::shared_ptr<Camera> spCamera)
@@ -76,30 +72,37 @@ void Scene::ProcessInput()
 	for (auto& iter : m_vecRenderPass)
 	{
 		auto spRenderState = iter->GetRenderState();
-		if (spRenderState->GetExpusure())
+		if (spRenderState->GetUseBloom())
 		{
+			auto bloomKeyPressed = spRenderState->GetBloomPressed();
 			if (glfwGetKey(pGLFWwindow, GLFW_KEY_Z) == GLFW_PRESS && !bloomKeyPressed)
 			{
-  				auto bloom = spRenderState->GetBloom();
-				spRenderState->EnableBloom(!bloom);
-				bloomKeyPressed = true;
+				auto bloom = spRenderState->GetBloom();
+				spRenderState->SetBloom(!bloom);
+				spRenderState->SetBloomPressed(true);
 			}
 			if (glfwGetKey(pGLFWwindow, GLFW_KEY_Z) == GLFW_RELEASE)
 			{
- 				bloomKeyPressed = false;
+				spRenderState->SetBloomPressed(false);
 			}
-
+		}
+		if (spRenderState->GetUseGamma())
+		{
+			auto gammaKeyPressed = spRenderState->GetGammaPressed();
 			if (glfwGetKey(pGLFWwindow, GLFW_KEY_C) == GLFW_PRESS && !gammaKeyPressed)
 			{
 				auto gamma = spRenderState->GetGamma();
-				spRenderState->EnableGamma(!gamma);
-				gammaKeyPressed = true;
+				spRenderState->SetGamma(!gamma);
+				spRenderState->SetGammaPressed(true);
 			}
 			if (glfwGetKey(pGLFWwindow, GLFW_KEY_C) == GLFW_RELEASE)
 			{
-				gammaKeyPressed = false;
+				spRenderState->SetGammaPressed(false);
 			}
-
+		}
+		if (spRenderState->GetUseExpusure())
+		{
+			auto exposure = spRenderState->GetExposure();
 			if (glfwGetKey(pGLFWwindow, GLFW_KEY_Q) == GLFW_PRESS)
 			{
 				if (exposure > 0.0f)
@@ -115,15 +118,16 @@ void Scene::ProcessInput()
 		}
 		if (spRenderState->GetUseBlinn())
 		{
+			auto blinnKeyPressed = spRenderState->GetBlinnPressed();
 			if (glfwGetKey(pGLFWwindow, GLFW_KEY_X) == GLFW_PRESS && !blinnKeyPressed)
 			{
 				auto blinn = spRenderState->GetBlinn();
 				spRenderState->SetBlinn(!blinn);
-				blinnKeyPressed = true;
+				spRenderState->SetBlinnPressed(true);
 			}
 			if (glfwGetKey(pGLFWwindow, GLFW_KEY_X) == GLFW_RELEASE)
 			{
-				blinnKeyPressed = false;
+				spRenderState->SetBlinnPressed(false);
 			}
 		}
 	}

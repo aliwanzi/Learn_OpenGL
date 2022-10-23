@@ -38,13 +38,16 @@ RenderState::RenderState(std::shared_ptr<Shader>spShader, std::shared_ptr<Textur
 	m_bBlurBuffer(false),
 	m_bHorizontal(true),
 	m_bFirst(true),
-	m_iFrame(0),
-	m_bBloom(false),
-	m_bExposure(false),
-	m_bGamma(false),
-	m_fExposure(0.f),
+	m_bUseBlinn(false),
 	m_blinn(true),
-	m_bUseBlinn(false)
+	m_bBlinnPressed(false),
+	m_bUseBloom(false),
+	m_bBloom(false),
+	m_bUseGamma(false),
+	m_bGamma(true),
+	m_bGammaPressed(false),
+	m_bUseExposure(false),
+	m_fExposure(1.0f)
 {
 
 }
@@ -337,16 +340,24 @@ void RenderState::ApplyTransform(std::shared_ptr<Camera>spCamera)
 		m_spShader->SetFloat("time", glm::sin(glfwGetTime()));
 	}
 
-	if (m_bExposure)
+	if (m_bUseExposure)
+	{
+		m_spShader->SetFloat("exposure", m_fExposure);
+	}
+	if (m_bUseBloom)
 	{
 		m_spShader->SetBool("bloom", m_bBloom);
-		m_spShader->SetFloat("exposure", m_fExposure);
+		//m_bBloom ? std::cout << "use Bloom" << std::endl : std::cout << "no use Blomm" << std::endl;
+	}
+	if (m_bUseGamma)
+	{
 		m_spShader->SetBool("bgamma", m_bGamma);
+		m_bGamma ? std::cout << "use Gamma" << std::endl : std::cout << "no use Gamma" << std::endl;
 	}
 	if (m_bUseBlinn)
 	{
 		m_spShader->SetBool("blinn", m_blinn);
-		m_blinn ? std::cout << "use blinn" << std::endl : std::cout << "not use blinn" << std::endl;
+		//m_bBloom ? std::cout << "use BlinnPhong" << std::endl : std::cout << "use Phong" << std::endl;
 	}
 }
 
@@ -538,24 +549,9 @@ void RenderState::SetBlurFrame(int frame)
 	m_iFrame = frame;
 }
 
-void RenderState::EnableBloom(bool bBloom)
+void RenderState::EnableUseBlinn(bool bUseLinn)
 {
-	m_bBloom = bBloom;
-}
-
-void RenderState::EnabelExposure(bool bExposure)
-{
-	m_bExposure = bExposure;
-}
-
-bool RenderState::GetBloom() const
-{
-	return m_bBloom;
-}
-
-bool RenderState::GetBlinn() const
-{
-	return m_blinn;
+	m_bUseBlinn = bUseLinn;
 }
 
 bool RenderState::GetUseBlinn() const
@@ -563,9 +559,9 @@ bool RenderState::GetUseBlinn() const
 	return m_bUseBlinn;
 }
 
-void RenderState::EnableUseBlinn(bool bUseLinn)
+bool RenderState::GetBlinn() const
 {
-	m_bUseBlinn = bUseLinn;
+	return m_blinn;
 }
 
 void RenderState::SetBlinn(bool blinn)
@@ -573,15 +569,60 @@ void RenderState::SetBlinn(bool blinn)
 	m_blinn = blinn;
 }
 
-
-void RenderState::EnableGamma(bool bEnable)
+bool RenderState::GetBlinnPressed() const
 {
-	m_bGamma = bEnable;
+	return m_bBlinnPressed;
 }
 
-bool RenderState::GetExpusure() const
+void RenderState::SetBlinnPressed(bool bPress)
 {
-	return m_bExposure;
+	m_bBlinnPressed = bPress;
+}
+
+void RenderState::EnableUseBloom(bool bBloom)
+{
+	m_bUseBloom = bBloom;
+}
+
+bool RenderState::GetUseBloom() const
+{
+	return m_bUseBloom;
+}
+
+bool RenderState::GetBloom() const
+{
+	return m_bBloom;
+}
+
+void RenderState::SetBloom(bool bBloom)
+{
+	m_bBloom = bBloom;
+}
+
+void RenderState::SetBloomPressed(bool bPress)
+{
+	m_bBloomPressed = bPress;
+}
+
+bool RenderState::GetBloomPressed() const
+{
+	return m_bBloomPressed;
+}
+
+void RenderState::EnabelUseExposure(bool bExposure)
+{
+	m_bUseExposure = bExposure;
+}
+
+
+void RenderState::EnableUseGamma(bool bEnable)
+{
+	m_bUseGamma = bEnable;
+}
+
+bool RenderState::GetUseGamma() const
+{
+	return m_bUseGamma;
 }
 
 bool RenderState::GetGamma() const
@@ -589,9 +630,35 @@ bool RenderState::GetGamma() const
 	return m_bGamma;
 }
 
+void RenderState::SetGamma(bool bGamma)
+{
+	m_bGamma = bGamma;
+}
+
+void RenderState::SetGammaPressed(bool bPress)
+{
+	m_bGammaPressed = bPress;
+}
+
+bool RenderState::GetGammaPressed() const
+{
+	return m_bGammaPressed;
+}
+
+
+bool RenderState::GetUseExpusure() const
+{
+	return m_bUseExposure;
+}
+
 void RenderState::SetExposure(float fExposure)
 {
 	m_fExposure = fExposure;
+}
+
+float RenderState::GetExposure()const
+{
+	return m_fExposure;
 }
 
 void RenderState::EnableMultiSample(bool bMultiSample)

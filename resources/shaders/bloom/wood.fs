@@ -28,6 +28,7 @@ in VS_OUT {
 
 uniform sampler2D texture_diffuse1;
 uniform bool blinn;
+uniform bool bgamma;
 
 void main()
 {
@@ -60,7 +61,7 @@ void main()
 
 
         float distance = length(fs_in.FragPos - pointLights[i].position);
-        float attention = 1.0 / (distance * distance);
+        float attention = 1.0 / (bgamma ? distance * distance: distance );
         
         ambient  *= attention;
         diffuse  *= attention ;

@@ -150,15 +150,26 @@ public:
 	bool GetUseBlinn()const;
 	bool GetBlinn()const;
 	void SetBlinn(bool blinn);
+	bool GetBlinnPressed()const;
+	void SetBlinnPressed(bool bPress);
 
-	void EnableBloom(bool bBloom);
+	void EnableUseBloom(bool bBloom);
+	bool GetUseBloom()const;
 	bool GetBloom()const;
+	void SetBloom(bool bBloom);
+	void SetBloomPressed(bool bPress);
+	bool GetBloomPressed()const;
 
-	void EnableGamma(bool bEnable);
+	void EnableUseGamma(bool bEnable);
+	bool GetUseGamma()const;
 	bool GetGamma()const;
+	void SetGamma(bool bGamma);
+	void SetGammaPressed(bool bPress);
+	bool GetGammaPressed()const;
 
-	void EnabelExposure(bool bExposure);
-	bool GetExpusure()const;
+	void EnabelUseExposure(bool bExposure);
+	bool GetUseExpusure()const;
+	float GetExposure() const;
 	void SetExposure(float fExposure);
 private:
 
@@ -195,9 +206,6 @@ private:
 	bool m_bCopyGBufferDepth;
 	std::shared_ptr<GBuffer> m_spGBuffer;
 
-	bool m_bUseBlinn;
-	bool m_blinn;
-
 	std::shared_ptr<UniformBuffer> m_spUniformBuffer;
 	bool m_bUniformBuffer;
 	bool m_bUpdateUniformBuffer;
@@ -215,8 +223,18 @@ private:
 	std::shared_ptr<BlurBuffer> m_spBlurBuffer;
 	int m_iFrame;
 
+	bool m_bUseBlinn;
+	bool m_blinn;
+	bool m_bBlinnPressed;
+
+	bool m_bUseBloom;
 	bool m_bBloom;
+	bool m_bBloomPressed;
+
+	bool m_bUseGamma;
 	bool m_bGamma;
-	bool m_bExposure;
+	bool m_bGammaPressed;
+
+	bool m_bUseExposure;
 	float m_fExposure;
 };
