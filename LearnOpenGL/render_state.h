@@ -10,6 +10,7 @@
 #include "GBuffer.h"
 #include "HDRBuffer.h"
 #include "BlurBuffer.h"
+#include "DepthBuffer.h"
 
 enum POLYGON_MODE
 {
@@ -171,6 +172,11 @@ public:
 	bool GetUseExpusure()const;
 	float GetExposure() const;
 	void SetExposure(float fExposure);
+
+	void SetDepthMappingBuffer(std::shared_ptr<DepthBuffer> spDepthBuffer);
+	void EnableDepthMappingBuffer(bool bEnableDepthBuffer);
+	void SetLightSpaceMatrix(const glm::mat4& matLightSpace);
+	void EnableLightSpace(bool bEnable);
 private:
 
 	glm::vec4 m_vec4BackGround;
@@ -237,4 +243,10 @@ private:
 
 	bool m_bUseExposure;
 	float m_fExposure;
+
+	bool m_bEnableDepthBuffer;
+	std::shared_ptr<DepthBuffer> m_spDepthBuffer;
+
+	bool m_bEnabelLightSpace;
+	glm::mat4 m_matLightSpaceMatrix;
 };

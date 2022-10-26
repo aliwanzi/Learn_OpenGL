@@ -70,6 +70,9 @@
     <Filter Include="shader\bloom">
       <UniqueIdentifier>{16cb1e44-a6b0-4e12-868f-b1d7f99084ee}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shader\shadowmapping">
+      <UniqueIdentifier>{1f1c0548-f2b1-4ba4-a76f-d11aeeb0b812}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="entity.h">
@@ -129,6 +132,9 @@
     <ClInclude Include="BlurBuffer.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="DepthBuffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="entity.cpp">
@@ -186,6 +192,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="BlurBuffer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DepthBuffer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -360,6 +369,24 @@
     </None>
     <None Include="..\resources\shaders\bloom\wood.fs">
       <Filter>shader\bloom</Filter>
+    </None>
+    <None Include="..\resources\shaders\shadowmapping\depthmap.fs">
+      <Filter>shader\shadowmapping</Filter>
+    </None>
+    <None Include="..\resources\shaders\shadowmapping\quad.vs">
+      <Filter>shader\shadowmapping</Filter>
+    </None>
+    <None Include="..\resources\shaders\shadowmapping\quad.fs">
+      <Filter>shader\shadowmapping</Filter>
+    </None>
+    <None Include="..\resources\shaders\shadowmapping\depthmap.vs">
+      <Filter>shader\shadowmapping</Filter>
+    </None>
+    <None Include="..\resources\shaders\shadowmapping\shadowmapping.fs">
+      <Filter>shader\shadowmapping</Filter>
+    </None>
+    <None Include="..\resources\shaders\shadowmapping\shadowmapping.vs">
+      <Filter>shader\shadowmapping</Filter>
     </None>
   </ItemGroup>
 </Project>

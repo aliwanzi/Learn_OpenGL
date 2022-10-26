@@ -47,7 +47,10 @@ RenderState::RenderState(std::shared_ptr<Shader>spShader, std::shared_ptr<Textur
 	m_bGamma(true),
 	m_bGammaPressed(false),
 	m_bUseExposure(false),
-	m_fExposure(1.0f)
+	m_fExposure(1.0f),
+	m_bEnableDepthBuffer(false),
+	m_spDepthBuffer(nullptr),
+	m_bEnabelLightSpace(false)
 {
 
 }
@@ -266,6 +269,11 @@ void RenderState::ApplyPreState()
 		}
 	}
 
+	if (m_bEnableDepthBuffer)
+	{
+		m_spDepthBuffer->Bind();
+	}
+
 	if (m_bGBuffer)
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, m_spGBuffer->GetGBuffer());
@@ -299,6 +307,12 @@ void RenderState::ApplyPostState()
 	if (m_glDepthFunc != GL_LESS)
 	{
 		glDepthFunc(GL_LESS);
+	}
+	if (m_bEnableDepthBuffer)
+	{
+		int width(0), height(0);
+		m_spDepthBuffer->GetOriWidthAndHeight(width, height);
+		glViewport(0, 0, width, height);
 	}
 }
 
@@ -339,6 +353,10 @@ void RenderState::ApplyTransform(std::shared_ptr<Camera>spCamera)
 	{
 		m_spShader->SetFloat("time", glm::sin(glfwGetTime()));
 	}
+	if (m_bEnabelLightSpace)
+	{
+		m_spShader->SetMat4("matLightSpace", m_matLightSpaceMatrix);
+	}
 
 	if (m_bUseExposure)
 	{
@@ -352,7 +370,7 @@ void RenderState::ApplyTransform(std::shared_ptr<Camera>spCamera)
 	if (m_bUseGamma)
 	{
 		m_spShader->SetBool("bgamma", m_bGamma);
-		m_bGamma ? std::cout << "use Gamma" << std::endl : std::cout << "no use Gamma" << std::endl;
+		//m_bGamma ? std::cout << "use Gamma" << std::endl : std::cout << "no use Gamma" << std::endl;
 	}
 	if (m_bUseBlinn)
 	{
@@ -633,6 +651,26 @@ bool RenderState::GetGamma() const
 void RenderState::SetGamma(bool bGamma)
 {
 	m_bGamma = bGamma;
+}
+
+void RenderState::SetDepthMappingBuffer(std::shared_ptr<DepthBuffer> spDepthBuffer)
+{
+	m_spDepthBuffer = spDepthBuffer;
+}
+
+void RenderState::EnableDepthMappingBuffer(bool bEnableDepth)
+{
+	m_bEnableDepthBuffer = bEnableDepth;
+}
+
+void RenderState::EnableLightSpace(bool bEnable)
+{
+	m_bEnabelLightSpace = bEnable;
+}
+
+void RenderState::SetLightSpaceMatrix(const glm::mat4& matLightSpace)
+{
+	m_matLightSpaceMatrix = matLightSpace;
 }
 
 void RenderState::SetGammaPressed(bool bPress)
