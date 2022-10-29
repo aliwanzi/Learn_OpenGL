@@ -177,6 +177,19 @@ public:
 	void EnableDepthMappingBuffer(bool bEnableDepthBuffer);
 	void SetLightSpaceMatrix(const glm::mat4& matLightSpace);
 	void EnableLightSpace(bool bEnable);
+
+	void SetCubeLightSpaceMatrix(const std::vector<glm::mat4>& vecMatLightSpace);
+	void EnabelCubeLightSpace(bool bEnable);
+
+	void EnableUseShadow(bool bUseShadow);
+	bool GetUseShadow()const;
+	bool GetShadow()const;
+	void SetShadow(bool Shadow);
+	bool GetShadowPressed()const;
+	void SetShadowPressed(bool bPress);
+
+	void EnabelNearAndFar(bool bEnable);
+	void SetNearAndFar(float fnear, float ffar);
 private:
 
 	glm::vec4 m_vec4BackGround;
@@ -249,4 +262,14 @@ private:
 
 	bool m_bEnabelLightSpace;
 	glm::mat4 m_matLightSpaceMatrix;
+	bool m_bEnableCubeLightSpace;
+	std::vector<glm::mat4> m_vecLightSpaceMatrix;
+
+	bool m_bUseShadow;
+	bool m_bShadow;
+	bool m_bShadowPressed;
+
+	bool m_bEnableFarAndNear;
+	float m_fNear;
+	float m_fFar;
 };

@@ -50,7 +50,14 @@ RenderState::RenderState(std::shared_ptr<Shader>spShader, std::shared_ptr<Textur
 	m_fExposure(1.0f),
 	m_bEnableDepthBuffer(false),
 	m_spDepthBuffer(nullptr),
-	m_bEnabelLightSpace(false)
+	m_bEnabelLightSpace(false),
+	m_bEnableCubeLightSpace(false),
+	m_bUseShadow(false),
+	m_bShadow(false),
+	m_bShadowPressed(false),
+	m_bEnableFarAndNear(false),
+	m_fFar(0.f),
+	m_fNear(0.f)
 {
 
 }
@@ -334,6 +341,14 @@ void RenderState::ApplyTransform(std::shared_ptr<Camera>spCamera)
 
 			glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(spCamera->GetProjectionMatrix()));
 			glBindBuffer(GL_UNIFORM_BUFFER, 0);
+		}
+	}
+	else if (m_bEnableCubeLightSpace)
+	{
+		for (size_t i = 0; i < m_vecLightSpaceMatrix.size(); i++)
+		{
+			auto sName = "matLightSpace[" + std::to_string(i) + "]";
+			m_spShader->SetMat4(sName, m_vecLightSpaceMatrix[i]);
 		}
 	}
 	else
@@ -666,6 +681,57 @@ void RenderState::EnableDepthMappingBuffer(bool bEnableDepth)
 void RenderState::EnableLightSpace(bool bEnable)
 {
 	m_bEnabelLightSpace = bEnable;
+}
+
+void RenderState::SetCubeLightSpaceMatrix(const std::vector<glm::mat4>& vecMatLightSpace)
+{
+	m_vecLightSpaceMatrix = vecMatLightSpace;
+}
+
+void RenderState::EnabelCubeLightSpace(bool bEnable)
+{
+	m_bEnableCubeLightSpace = bEnable;
+}
+
+void RenderState::EnableUseShadow(bool bUseShadow)
+{
+	m_bUseShadow = bUseShadow;
+}
+
+bool RenderState::GetUseShadow() const
+{
+	return m_bUseShadow;
+}
+
+bool RenderState::GetShadow() const
+{
+	return m_bShadow;
+}
+
+void RenderState::SetShadow(bool Shadow)
+{
+	m_bShadow = Shadow;
+}
+
+bool RenderState::GetShadowPressed() const
+{
+	return m_bShadowPressed;
+}
+
+void RenderState::SetShadowPressed(bool bPress)
+{
+	m_bShadowPressed = bPress;
+}
+
+void RenderState::EnabelNearAndFar(bool bEnable)
+{
+	m_bEnableFarAndNear = bEnable;
+}
+
+void RenderState::SetNearAndFar(float fnear, float ffar)
+{
+	m_fNear = fnear;
+	m_fFar = ffar;
 }
 
 void RenderState::SetLightSpaceMatrix(const glm::mat4& matLightSpace)

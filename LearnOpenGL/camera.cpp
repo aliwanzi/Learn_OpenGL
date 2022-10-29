@@ -124,3 +124,10 @@ const glm::vec3& Camera::GetViewDirection()const
 {
 	return m_vec3ViewDirection;
 }
+
+glm::vec3 Camera::CalUpdirection(const glm::vec3& viewDir)
+{
+	auto vecView = glm::normalize(viewDir);
+	auto vecRight = glm::normalize(glm::cross(vecView, glm::vec3(0.f, 1.f, 0.f)));
+	return glm::normalize(glm::cross(vecRight, vecView));
+}

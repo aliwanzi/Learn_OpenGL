@@ -33,6 +33,8 @@ public:
 
 	const glm::vec3& GetEye()const;
 	const glm::vec3& GetViewDirection()const;
+
+	static glm::vec3 CalUpdirection(const glm::vec3& viewDir);
 private:
 	void UpdateCameraVectors();
 
