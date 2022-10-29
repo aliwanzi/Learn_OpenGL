@@ -13,11 +13,31 @@ std::vector<glm::vec3> objectPosition
 	glm::vec3(-1.0,  0.0, 2.0),
 };
 
+std::vector<glm::vec3> objectPosition1
+{
+	glm::vec3(0.0),
+	glm::vec3(4.0f,-3.5f,0.0),
+	glm::vec3(2.0f,3.0f,1.0f),
+	glm::vec3(-3.0f,-1.0f,0.0f),
+	glm::vec3(-1.5f,1.0f,1.5f),
+	glm::vec3(-1.5f,2.0f,-3.0f)
+};
+
 std::vector<glm::vec3> objectScale
 {
 	glm::vec3(0.5),
 	glm::vec3(0.5),
 	glm::vec3(0.25)
+};
+
+std::vector<glm::vec3> objectScale1
+{
+	glm::vec3(5.0f),
+	glm::vec3(0.5f),
+	glm::vec3(0.75f),
+	glm::vec3(0.5f),
+	glm::vec3(0.5f),
+	glm::vec3(0.75)
 };
 
 std::vector<glm::vec3> objectRotateAxis
@@ -27,8 +47,28 @@ std::vector<glm::vec3> objectRotateAxis
 	glm::vec3(1.0, 0.0, 1.0),
 };
 
+std::vector<glm::vec3> objectRotateAxis1
+{
+	glm::vec3(0.0, 0.0, 1.0),
+	glm::vec3(0.0, 0.0, 1.0),
+	glm::vec3(0.0, 0.0, 1.0),
+	glm::vec3(0.0, 0.0, 1.0),
+	glm::vec3(0.0, 0.0, 1.0),
+	glm::vec3(1.0, 0.0, 1.0)
+};
+
 std::vector<float> objectRotateAngle
 {
+	0.0,
+	0.0,
+	60.0
+};
+
+std::vector<float> objectRotateAngle1
+{
+	0.0,
+	0.0,
+	0.0,
 	0.0,
 	0.0,
 	60.0
@@ -113,9 +153,9 @@ void CreatBoxNode(std::shared_ptr<RenderState> spRenderState,
 			spPointLight->SetLightType(LightType::POINT_LIGHT);
 
 			spPointLight->SetLightPosition(lightPosition[i]);
-			spPointLight->SetAmbient(glm::vec3(0.3f));
-			spPointLight->SetDiffuse(glm::vec3(0.3f));
-			spPointLight->SetSpecular(glm::vec3(0.3f), 64);
+			spPointLight->SetAmbient(glm::vec3(0.0f));
+			spPointLight->SetDiffuse(glm::vec3(1.0f));
+			spPointLight->SetSpecular(glm::vec3(1.0f), 64);
 			vecLights.emplace_back(spPointLight);
 		}
 		spRenderState->SetLights(vecLights);
@@ -134,9 +174,9 @@ std::shared_ptr<Node> CreatWoodNode(std::shared_ptr<RenderState> spRenderState, 
 			spPointLight->SetLightType(LightType::POINT_LIGHT);
 
 			spPointLight->SetLightPosition(lightPosition[i]);
-			spPointLight->SetAmbient(glm::vec3(0.3f));
-			spPointLight->SetDiffuse(glm::vec3(0.3f));
-			spPointLight->SetSpecular(glm::vec3(0.3f), 64);
+			spPointLight->SetAmbient(glm::vec3(0.0f));
+			spPointLight->SetDiffuse(glm::vec3(1.0f));
+			spPointLight->SetSpecular(glm::vec3(1.0f), 64);
 			vecLights.emplace_back(spPointLight);
 		}
 		spRenderState->SetLights(vecLights);
@@ -188,7 +228,7 @@ int main()
 	auto spCamera = std::make_shared<Camera>(glm::vec3(0.f, 0.f, 3.f));
 	auto spScene = std::make_shared<Scene>(spGLResource, spCamera);
 
-	auto spDepthBuffer = std::make_shared<DepthBuffer>(1024, 1024);
+	auto spDepthBuffer = std::make_shared<DepthBuffer>(1024, 1024, false);
 	spDepthBuffer->SetOriWidthAndHeight(SCR_WIDTH, SCR_HEIGHT);
 
 	auto spDepthShader = std::make_shared<Shader>("../resources/shaders/shadowmapping/depthmap.vs",
@@ -201,6 +241,11 @@ int main()
 	spDepthRenderState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_MODE);
 	spDepthRenderState->EnableDepthMappingBuffer(true);
 	spDepthRenderState->SetDepthMappingBuffer(spDepthBuffer);
+	spDepthRenderState->EnableCullFace(true);
+	auto spCullface = std::make_shared<CullFace>();
+	spCullface->FaceMode = GL_FRONT;
+	spCullface->FaceOri = GL_CW;
+	spDepthRenderState->SetCullFace(spCullface);
 
 	float fnear(1.0), ffar(7.5);
 	glm::vec3 lightPos(-2.0f, 4.0f, -1.0f);

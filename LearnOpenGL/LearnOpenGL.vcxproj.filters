@@ -388,5 +388,14 @@
     <None Include="..\resources\shaders\shadowmapping\shadowmapping.vs">
       <Filter>shader\shadowmapping</Filter>
     </None>
+    <None Include="..\resources\shaders\shadowmapping\point_shadow_depth.fs">
+      <Filter>shader\shadowmapping</Filter>
+    </None>
+    <None Include="..\resources\shaders\shadowmapping\point_shadow_depth.gs">
+      <Filter>shader\shadowmapping</Filter>
+    </None>
+    <None Include="..\resources\shaders\shadowmapping\point_shadow_depth.vs">
+      <Filter>shader\shadowmapping</Filter>
+    </None>
   </ItemGroup>
 </Project>

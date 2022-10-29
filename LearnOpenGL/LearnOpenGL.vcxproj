@@ -225,6 +225,9 @@
     <None Include="..\resources\shaders\model\fragment.fs" />
     <None Include="..\resources\shaders\model\vertex.vs" />
     <None Include="..\resources\shaders\shadowmapping\depthmap.fs" />
+    <None Include="..\resources\shaders\shadowmapping\point_shadow_depth.fs" />
+    <None Include="..\resources\shaders\shadowmapping\point_shadow_depth.gs" />
+    <None Include="..\resources\shaders\shadowmapping\point_shadow_depth.vs" />
     <None Include="..\resources\shaders\shadowmapping\quad.vs" />
     <None Include="..\resources\shaders\shadowmapping\quad.fs" />
     <None Include="..\resources\shaders\shadowmapping\depthmap.vs" />

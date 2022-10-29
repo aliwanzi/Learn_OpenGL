@@ -4,7 +4,7 @@
 class DepthBuffer
 {
 public:
-	DepthBuffer(int width,int height);
+	DepthBuffer(int width, int height, bool bCube);
 	void SetOriWidthAndHeight(int width, int height);
 	void GetOriWidthAndHeight(int& width, int& height) const;
 	GLuint GetDepthMap()const;
