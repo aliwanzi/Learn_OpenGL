@@ -32,22 +32,75 @@ uniform samplerCube texture_cube_map1;
 uniform float near_plane;
 uniform float far_plane;
 
-float LinearizeDepth(float depth)
-{
-    float z = depth * 2.0 - 1.0;
-    return (2.0 * near_plane * far_plane)/(far_plane + near_plane - z * (far_plane - near_plane));
-}
+uniform bool bShadow;
 
-float ShadowCalculation(vec3 fragPos)
+float ShadowCalculation0(vec3 fragPos)
 {
     vec3 fragToLight = fragPos - pointLights[0].position;
     float closetDepth = texture(texture_cube_map1,fragToLight).r;
 
-    closetDepth *= 25.0f;
+    closetDepth *= far_plane;
     float currentDepth = length(fragToLight);
 
     float bias = 0.05;
-    float shadow = currentDepth> closetDepth ?1.0:0.0;
+    float shadow = currentDepth-bias> closetDepth ?1.0:0.0;
+    return shadow;
+}
+
+float ShadowCalculation1(vec3 fragPos)
+{
+    vec3 fragToLight = fragPos - pointLights[0].position;
+    float currentDepth = length(fragToLight);
+
+    float shadow = 0.0;
+    float bias = 0.05;
+    float samples = 4.0;
+    float offset = 0.1;
+    for(float x = -offset; x<offset; x += offset/(samples*0.5))
+    {
+        for(float y = -offset; y < offset; y += offset/(samples*0.5))
+        {
+            for(float z = -offset; z < offset; z += offset/(samples*0.5))
+            {
+                float closetDepth = texture(texture_cube_map1,fragToLight + vec3(x,y,z)).r;
+                closetDepth *= far_plane;
+                if(currentDepth - bias > closetDepth)
+                    shadow += 1.0;
+            }
+        }
+    }
+    shadow /= (samples*samples*samples);
+    return shadow;
+}
+
+float ShadowCalculation2(vec3 fragPos)
+{
+    vec3 fragToLight = fragPos - pointLights[0].position;
+    float currentDepth = length(fragToLight);
+
+    float shadow = 0.0;
+    float bias = 0.15;
+    float samples =20.0;
+    float offset = 0.05;
+
+    vec3 sampleOffsetDirections[20] = vec3[]
+    (
+       vec3( 1,  1,  1), vec3( 1, -1,  1), vec3(-1, -1,  1), vec3(-1,  1,  1), 
+       vec3( 1,  1, -1), vec3( 1, -1, -1), vec3(-1, -1, -1), vec3(-1,  1, -1),
+       vec3( 1,  1,  0), vec3( 1, -1,  0), vec3(-1, -1,  0), vec3(-1,  1,  0),
+       vec3( 1,  0,  1), vec3(-1,  0,  1), vec3( 1,  0, -1), vec3(-1,  0, -1),
+       vec3( 0,  1,  1), vec3( 0, -1,  1), vec3( 0, -1, -1), vec3( 0,  1, -1)
+    );
+    
+
+    for(int i=0;i<samples;++i)
+    {
+        float closetDepth = texture(texture_cube_map1,fragToLight + sampleOffsetDirections[i] * offset).r;
+        closetDepth *= far_plane;
+        if(currentDepth - bias > closetDepth)
+            shadow += 1.0; 
+    }
+    shadow /= samples;
     return shadow;
 }
 
@@ -67,11 +120,9 @@ void main()
     float spec = pow(max(dot(normal,halfwayDir),0.0),pointLights[0].shininess);
     vec3 specular = spec * pointLights[0].specular;
 
-    float shadow = ShadowCalculation(fs_in.FragPos);
+    float shadow = bShadow ? ShadowCalculation2(fs_in.FragPos) : 0.0;
+
     vec3 lighting = (ambient +(1.0-shadow)*(diffuse + specular))*color;
 
-    vec3 fragToLight = fs_in.FragPos - pointLights[0].position;
-    float closetDepth = texture(texture_cube_map1,fragToLight).r;
-
-    FragColor = vec4(vec3(closetDepth),1.0);
+    FragColor = vec4(lighting,1.0);
 }

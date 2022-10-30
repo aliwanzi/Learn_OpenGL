@@ -6,6 +6,8 @@ const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 const unsigned int SHADOW_WIDTH = 1024;
 const unsigned int SHADOW_HEIGHT= 1024;
+const float FNEAR(1.0F);
+const float FFAR(25.0);
 
 const std::string WINDOW_NAME = "LearnOpenGL";
 
@@ -182,7 +184,7 @@ void CreatBoxNode(std::shared_ptr<RenderState> spRenderState,
 }
 
 void CreatBoxNode1(std::shared_ptr<RenderState> spRenderState,
-	std::vector<std::shared_ptr<Node>>& vecBoxNode, bool depth)
+	std::vector<std::shared_ptr<Node>>& vecBoxNode)
 {
 	for (int i = 0; i < objectPosition1.size(); i++)
 	{
@@ -197,23 +199,25 @@ void CreatBoxNode1(std::shared_ptr<RenderState> spRenderState,
 		{
 			spNode->SetUniformReverseNormal(true);
 		}
+		else
+		{
+			spNode->SetUniformCull(true);
+		}
 		vecBoxNode.push_back(spNode);
 	}
-	if (!depth)
-	{
-		std::vector<std::shared_ptr<Light>> vecLights;
-		glm::vec3 lightPos(-2.0f, 4.0f, -1.0f);
 
-		auto spPointLight = std::make_shared<PointLight>();
-		spPointLight->SetLightType(LightType::POINT_LIGHT);
+	std::vector<std::shared_ptr<Light>> vecLights;
+	glm::vec3 lightPos(0.0f);
 
-		spPointLight->SetLightPosition(lightPos);
-		spPointLight->SetAmbient(glm::vec3(0.0f));
-		spPointLight->SetDiffuse(glm::vec3(1.0f));
-		spPointLight->SetSpecular(glm::vec3(1.0f), 64);
-		vecLights.emplace_back(spPointLight);
-		spRenderState->SetLights(vecLights);
-	}
+	auto spPointLight = std::make_shared<PointLight>();
+	spPointLight->SetLightType(LightType::POINT_LIGHT);
+
+	spPointLight->SetLightPosition(lightPos);
+	spPointLight->SetAmbient(glm::vec3(0.0f));
+	spPointLight->SetDiffuse(glm::vec3(1.0f));
+	spPointLight->SetSpecular(glm::vec3(1.0f), 64);
+	vecLights.emplace_back(spPointLight);
+	spRenderState->SetLights(vecLights);
 }
 
 std::shared_ptr<Node> CreatWoodNode(std::shared_ptr<RenderState> spRenderState, bool depth)
@@ -284,9 +288,8 @@ void CreateLightSpaceMatric(std::shared_ptr<RenderState> spRenderState)
 
 void CreateLightSpaceMatric1(std::shared_ptr<RenderState> spRenderState)
 {
-	float fnear(1.0), ffar(25.0);
 	glm::vec3 lightPos(0.f);
-	glm::mat4 shadowProj = glm::perspective(glm::radians(90.f), (float)SHADOW_WIDTH / (float)SHADOW_HEIGHT, fnear, ffar);
+	glm::mat4 shadowProj = glm::perspective(glm::radians(90.f), (float)SHADOW_WIDTH / (float)SHADOW_HEIGHT, FNEAR, FFAR);
 	std::vector<glm::mat4> shadowTransforms;
 	shadowTransforms.push_back(shadowProj * glm::lookAt(lightPos, lightPos + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
 	shadowTransforms.push_back(shadowProj * glm::lookAt(lightPos, lightPos + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
@@ -299,8 +302,8 @@ void CreateLightSpaceMatric1(std::shared_ptr<RenderState> spRenderState)
 	spRenderState->SetCubeLightSpaceMatrix(shadowTransforms);
 }
 
-//#define CASE1
-#define CASE2
+#define CASE1
+//#define CASE2
 
 int main()
 {
@@ -325,13 +328,12 @@ int main()
 	spDepthRenderState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_MODE);
 	spDepthRenderState->EnableDepthMappingBuffer(true);
 	spDepthRenderState->SetDepthMappingBuffer(spDepthBuffer);
-	spDepthRenderState->EnableCullFace(true);
+	//spDepthRenderState->EnableCullFace(true);
 	auto spCullface = std::make_shared<CullFace>();
 	spCullface->FaceMode = GL_FRONT;
 	spCullface->FaceOri = GL_CW;
 	spDepthRenderState->SetCullFace(spCullface);
 	CreateLightSpaceMatric(spDepthRenderState);
-
 
 	auto spDepthEntity = std::make_shared<Entity>();
 	auto spDepthRenderPass = std::make_shared<RenderPass>(spDepthEntity, spDepthRenderState);
@@ -358,6 +360,7 @@ int main()
 	spRenderState->EnableDepthTest(true);
 	spRenderState->SetDrawMode(DRAW_MODE::ELEMENT_MODE);
 	spRenderState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_MODE);
+	spRenderState->EnableUseShadow(true);
 	CreateLightSpaceMatric(spRenderState);
 
 	auto spRenderEntity = std::make_shared<Entity>();
@@ -390,7 +393,7 @@ int main()
 	{
 		spLightEntity->AddGeometryNode(vecLightNode[i]);
 	}
-	spScene->AddRenderPass(spLightRenderPass);
+	//spScene->AddRenderPass(spLightRenderPass);
 
 	auto spQuadShader = std::make_shared<Shader>("../resources/shaders/shadowmapping/shadow_mapping/quad.vs",
 		"../resources/shaders/shadowmapping/shadow_mapping/quad.fs");
@@ -409,7 +412,7 @@ int main()
 	auto spQuadEntity = std::make_shared<Entity>();
 	auto spQuadRenderPass = std::make_shared<RenderPass>(spQuadEntity, spQuadRenderState);
 	spQuadEntity->AddGeometryNode(spQuadNode);
-	//spScene->AddRenderPass(spQuadRenderPass);
+	spScene->AddRenderPass(spQuadRenderPass);
 #endif // CASE1
 
 #ifdef CASE2
@@ -422,8 +425,10 @@ int main()
 	spDepthRenderState->EnableDepthTest(true);
 	spDepthRenderState->SetDrawMode(DRAW_MODE::ELEMENT_MODE);
 	spDepthRenderState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_MODE);
+	spDepthRenderState->EnabelNearAndFar(true);
+	spDepthRenderState->SetNearAndFar(FNEAR, FFAR);
 
-	//spDepthRenderState->EnableDepthMappingBuffer(true);
+	spDepthRenderState->EnableDepthMappingBuffer(true);
 	auto spDepthBuffer = std::make_shared<DepthBuffer>(SHADOW_WIDTH, SHADOW_HEIGHT, true);
 	spDepthBuffer->SetOriWidthAndHeight(SCR_WIDTH, SCR_HEIGHT);
 	spDepthRenderState->SetDepthMappingBuffer(spDepthBuffer);
@@ -432,7 +437,7 @@ int main()
 	auto spDepthEntity = std::make_shared<Entity>();
 	auto spDepthRenderPass = std::make_shared<RenderPass>(spDepthEntity, spDepthRenderState);
 	std::vector<std::shared_ptr<Node>> vecDepthNode;
-	CreatBoxNode1(spDepthRenderState, vecDepthNode, true);
+	CreatBoxNode1(spDepthRenderState, vecDepthNode);
 	for (auto i = 0; i < vecDepthNode.size(); i++)
 	{
 		spDepthEntity->AddGeometryNode(vecDepthNode[i]);
@@ -453,17 +458,18 @@ int main()
 	spRenderState->SetDrawMode(DRAW_MODE::ELEMENT_MODE);
 	spRenderState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_MODE);
 	spRenderState->EnabelNearAndFar(true);
-	spRenderState->SetNearAndFar(1.0, 25.0);
+	spRenderState->SetNearAndFar(FNEAR, FFAR);
+	spRenderState->EnableUseShadow(true);
 
 	auto spRenderEntity = std::make_shared<Entity>();
 	auto spRenderPass = std::make_shared<RenderPass>(spRenderEntity, spRenderState);
 	std::vector<std::shared_ptr<Node>> vecBoxNode;
-	CreatBoxNode1(spRenderState, vecBoxNode, false);
+	CreatBoxNode1(spRenderState, vecBoxNode);
 	for (auto i = 0; i < vecBoxNode.size(); i++)
 	{
 		spRenderEntity->AddGeometryNode(vecBoxNode[i]);
 	}
-	//spScene->AddRenderPass(spRenderPass);
+	spScene->AddRenderPass(spRenderPass);
 
 #endif // CASE2
 

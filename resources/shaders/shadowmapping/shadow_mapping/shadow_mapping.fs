@@ -32,6 +32,7 @@ uniform sampler2D texture_diffuse2;
 
 uniform float near_plane;
 uniform float far_plane;
+uniform bool bShadow;
 
 float LinearizeDepth(float depth)
 {
@@ -59,8 +60,8 @@ float ShadowCalculation(vec4 fragPosLightSpace)
         for(int y = -1; y <= 1; ++y)
         {
             float pcfDepth = texture(texture_diffuse1, projCoords.xy + vec2(x, y) * texelSize).r; 
-            //shadow += currentDepth - bias > pcfDepth  ? 1.0 : 0.0;
-            shadow += currentDepth > pcfDepth  ? 1.0 : 0.0;  
+            shadow += currentDepth - bias > pcfDepth  ? 1.0 : 0.0;
+            //shadow += currentDepth > pcfDepth  ? 1.0 : 0.0;  
         }    
     }
     shadow /= 9.0;
@@ -83,7 +84,7 @@ void main()
     float spec = pow(max(dot(normal,halfwayDir),0.0),pointLights[0].shininess);
     vec3 specular = spec * pointLights[0].specular;
 
-    float shadow = ShadowCalculation(fs_in.FragPosLightSpace);
+    float shadow = bShadow ? ShadowCalculation(fs_in.FragPosLightSpace) : 0.0;
     vec3 lighting = (ambient +(1.0-shadow)*(diffuse + specular))*color;
 
     FragColor = vec4(lighting,1.0);

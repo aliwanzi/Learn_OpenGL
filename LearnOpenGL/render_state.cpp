@@ -392,6 +392,15 @@ void RenderState::ApplyTransform(std::shared_ptr<Camera>spCamera)
 		m_spShader->SetBool("blinn", m_blinn);
 		//m_bBloom ? std::cout << "use BlinnPhong" << std::endl : std::cout << "use Phong" << std::endl;
 	}
+	if (m_bEnableFarAndNear)
+	{
+		m_spShader->SetFloat("far_plane", m_fFar);
+		m_spShader->SetFloat("near_plane", m_fNear);
+	}
+	if (m_bUseShadow)
+	{
+		m_spShader->SetBool("bShadow", m_bShadow);
+	}
 }
 
 void RenderState::ApplyLights(std::shared_ptr<Camera> spCamera)

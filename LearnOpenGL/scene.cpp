@@ -130,5 +130,19 @@ void Scene::ProcessInput()
 				spRenderState->SetBlinnPressed(false);
 			}
 		}
+		if (spRenderState->GetUseShadow())
+		{
+			auto bShadowKeyPressed = spRenderState->GetShadowPressed();
+			if (glfwGetKey(pGLFWwindow, GLFW_KEY_SPACE) == GLFW_PRESS && !bShadowKeyPressed)
+			{
+				auto bShadow = spRenderState->GetShadow();
+				spRenderState->SetShadow(!bShadow);
+				spRenderState->SetShadowPressed(true);
+			}
+			if (glfwGetKey(pGLFWwindow, GLFW_KEY_SPACE) == GLFW_RELEASE)
+			{
+				spRenderState->SetShadowPressed(false);
+			}
+		}
 	}
 }
