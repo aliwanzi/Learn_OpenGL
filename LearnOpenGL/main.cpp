@@ -142,14 +142,14 @@ std::vector<unsigned int> vecIndex
 std::vector<Vertex> PlaneVertex
 {
 	Vertex(glm::vec3( 25.0f, -0.5f,  25.0f),glm::vec2(25.0f,  0.0f),glm::vec3(0.f,1.0f,0.f)),//0
-	Vertex(glm::vec3(-25.0f, -0.5f,  25.0f),glm::vec2( 0.0f,  0.0f),glm::vec3(0.f,1.0f,0.f)),//0
-	Vertex(glm::vec3(-25.0f, -0.5f, -25.0f),glm::vec2( 0.0f, 25.0f),glm::vec3(0.f,1.0f,0.f)),//0
 	Vertex(glm::vec3( 25.0f, -0.5f, -25.0f),glm::vec2(25.0f, 25.0f),glm::vec3(0.f,1.0f,0.f)),//0
+	Vertex(glm::vec3(-25.0f, -0.5f, -25.0f),glm::vec2(0.0f, 25.0f),glm::vec3(0.f,1.0f,0.f)),//0
+	Vertex(glm::vec3(-25.0f, -0.5f,  25.0f),glm::vec2( 0.0f,  0.0f),glm::vec3(0.f,1.0f,0.f)),//0
 };
 
 std::vector<unsigned int> PlaneIndex
 {
-	0,1,2,0,2,3
+	0,1,2,2,3,0
 };
 
 void CreatBoxNode(std::shared_ptr<RenderState> spRenderState,
@@ -302,8 +302,8 @@ void CreateLightSpaceMatric1(std::shared_ptr<RenderState> spRenderState)
 	spRenderState->SetCubeLightSpaceMatrix(shadowTransforms);
 }
 
-#define CASE1
-//#define CASE2
+//#define CASE1
+#define CASE2
 
 int main()
 {
@@ -328,7 +328,7 @@ int main()
 	spDepthRenderState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_MODE);
 	spDepthRenderState->EnableDepthMappingBuffer(true);
 	spDepthRenderState->SetDepthMappingBuffer(spDepthBuffer);
-	//spDepthRenderState->EnableCullFace(true);
+	spDepthRenderState->EnableCullFace(true);
 	auto spCullface = std::make_shared<CullFace>();
 	spCullface->FaceMode = GL_FRONT;
 	spCullface->FaceOri = GL_CW;
@@ -393,7 +393,7 @@ int main()
 	{
 		spLightEntity->AddGeometryNode(vecLightNode[i]);
 	}
-	//spScene->AddRenderPass(spLightRenderPass);
+	spScene->AddRenderPass(spLightRenderPass);
 
 	auto spQuadShader = std::make_shared<Shader>("../resources/shaders/shadowmapping/shadow_mapping/quad.vs",
 		"../resources/shaders/shadowmapping/shadow_mapping/quad.fs");
@@ -412,7 +412,7 @@ int main()
 	auto spQuadEntity = std::make_shared<Entity>();
 	auto spQuadRenderPass = std::make_shared<RenderPass>(spQuadEntity, spQuadRenderState);
 	spQuadEntity->AddGeometryNode(spQuadNode);
-	spScene->AddRenderPass(spQuadRenderPass);
+	//spScene->AddRenderPass(spQuadRenderPass);
 #endif // CASE1
 
 #ifdef CASE2

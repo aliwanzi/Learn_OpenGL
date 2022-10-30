@@ -10,7 +10,7 @@ m_spRenderState(nullptr), m_spTransform(nullptr)
 Node::Node(std::vector<Vertex>& vecVertexs, std::vector<unsigned int>& vecIndexs,
 	std::shared_ptr<RenderState> spRenderState, std::shared_ptr<Transform> spTransform) :
 	m_vecVertexs(vecVertexs), m_vecIndexs(vecIndexs), m_spRenderState(spRenderState), m_spTransform(spTransform),
-	m_bUniformColor(false), m_bUniformCull(false), m_bUnifromReverse(false)
+	m_bUniformColor(false), m_bUniformCull(false), m_bUnifromReverse(false),m_bUseNodeCull(false)
 {
 	SetVAOVBO();
 }
@@ -60,6 +60,7 @@ void Node::Draw()
 
 void Node::PostRender()
 {
+
 }
 
 void Node::ApplyTexture()
@@ -152,14 +153,18 @@ void Node::ApplyUniform()
 	{
 		spShader->SetVec3("lightColor", m_vec3Color);
 	}
-	if (m_bUniformCull)
+	if (m_bUseNodeCull)
 	{
-		glEnable(GL_CULL_FACE);
+		if (m_bUniformCull)
+		{
+			glEnable(GL_CULL_FACE);
+		}
+		else
+		{
+			glDisable(GL_CULL_FACE);
+		}
 	}
-	else
-	{
-		glDisable(GL_CULL_FACE);
-	}
+
 	if (m_bUnifromReverse)
 	{
 		spShader->SetBool("reverse_normals", m_bUnifromReverse);
@@ -257,8 +262,9 @@ void Node::SetUniformColor(const glm::vec3& color, bool bUniformColor)
 	m_vec3Color = color;
 }
 
-void Node::SetUniformCull(bool bUniformCull)
+void Node::SetUniformCull(bool bUseNodeCull, bool bUniformCull)
 {
+	m_bUseNodeCull = bUseNodeCull;
 	m_bUniformCull = bUniformCull;
 }
 

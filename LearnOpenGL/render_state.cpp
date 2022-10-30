@@ -180,7 +180,7 @@ void RenderState::ApplyState()
 		if (m_spCullFace)
 		{
 			glCullFace(m_spCullFace->FaceMode);
-			glFrontFace(m_spCullFace->FaceOri);
+			//glFrontFace(m_spCullFace->FaceOri);
 		}
 	}
 	else
@@ -320,6 +320,10 @@ void RenderState::ApplyPostState()
 		int width(0), height(0);
 		m_spDepthBuffer->GetOriWidthAndHeight(width, height);
 		glViewport(0, 0, width, height);
+	}
+	if (m_bCullFace)
+	{
+		glCullFace(GL_BACK);
 	}
 }
 

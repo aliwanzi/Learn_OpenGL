@@ -29,7 +29,8 @@ out vec4 FragColor;
 
 void main()
 {
-    float lightDistance = (length(fs_in.FragPos.xyz - pointLights[0].position))/far_plane;
+    float length = length(fs_in.FragPos.xyz - pointLights[0].position);
+    float lightDistance = length/far_plane;
 
     gl_FragDepth = lightDistance;
     FragColor = vec4(vec3(lightDistance),1.0);

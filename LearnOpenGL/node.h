@@ -32,7 +32,7 @@ public:
 	void SetInstanceOffset(const std::vector<glm::vec2>& vecOffset);
 	void SetInstanceOffset(const std::vector<glm::mat4>& vecOffset);
 	void SetUniformColor(const glm::vec3& color, bool bUniformColor = true);
-	void SetUniformCull( bool bUniformCull);
+	void SetUniformCull(bool bUseNodeCull, bool bUniformCull = true);
 	void SetUniformReverseNormal(bool bUnifromReverse);
 
 	virtual void Prender();
@@ -67,6 +67,7 @@ private:
 	unsigned int m_uiEBO;
 	unsigned int m_uiInstance;
 
+	bool m_bUseNodeCull;
 	bool m_bUniformCull;
 	bool m_bUnifromReverse;
 };
