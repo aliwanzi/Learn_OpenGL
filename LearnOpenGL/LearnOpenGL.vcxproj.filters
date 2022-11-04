@@ -79,6 +79,12 @@
     <Filter Include="shader\shadowmapping\point_shadow_mapping">
       <UniqueIdentifier>{3d9080e2-b835-4433-ab11-9a256981c8c2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shader\normalmapping">
+      <UniqueIdentifier>{e7e16444-ec54-43f4-a46d-dd019575778a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shader\normalmapping\normalmpping">
+      <UniqueIdentifier>{008f86ce-6f0a-4d41-bcdb-0c6e32401c6a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="entity.h">
@@ -408,6 +414,15 @@
     </None>
     <None Include="..\resources\shaders\shadowmapping\shadow_mapping\shadow_mapping.vs">
       <Filter>shader\shadowmapping\shadow_mapping</Filter>
+    </None>
+    <None Include="..\resources\shaders\normalmapping\normal_mapping\normal_mapping.fs">
+      <Filter>shader\normalmapping\normalmpping</Filter>
+    </None>
+    <None Include="..\resources\shaders\normalmapping\normal_mapping\normal_mapping.vs">
+      <Filter>shader\normalmapping\normalmpping</Filter>
+    </None>
+    <None Include="..\resources\shaders\normalmapping\normal_mapping\parallax_mapping.fs">
+      <Filter>shader\normalmapping\normalmpping</Filter>
     </None>
   </ItemGroup>
 </Project>

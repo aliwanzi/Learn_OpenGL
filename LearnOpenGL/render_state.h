@@ -190,6 +190,12 @@ public:
 
 	void EnabelNearAndFar(bool bEnable);
 	void SetNearAndFar(float fnear, float ffar);
+
+	void EnabelUseHightScale(bool bHeightScale);
+	bool GetUseHightScale()const;
+	float GetHightScale() const;
+	void SetHightScale(float fHeightScale);
+
 private:
 
 	glm::vec4 m_vec4BackGround;
@@ -272,4 +278,7 @@ private:
 	bool m_bEnableFarAndNear;
 	float m_fNear;
 	float m_fFar;
+
+	bool m_bEnabelHightScale;
+	float m_fHeightScale;
 };

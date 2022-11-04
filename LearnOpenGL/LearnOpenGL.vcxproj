@@ -224,6 +224,9 @@
     <None Include="..\resources\shaders\light\light.vs" />
     <None Include="..\resources\shaders\model\fragment.fs" />
     <None Include="..\resources\shaders\model\vertex.vs" />
+    <None Include="..\resources\shaders\normalmapping\normal_mapping\normal_mapping.fs" />
+    <None Include="..\resources\shaders\normalmapping\normal_mapping\normal_mapping.vs" />
+    <None Include="..\resources\shaders\normalmapping\normal_mapping\parallax_mapping.fs" />
     <None Include="..\resources\shaders\shadowmapping\point_shadow_mapping\point_shadow_depth.fs" />
     <None Include="..\resources\shaders\shadowmapping\point_shadow_mapping\point_shadow_depth.gs" />
     <None Include="..\resources\shaders\shadowmapping\point_shadow_mapping\point_shadow_depth.vs" />

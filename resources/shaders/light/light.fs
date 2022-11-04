@@ -101,7 +101,7 @@ vec3 CalcPointLight(PointLight light,vec3 normal, vec3 fragPos, vec3 viewDir)
     float attention = 1.0/(light.constant + light.linear * distance + light.quadratic *distance*distance );
 
     vec3 ambient = light.ambient * vec3(texture(texture_diffuse1,TexCoords)) * attention;
-    vec3 diffuse = light.diffuse *vec3(texture(texture_diffuse1,TexCoords)) *  diff * attention;
+    vec3 diffuse = light.diffuse * vec3(texture(texture_diffuse1,TexCoords)) *  diff * attention;
     vec3 specular = light.specular * vec3(texture(texture_specular1,TexCoords))* spec * attention;
     return ambient+diffuse+specular;
 }

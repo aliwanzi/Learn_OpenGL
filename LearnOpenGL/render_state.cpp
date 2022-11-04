@@ -57,7 +57,9 @@ RenderState::RenderState(std::shared_ptr<Shader>spShader, std::shared_ptr<Textur
 	m_bShadowPressed(false),
 	m_bEnableFarAndNear(false),
 	m_fFar(0.f),
-	m_fNear(0.f)
+	m_fNear(0.f),
+	m_bEnabelHightScale(true),
+	m_fHeightScale(0.1f)
 {
 
 }
@@ -376,6 +378,10 @@ void RenderState::ApplyTransform(std::shared_ptr<Camera>spCamera)
 	{
 		m_spShader->SetMat4("matLightSpace", m_matLightSpaceMatrix);
 	}
+	if (m_bEnabelHightScale)
+	{
+		m_spShader->SetFloat("heightScale", m_fHeightScale);
+	}
 
 	if (m_bUseExposure)
 	{
@@ -436,6 +442,7 @@ void RenderState::ApplyLights(std::shared_ptr<Camera> spCamera)
 				if (spPointLight != nullptr)
 				{
 					auto sName = "pointLights[" + std::to_string(uiPoint++) + "]";
+					m_spShader->SetVec3("lightPos", (spPointLight)->GetLightPosition());
 					m_spShader->SetVec3(sName + ".position", (spPointLight)->GetLightPosition());
 					m_spShader->SetVec3(sName + ".ambient", (spPointLight)->GetAmbient());
 					m_spShader->SetVec3(sName + ".diffuse", (spPointLight)->GetDiffuse());
@@ -746,6 +753,27 @@ void RenderState::SetNearAndFar(float fnear, float ffar)
 	m_fNear = fnear;
 	m_fFar = ffar;
 }
+
+void RenderState::EnabelUseHightScale(bool bHeightScale)
+{
+	m_bEnabelHightScale = bHeightScale;
+}
+
+bool RenderState::GetUseHightScale()const
+{
+	return m_bEnabelHightScale;
+}
+
+float RenderState::GetHightScale() const
+{
+	return m_fHeightScale;
+}
+
+void RenderState::SetHightScale(float fHeightScale)
+{
+	m_fHeightScale = fHeightScale;
+}
+
 
 void RenderState::SetLightSpaceMatrix(const glm::mat4& matLightSpace)
 {

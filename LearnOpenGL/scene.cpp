@@ -116,6 +116,26 @@ void Scene::ProcessInput()
 			}
 			spRenderState->SetExposure(exposure);
 		}
+		if (spRenderState->GetUseHightScale())
+		{
+			auto heightScale = spRenderState->GetHightScale();
+			if (glfwGetKey(pGLFWwindow, GLFW_KEY_Q) == GLFW_PRESS)
+			{
+				if (heightScale > 0.0f)
+					heightScale -= 0.0005f;
+				else
+					heightScale = 0.0f;
+			}
+			else if (glfwGetKey(pGLFWwindow, GLFW_KEY_E) == GLFW_PRESS)
+			{
+				if (heightScale < 1.0f)
+					heightScale += 0.0005f;
+				else
+					heightScale = 1.0f;
+			}
+			spRenderState->SetHightScale(heightScale);
+		}
+
 		if (spRenderState->GetUseBlinn())
 		{
 			auto blinnKeyPressed = spRenderState->GetBlinnPressed();
