@@ -72,7 +72,7 @@ void CreatLightNode(std::shared_ptr<RenderState> spRenderState,
 std::shared_ptr<Node> CreatWoodNode(std::shared_ptr<RenderState> spRenderState)
 {
 	//light
-	glm::vec3 lightPos(1.0f, 1.0f, 1.0f);
+	glm::vec3 lightPos(0.5f, 1.0f, 0.3f);
 	
 	auto spPointLight = std::make_shared<PointLight>();
 	spPointLight->SetLightType(LightType::POINT_LIGHT);
@@ -87,10 +87,10 @@ std::shared_ptr<Node> CreatWoodNode(std::shared_ptr<RenderState> spRenderState)
 	spRenderState->SetLights(vecLights);
 
 	//model
-	glm::vec3 pos1(-1.0f, 0.0f, 1.0f);
-	glm::vec3 pos2(-1.0f, 0.0f, -1.0f);
-	glm::vec3 pos3(1.0f, 0.0f, -1.0f);
-	glm::vec3 pos4(1.0f, 0.0f, 1.0f);
+	glm::vec3 pos1(-1.0f, 1.0f, 0.0f);
+	glm::vec3 pos2(-1.0f, -1.0f, 0.0f);
+	glm::vec3 pos3(1.0f, -1.0f, 0.0f);
+	glm::vec3 pos4(1.0f, 1.0f, 0.0f);
 
 	glm::vec2 uv1(0.0f, 1.0f);
 	glm::vec2 uv2(0.0f, 0.0f);
@@ -160,7 +160,7 @@ int main()
 	spGLResource->CreateGLFWWindow(SCR_WIDTH, SCR_HEIGHT, WINDOW_NAME);
 	std::cout << "ÏÔ¿¨ÐÍºÅ£º" << spGLResource->GetGPUVersion() << std::endl;
 
-	auto spCamera = std::make_shared<Camera>(glm::vec3(0.f, 0.f, 0.f));
+	auto spCamera = std::make_shared<Camera>(glm::vec3(0.f, 0.f, 3.f));
 	auto spScene = std::make_shared<Scene>(spGLResource, spCamera);
 
 #ifdef CASE1

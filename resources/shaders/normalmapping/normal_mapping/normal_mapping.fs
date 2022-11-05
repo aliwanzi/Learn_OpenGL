@@ -55,13 +55,11 @@ void main()
         specular = spec * pointLights[0].specular;
 
         vec3 lighting = (ambient + diffuse + specular) * color;
-        FragColor = vec4(diffuse,1.0);
+        FragColor = vec4(lighting,1.0);
     }
     else
     {
-        //vec3 normal = normalize(fs_in.Normal);
-        vec3 normal = texture(texture_diffuse2,fs_in.TexCoords).rgb;
-        normal = normalize(normal * 2.0 - 1.0);
+        vec3 normal = normalize(fs_in.Normal);
         vec3 lightDir = normalize(pointLights[0].position - fs_in.FragPos);
         float diff = max(dot(lightDir,normal),0.0);
         vec3 diffuse = diff * pointLights[0].diffuse;
