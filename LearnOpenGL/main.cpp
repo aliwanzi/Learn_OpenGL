@@ -150,8 +150,8 @@ std::shared_ptr<Node> CreatWoodNode(std::shared_ptr<RenderState> spRenderState)
 	return std::make_shared<GeometryNode>(quadVertices, quadIndex, spRenderState, spTransform);
 }
 
-#define CASE1
-//#define CASE2
+//#define CASE1
+#define CASE2
 
 int main()
 {

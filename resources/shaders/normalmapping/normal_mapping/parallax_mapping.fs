@@ -86,9 +86,9 @@ vec2 ParallaxMapping2(vec2 texCoords, vec3 viewDir)
     vec2 prevTexCoords = currentTexCoords + deltaTexCoords;
     float beforeDepth = texture(texture_diffuse3,prevTexCoords).r - currentLayerDepth + layerDepth;
 
-    float afterDepth = currentDepthMapValue - currentLayerDepth;
-    float weight = afterDepth/(afterDepth - beforeDepth);
-    vec2 finalTexCoords = prevTexCoords * weight + currentTexCoords * (1.0 - weight);
+    float afterDepth = currentLayerDepth - currentDepthMapValue;
+    float weight = beforeDepth / (afterDepth+beforeDepth);
+    vec2 finalTexCoords = currentTexCoords * weight + prevTexCoords * (1.0 - weight);
 
     return finalTexCoords;
 }
