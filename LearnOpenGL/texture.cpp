@@ -39,6 +39,24 @@ GLuint Texture::AddTexture(std::vector<std::string>& vecCubeMap)
 	return spTexture->uiID;
 }
 
+GLuint Texture::AddTexture(int width, int height, void* data)
+{
+	auto spTexture = std::make_shared<TextureStruct>();
+	spTexture->sPath = "";
+	spTexture->eType = TextureType::CUBEMAP;
+
+	glGenTextures(1, &spTexture->uiID);
+	glBindTexture(GL_TEXTURE_2D, spTexture->uiID);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, width, height, 0, GL_RGB, GL_FLOAT, data);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	m_mapTextures[spTexture->uiID] = spTexture;
+	return spTexture->uiID;
+}
+
 const std::map<GLuint, std::shared_ptr<TextureStruct>>& Texture::GetTexures()const
 {
 	return m_mapTextures;

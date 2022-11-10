@@ -164,5 +164,19 @@ void Scene::ProcessInput()
 				spRenderState->SetShadowPressed(false);
 			}
 		}
+		if (spRenderState->GetUseSSAO())
+		{
+			auto bSSAOKeyPressed = spRenderState->GetSSAOPressed();
+			if (glfwGetKey(pGLFWwindow, GLFW_KEY_SPACE) == GLFW_PRESS && !bSSAOKeyPressed)
+			{
+				auto bSSAO = spRenderState->GetSSAO();
+				spRenderState->SetSSAO(!bSSAO);
+				spRenderState->SetSSAOPressed(true);
+			}
+			if (glfwGetKey(pGLFWwindow, GLFW_KEY_SPACE) == GLFW_RELEASE)
+			{
+				spRenderState->SetSSAOPressed(false);
+			}
+		}
 	}
 }

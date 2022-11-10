@@ -85,6 +85,9 @@
     <Filter Include="shader\normalmapping\normalmpping">
       <UniqueIdentifier>{008f86ce-6f0a-4d41-bcdb-0c6e32401c6a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shader\ssao">
+      <UniqueIdentifier>{97f93288-a6ee-449c-b753-e83077d0340e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="entity.h">
@@ -147,6 +150,9 @@
     <ClInclude Include="DepthBuffer.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="ssao.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="entity.cpp">
@@ -207,6 +213,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="DepthBuffer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ssao.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -423,6 +432,24 @@
     </None>
     <None Include="..\resources\shaders\normalmapping\normal_mapping\parallax_mapping.fs">
       <Filter>shader\normalmapping\normalmpping</Filter>
+    </None>
+    <None Include="..\resources\shaders\ssao\ssao_lighting.fs">
+      <Filter>shader\ssao</Filter>
+    </None>
+    <None Include="..\resources\shaders\ssao\ssao_blur.fs">
+      <Filter>shader\ssao</Filter>
+    </None>
+    <None Include="..\resources\shaders\ssao\ssao.fs">
+      <Filter>shader\ssao</Filter>
+    </None>
+    <None Include="..\resources\shaders\ssao\ssao.vs">
+      <Filter>shader\ssao</Filter>
+    </None>
+    <None Include="..\resources\shaders\ssao\g_buffer.fs">
+      <Filter>shader\ssao</Filter>
+    </None>
+    <None Include="..\resources\shaders\ssao\g_buffer.vs">
+      <Filter>shader\ssao</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -1,7 +1,6 @@
 #include "scene.h"
 #include "gl_resource.h"
-#include <ctime>
-#include <map>
+#include <random>
 
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
@@ -18,6 +17,56 @@ std::vector<glm::vec3> objectPosition
 	glm::vec3(-3.0,  -0.5,  3.0),
 	glm::vec3(0.0,  -0.5,  3.0),
 	glm::vec3(3.0,  -0.5,  3.0),
+};
+
+std::vector<Vertex> vecVertex
+{
+	Vertex(glm::vec3(-1.0, -1.0, -1.0),glm::vec2(0.0, 0.0),glm::vec3(0.0f,  0.0f, -1.0f)),
+	Vertex(glm::vec3(1.0,  1.0, -1.0),glm::vec2(1.0, 1.0),glm::vec3(0.0f,  0.0f, -1.0f)),
+	Vertex(glm::vec3(1.0, -1.0, -1.0),glm::vec2(1.0, 0.0),glm::vec3(0.0f,  0.0f, -1.0f)),
+	Vertex(glm::vec3(1.0,  1.0, -1.0),glm::vec2(1.0, 1.0),glm::vec3(0.0f,  0.0f, -1.0f)),
+	Vertex(glm::vec3(-1.0, -1.0, -1.0),glm::vec2(0.0, 0.0),glm::vec3(0.0f,  0.0f, -1.0f)),
+	Vertex(glm::vec3(-1.0,  1.0, -1.0),glm::vec2(0.0, 1.0),glm::vec3(0.0f,  0.0f, -1.0f)),
+
+	Vertex(glm::vec3(-1.0, -1.0,  1.0),glm::vec2(0.0, 0.0),glm::vec3(0.0f,  0.0f,  1.0f)),//4
+	Vertex(glm::vec3(1.0, -1.0,  1.0),glm::vec2(1.0, 0.0),glm::vec3(0.0f,  0.0f,  1.0f)),//5
+	Vertex(glm::vec3(1.0,  1.0,  1.0),glm::vec2(1.0, 1.0),glm::vec3(0.0f,  0.0f,  1.0f)),//6
+	Vertex(glm::vec3(1.0,  1.0,  1.0),glm::vec2(1.0, 1.0),glm::vec3(0.0f,  0.0f,  1.0f)),//7
+	Vertex(glm::vec3(-1.0,  1.0,  1.0),glm::vec2(0.0, 1.0),glm::vec3(0.0f,  0.0f,  1.0f)),//6
+	Vertex(glm::vec3(-1.0, -1.0,  1.0),glm::vec2(0.0, 0.0),glm::vec3(0.0f,  0.0f,  1.0f)),//7
+
+	Vertex(glm::vec3(-1.0,  1.0,  1.0),glm::vec2(1.0, 0.0),glm::vec3(-1.0f,  0.0f,  0.0f)),
+	Vertex(glm::vec3(-1.0,  1.0, -1.0),glm::vec2(1.0, 1.0),glm::vec3(-1.0f,  0.0f,  0.0f)),
+	Vertex(glm::vec3(-1.0, -1.0, -1.0),glm::vec2(0.0, 1.0),glm::vec3(-1.0f,  0.0f,  0.0f)),
+	Vertex(glm::vec3(-1.0, -1.0, -1.0),glm::vec2(0.0, 1.0),glm::vec3(-1.0f,  0.0f,  0.0f)),
+	Vertex(glm::vec3(-1.0, -1.0,  1.0),glm::vec2(0.0, 0.0),glm::vec3(-1.0f,  0.0f,  0.0f)),
+	Vertex(glm::vec3(-1.0,  1.0,  1.0),glm::vec2(1.0, 0.0),glm::vec3(-1.0f,  0.0f,  0.0f)),
+
+	Vertex(glm::vec3(1.0,  1.0,  1.0),glm::vec2(1.0, 0.0),glm::vec3(1.0f,  0.0f,  0.0f)),
+	Vertex(glm::vec3(1.0, -1.0, -1.0),glm::vec2(0.0, 1.0),glm::vec3(1.0f,  0.0f,  0.0f)),
+	Vertex(glm::vec3(1.0,  1.0, -1.0),glm::vec2(1.0, 1.0),glm::vec3(1.0f,  0.0f,  0.0f)),
+	Vertex(glm::vec3(1.0, -1.0, -1.0),glm::vec2(0.0, 1.0),glm::vec3(1.0f,  0.0f,  0.0f)),
+	Vertex(glm::vec3(1.0,  1.0,  1.0),glm::vec2(1.0, 0.0),glm::vec3(1.0f,  0.0f,  0.0f)),
+	Vertex(glm::vec3(1.0, -1.0,  1.0),glm::vec2(0.0, 0.0),glm::vec3(1.0f,  0.0f,  0.0f)),
+
+	Vertex(glm::vec3(-1.0, -1.0, -1.0),glm::vec2(0.0,  1.0),glm::vec3(0.0f, -1.0f,  0.0f)),
+	Vertex(glm::vec3(1.0, -1.0, -1.0),glm::vec2(1.0,  1.0),glm::vec3(0.0f, -1.0f,  0.0f)),
+	Vertex(glm::vec3(1.0, -1.0,  1.0),glm::vec2(1.0,  0.0),glm::vec3(0.0f, -1.0f,  0.0f)),
+	Vertex(glm::vec3(1.0, -1.0,  1.0),glm::vec2(1.0,  0.0),glm::vec3(0.0f, -1.0f,  0.0f)),
+	Vertex(glm::vec3(-1.0, -1.0,  1.0),glm::vec2(0.0,  0.0),glm::vec3(0.0f, -1.0f,  0.0f)),
+	Vertex(glm::vec3(-1.0, -1.0, -1.0),glm::vec2(0.0,  1.0),glm::vec3(0.0f, -1.0f,  0.0f)),
+
+	Vertex(glm::vec3(-1.0,  1.0, -1.0),glm::vec2(0.0,  1.0),glm::vec3(0.0f,  1.0f,  0.0f)),
+	Vertex(glm::vec3(1.0,  1.0,  1.0),glm::vec2(1.0,  0.0),glm::vec3(0.0f,  1.0f,  0.0f)),
+	Vertex(glm::vec3(1.0,  1.0, -1.0),glm::vec2(1.0,  1.0),glm::vec3(0.0f,  1.0f,  0.0f)),
+	Vertex(glm::vec3(1.0,  1.0,  1.0),glm::vec2(1.0,  0.0),glm::vec3(0.0f,  1.0f,  0.0f)),
+	Vertex(glm::vec3(-1.0,  1.0, -1.0),glm::vec2(0.0,  1.0),glm::vec3(0.0f,  1.0f,  0.0f)),
+	Vertex(glm::vec3(-1.0,  1.0,  1.0),glm::vec2(0.0,  0.0),glm::vec3(0.0f,  1.0f,  0.0f))
+};
+
+std::vector<unsigned int> vecIndex
+{
+	0,1,2,3,4,5, 6,7,8,9,10,11, 12,13,14,15,16,17, 18,19,20,21,22,23, 24,25,26,27,28,29, 30,31,32,33,34,35
 };
 
 std::shared_ptr<Node> CreatLights(std::shared_ptr<RenderState> spRenderState)
@@ -81,45 +130,6 @@ void CreatCubeNode(std::shared_ptr<RenderState> spRenderState,
 	const std::vector<std::shared_ptr<Light>>& vecLights,
 	std::vector<std::shared_ptr<Node>>& vecNode)
 {
-	std::vector<Vertex> vecVertex
-	{
-		Vertex(glm::vec3(-1.0, 1.0, -1.0)),//0
-		Vertex(glm::vec3(-1.0, -1.0, -1.0)),//1
-		Vertex(glm::vec3(1.0,  -1.0, -1.0)),//2
-		Vertex(glm::vec3(1.0,  1.0, -1.0)),//3
-
-		Vertex(glm::vec3(-1.0, -1.0, 1.0)),//4
-		Vertex(glm::vec3(-1.0, -1.0, -1.0)),//5
-		Vertex(glm::vec3(-1.0,  1.0, -1.0)),//6
-		Vertex(glm::vec3(-1.0,  1.0, 1.0)),//7
-
-		Vertex(glm::vec3(1.0,  -1.0,  -1.0)),
-		Vertex(glm::vec3(1.0,  -1.0, 1.0)),
-		Vertex(glm::vec3(1.0, 1.0, 1.0)),
-		Vertex(glm::vec3(1.0, 1.0,  -1.0)),
-
-		Vertex(glm::vec3(-1.0,  -1.0,  1.0)),
-		Vertex(glm::vec3(-1.0,  1.0, 1.0)),
-		Vertex(glm::vec3(1.0, 1.0, 1.0)),
-		Vertex(glm::vec3(1.0, -1.0,  1.0)),
-
-		Vertex(glm::vec3(-1.0, 1.0, -1.0)),
-		Vertex(glm::vec3(1.0, 1.0, -1.0)),
-		Vertex(glm::vec3(1.0, 1.0,  1.0)),
-		Vertex(glm::vec3(-1.0, 1.0,  1.0)),
-
-		Vertex(glm::vec3(-1.0,  -1.0, -1.0)),
-		Vertex(glm::vec3(-1.0,  -1.0, 1.0)),
-		Vertex(glm::vec3(1.0,  -1.0,  -1.0)),
-		Vertex(glm::vec3(-1.0,  -1.0,  1.0)),
-		Vertex(glm::vec3(1.0,  -1.0,  1.0)),
-	};
-
-	std::vector<unsigned int> vecIndex
-	{
-		0,1,2,2,3,0, 4,5,6,6,7,4, 8,9,10,10,11,8, 12,13,14,14,15,12, 16,17,18,18,19,16, 20,21,22,22,23,24
-	};
-
 	for (int i = 0; i < vecLights.size(); i++)
 	{
 		auto spTransform = std::make_shared<Transform>();
@@ -133,6 +143,92 @@ void CreatCubeNode(std::shared_ptr<RenderState> spRenderState,
 	}
 }
 
+float lerp(float a, float b, float f)
+{
+	return a + f * (b - a);
+}
+
+std::shared_ptr<Node> CreatQuad(std::shared_ptr<RenderState> spRenderState,bool bCreateSample,bool bCreateLight)
+{
+	std::vector<Vertex> vecVertex
+	{
+		Vertex(glm::vec3(-1.0,  1.0, 0.0),glm::vec2(0.0,1.0)),//0
+		Vertex(glm::vec3(-1.0, -1.0, 0.0),glm::vec2(0.0,0.0)),//1
+		Vertex(glm::vec3( 1.0, -1.0, 0.0),glm::vec2(1.0,0.0)),//2
+		Vertex(glm::vec3( 1.0,  1.0, 0.0),glm::vec2(1.0,1.0)),//3
+	};
+
+	std::vector<unsigned int> vecIndex
+	{
+		0,1,2,2,3,0
+	};
+
+	auto spTransform = std::make_shared<Transform>();
+	auto spNode = std::make_shared<GeometryNode>(vecVertex, vecIndex, spRenderState, spTransform);
+
+	if (bCreateSample)
+	{
+		std::uniform_real_distribution<GLfloat> randomFloats(0.0, 1.0);
+		std::default_random_engine generator;
+		std::vector<glm::vec3> ssaoKernel;
+		for (unsigned int i = 0; i < 64; i++)
+		{
+			glm::vec3 sample(randomFloats(generator) * 2.0 - 1.0, randomFloats(generator) * 2.0 - 1.0, randomFloats(generator));
+			sample = glm::normalize(sample);
+			sample *= randomFloats(generator);
+			float scale = float(i) / 64.0f;
+
+			scale = lerp(0.1, 1.0, scale * scale);
+			sample *= scale;
+			ssaoKernel.emplace_back(sample);
+		}
+		spNode->SetUniformSamples(ssaoKernel);
+	}
+	if (bCreateLight)
+	{
+		auto spPointLight = std::make_shared<PointLight>();
+		spPointLight->SetLightType(LightType::POINT_LIGHT);
+
+		spPointLight->SetLightPosition(glm::vec3(2.0, 1.0, -2.0));
+		spPointLight->SetAmbient(glm::vec3(0.3));
+		spPointLight->SetDiffuse(glm::vec3(0.2, 0.2, 0.7));
+		spPointLight->SetSpecular(glm::vec3(0.2, 0.2, 0.7), 8);
+
+		spPointLight->SetConstant(1.0f);
+		spPointLight->SetLinear(0.09f);
+		spPointLight->SetQuartic(0.032f);
+
+		std::vector<std::shared_ptr<Light>> vecLights{ spPointLight };
+		spRenderState->SetLights(vecLights);
+	}
+
+	return spNode;
+}
+
+void CreateSceneNode(std::shared_ptr<Entity>& spEntity, 
+	std::shared_ptr<RenderState> spRenderState)
+{
+	//Mesh
+	spEntity->AddMeshNode("../resources/objects/backpack/backpack.obj", spRenderState);
+	auto spTransform = std::make_shared<Transform>();
+	spTransform->SetModelPan(glm::vec3(0.0f, 0.5f, 0.0f));
+	spTransform->SetModelRotAixs(glm::vec3(1.0f, 0.0f, 0.0f));
+	spTransform->SetModelRotAngle(-90.f);
+	spEntity->SetTransform(spTransform);
+
+	//Cube
+	auto spCubeTransform = std::make_shared<Transform>();
+	spCubeTransform->SetModelPan(glm::vec3(0.0f, 7.0f, 0.0f));
+	spCubeTransform->SetModelScale(glm::vec3(7.5f));
+
+	auto spCubeNode = std::make_shared<GeometryNode>(vecVertex, vecIndex, spRenderState, spCubeTransform);
+	spCubeNode->SetUniformReverseNormal(true);
+
+	spEntity->SetCubeNode(spCubeNode);
+}
+
+#define CASE1
+//#define CASE2
 
 int main()
 {
@@ -144,6 +240,7 @@ int main()
 	auto spCamera = std::make_shared<Camera>(glm::vec3(0.f, 0.f, 5.f));
 	auto spScene = std::make_shared<Scene>(spGLResource, spCamera);
 
+#ifdef CASE1
 	//G-Buffer
 	auto spShader = std::make_shared<Shader>("../resources/shaders/deferred/g_buffer.vs",
 		"../resources/shaders/deferred/g_buffer.fs");
@@ -229,4 +326,123 @@ int main()
 	spScene->AddRenderPass(spLightBoxRenderPass);
 
 	spScene->Draw();
+#endif // !CASE1
+
+#ifdef CASE2
+	//G-Buffer
+	auto spShader = std::make_shared<Shader>("../resources/shaders/ssao/g_buffer.vs",
+		"../resources/shaders/ssao/g_buffer.fs");
+
+	auto spTexture = std::make_shared<Texture>();
+	auto spRenderState = std::make_shared<RenderState>(spShader, spTexture);
+	spRenderState->SetBackGround(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f));
+	spRenderState->EnableDepthTest(true);
+	spRenderState->SetDrawMode(DRAW_MODE::ELEMENT_MODE);
+	spRenderState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_MODE);
+
+	auto spGBuffer = std::make_shared<GBuffer>(SCR_WIDTH, SCR_HEIGHT);
+	spRenderState->SetGBuffer(spGBuffer);
+	spRenderState->EnableGBuffer(true);
+
+	auto spEntity = std::make_shared<Entity>();
+	auto spRenderPass = std::make_shared<RenderPass>(spEntity, spRenderState);
+	CreateSceneNode(spEntity, spRenderState);
+	spScene->AddRenderPass(spRenderPass);
+
+	//SSAO
+	auto spPositionInfo = std::make_shared<TextureStruct>();
+	spPositionInfo->eType = TextureType::DIFFUSE;
+	spPositionInfo->uiID = spGBuffer->GetPosition();
+	auto spNormalInfor = std::make_shared<TextureStruct>();
+	spNormalInfor->eType = TextureType::DIFFUSE;
+	spNormalInfor->uiID = spGBuffer->GetNormal();
+
+	auto spSSAOTexture = std::make_shared<Texture>();
+	spSSAOTexture->AddTexture(spPositionInfo);
+	spSSAOTexture->AddTexture(spNormalInfor);
+
+	std::uniform_real_distribution<GLfloat> randomFloats(0.0, 1.0);
+	std::default_random_engine generator;
+	std::vector<glm::vec3> ssaoNoise;
+	for (unsigned int i = 0; i < 16; i++)
+	{
+		glm::vec3 sample(randomFloats(generator) * 2.0 - 1.0, randomFloats(generator) * 2.0 - 1.0, 0);
+		ssaoNoise.push_back(sample);
+	}
+	spSSAOTexture->AddTexture(4, 4, &ssaoNoise[0]);
+
+	auto spSSAOShader = std::make_shared<Shader>("../resources/shaders/ssao/ssao.vs",
+		"../resources/shaders/ssao/ssao.fs");
+	auto spSSAORenderState = std::make_shared<RenderState>(spSSAOShader, spSSAOTexture);
+	spSSAORenderState->SetBackGround(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f));
+	spSSAORenderState->EnableDepthTest(true);
+	spSSAORenderState->SetDrawMode(DRAW_MODE::ELEMENT_MODE);
+	spSSAORenderState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_MODE);
+	auto spSSAOBuffer = std::make_shared<SSAOBuffer>(SCR_WIDTH, SCR_HEIGHT);
+	spSSAORenderState->EnableSSAOBuffer(true);
+	spSSAORenderState->SetSSAOBuffer(spSSAOBuffer);
+
+	auto spSSAOEntity = std::make_shared<Entity>();
+	auto spQuadNode = CreatQuad(spSSAORenderState, true, false);
+	spSSAOEntity->AddGeometryNode(spQuadNode);
+	auto spSSAORenderPass = std::make_shared<RenderPass>(spSSAOEntity, spSSAORenderState);
+	spScene->AddRenderPass(spSSAORenderPass);
+
+	////Blur
+	auto spSSAOTex = std::make_shared<TextureStruct>();
+	spSSAOTex->eType = TextureType::DIFFUSE;
+	spSSAOTex->uiID = spSSAOBuffer->GetSsaoColor();
+
+	auto spSSAOBlurTexture = std::make_shared<Texture>();
+	spSSAOBlurTexture->AddTexture(spSSAOTex);
+
+	auto spSSAOBlurShader = std::make_shared<Shader>("../resources/shaders/ssao/ssao.vs",
+		"../resources/shaders/ssao/ssao_blur.fs");
+	auto spSSAOBlurRenderState = std::make_shared<RenderState>(spSSAOBlurShader, spSSAOBlurTexture);
+	spSSAOBlurRenderState->SetBackGround(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+	spSSAOBlurRenderState->EnableDepthTest(true);
+	spSSAOBlurRenderState->SetDrawMode(DRAW_MODE::ELEMENT_MODE);
+	spSSAOBlurRenderState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_MODE);
+	auto spSSAOBlurBuffer = std::make_shared<SSAOBuffer>(SCR_WIDTH, SCR_HEIGHT);
+	spSSAOBlurRenderState->EnableSSAOBuffer(true);
+	spSSAOBlurRenderState->SetSSAOBuffer(spSSAOBlurBuffer);
+
+	auto spSSAOBlurEntity = std::make_shared<Entity>();
+	auto spBlurQuadNode = CreatQuad(spSSAOBlurRenderState, false, false);
+	spSSAOBlurEntity->AddGeometryNode(spBlurQuadNode);
+	auto spSSAOBlurRenderPass = std::make_shared<RenderPass>(spSSAOBlurEntity, spSSAOBlurRenderState);
+	spScene->AddRenderPass(spSSAOBlurRenderPass);
+
+	//Lighting
+	auto spSSAOBlurTex = std::make_shared<TextureStruct>();
+	spSSAOBlurTex->eType = TextureType::DIFFUSE;
+	spSSAOBlurTex->uiID = spSSAOBlurBuffer->GetSsaoColor();
+
+	auto spAlbedoInfo = std::make_shared<TextureStruct>();
+	spAlbedoInfo->eType = TextureType::DIFFUSE;
+	spAlbedoInfo->uiID = spGBuffer->GetAlbedo();
+
+	auto spLightingTexture = std::make_shared<Texture>();
+	spLightingTexture->AddTexture(spPositionInfo);
+	spLightingTexture->AddTexture(spNormalInfor);
+	spLightingTexture->AddTexture(spAlbedoInfo);
+	spLightingTexture->AddTexture(spSSAOBlurTex);
+
+	auto spLightingShader = std::make_shared<Shader>("../resources/shaders/ssao/ssao.vs",
+		"../resources/shaders/ssao/ssao_lighting.fs");
+	auto spLightingRenderState = std::make_shared<RenderState>(spLightingShader, spLightingTexture);
+	spLightingRenderState->SetBackGround(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+	spLightingRenderState->EnableDepthTest(true);
+	spLightingRenderState->SetDrawMode(DRAW_MODE::ELEMENT_MODE);
+	spLightingRenderState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_MODE);
+	spLightingRenderState->SetUseSSAO(true);
+
+	auto spLightingEntity = std::make_shared<Entity>();
+	auto spLighingQuadNode = CreatQuad(spLightingRenderState, false, true);
+	spLightingEntity->AddGeometryNode(spLighingQuadNode);
+	auto spLightingRenderPass = std::make_shared<RenderPass>(spLightingEntity, spLightingRenderState);
+	spScene->AddRenderPass(spLightingRenderPass);
+
+	spScene->Draw();
+#endif // CASE2
 }

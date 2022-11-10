@@ -59,7 +59,12 @@ RenderState::RenderState(std::shared_ptr<Shader>spShader, std::shared_ptr<Textur
 	m_fFar(0.f),
 	m_fNear(0.f),
 	m_bEnabelHightScale(true),
-	m_fHeightScale(0.1f)
+	m_fHeightScale(0.1f),
+	m_bEnableSSAO(false),
+	m_spSSAOBuffer(nullptr),
+	m_bUseSSAO(false),
+	m_bSSAO(false),
+	m_bSSAOPressed(false)
 {
 
 }
@@ -278,6 +283,11 @@ void RenderState::ApplyPreState()
 		}
 	}
 
+	if (m_bEnableSSAO)
+	{
+		glBindFramebuffer(GL_FRAMEBUFFER, m_spSSAOBuffer->GetSsaoBuffer());
+	}
+
 	if (m_bEnableDepthBuffer)
 	{
 		m_spDepthBuffer->Bind();
@@ -410,6 +420,10 @@ void RenderState::ApplyTransform(std::shared_ptr<Camera>spCamera)
 	if (m_bUseShadow)
 	{
 		m_spShader->SetBool("bShadow", m_bShadow);
+	}
+	if (m_bUseSSAO)
+	{
+		m_spShader->SetBool("bSSAO", m_bSSAO);
 	}
 }
 
@@ -764,6 +778,36 @@ bool RenderState::GetUseHightScale()const
 	return m_bEnabelHightScale;
 }
 
+void RenderState::SetUseSSAO(bool bUseSSAO)
+{
+	m_bUseSSAO = bUseSSAO;
+}
+
+bool RenderState::GetSSAO() const
+{
+	return m_bSSAO;
+}
+
+bool RenderState::GetUseSSAO()const
+{
+	return m_bUseSSAO;
+}
+
+void RenderState::SetSSAO(bool bSSAO)
+{
+	m_bSSAO = bSSAO;
+}
+
+bool RenderState::GetSSAOPressed() const
+{
+	return m_bSSAOPressed;
+}
+
+void RenderState::SetSSAOPressed(bool bPress)
+{
+	m_bSSAOPressed = bPress;
+}
+
 float RenderState::GetHightScale() const
 {
 	return m_fHeightScale;
@@ -824,4 +868,14 @@ void RenderState::SetMSAAInfor(std::shared_ptr<MSAAInfo> spMSAAInfo)
 void RenderState::SetModelMatrix(const glm::mat4& matModel)
 {
 	m_spShader->SetMat4("matModel", matModel);
+}
+
+void RenderState::EnableSSAOBuffer(bool bSSAO)
+{
+	m_bEnableSSAO = bSSAO;
+}
+
+void RenderState::SetSSAOBuffer(std::shared_ptr<SSAOBuffer> spSSAOBuffer)
+{
+	m_spSSAOBuffer = spSSAOBuffer;
 }

@@ -34,6 +34,7 @@ public:
 	void SetUniformColor(const glm::vec3& color, bool bUniformColor = true);
 	void SetUniformCull(bool bUseNodeCull, bool bUniformCull = true);
 	void SetUniformReverseNormal(bool bUnifromReverse);
+	void SetUniformSamples(const std::vector<glm::vec3>& vecSamples);
 
 	virtual void Prender();
 	virtual void Draw();
@@ -70,4 +71,5 @@ private:
 	bool m_bUseNodeCull;
 	bool m_bUniformCull;
 	bool m_bUnifromReverse;
+	std::vector<glm::vec3> m_vecSamples;
 };

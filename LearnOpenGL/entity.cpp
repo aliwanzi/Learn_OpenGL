@@ -1,6 +1,6 @@
 #include "entity.h"
 
-Entity::Entity():m_spParent(nullptr)
+Entity::Entity():m_spCubeNode(nullptr)
 {
 }
 
@@ -12,6 +12,11 @@ Entity::~Entity()
 void Entity::AddGeometryNode(std::shared_ptr<Node> spNode)
 {
 	m_listNode.push_back(spNode);
+}
+
+void Entity::SetCubeNode(std::shared_ptr<Node> spNode)
+{
+	m_spCubeNode = spNode;
 }
 
 void Entity::SetInstanceOffset(const std::vector<glm::vec2>& vecOffset)
@@ -61,6 +66,13 @@ void Entity::DrawSelfAndChild()
 			child->Draw();
 		}
 		child->PostRender();
+	}
+
+	if (m_spCubeNode)
+	{
+		m_spCubeNode->Prender();
+		m_spCubeNode->Draw();
+		m_spCubeNode->PostRender();
 	}
 }
 

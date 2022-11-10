@@ -11,6 +11,7 @@
 #include "HDRBuffer.h"
 #include "BlurBuffer.h"
 #include "DepthBuffer.h"
+#include "ssao.h"
 
 enum POLYGON_MODE
 {
@@ -196,6 +197,15 @@ public:
 	float GetHightScale() const;
 	void SetHightScale(float fHeightScale);
 
+	void EnableSSAOBuffer(bool bSSAO);
+	void SetSSAOBuffer(std::shared_ptr<SSAOBuffer> spSSAOBuffer);
+	void SetUseSSAO(bool bUseSSAO);
+	bool GetUseSSAO()const;
+	bool GetSSAO()const;
+	void SetSSAO(bool SSAO);
+	bool GetSSAOPressed()const;
+	void SetSSAOPressed(bool bPress);
+
 private:
 
 	glm::vec4 m_vec4BackGround;
@@ -281,4 +291,10 @@ private:
 
 	bool m_bEnabelHightScale;
 	float m_fHeightScale;
+
+	bool m_bEnableSSAO;
+	bool m_bUseSSAO;
+	bool m_bSSAO;
+	bool m_bSSAOPressed;
+	std::shared_ptr<SSAOBuffer> m_spSSAOBuffer;
 };

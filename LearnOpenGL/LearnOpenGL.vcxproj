@@ -164,6 +164,7 @@
     <ClInclude Include="render_state.h" />
     <ClInclude Include="scene.h" />
     <ClInclude Include="shader.h" />
+    <ClInclude Include="ssao.h" />
     <ClInclude Include="texture.h" />
     <ClInclude Include="transform.h" />
     <ClInclude Include="uniform_buffer.h" />
@@ -186,6 +187,7 @@
     <ClCompile Include="render_state.cpp" />
     <ClCompile Include="scene.cpp" />
     <ClCompile Include="shader.cpp" />
+    <ClCompile Include="ssao.cpp" />
     <ClCompile Include="texture.cpp" />
     <ClCompile Include="transform.cpp" />
     <ClCompile Include="uniform_buffer.cpp" />
@@ -251,6 +253,12 @@
     <None Include="..\resources\shaders\skybox\view_normal\fragment.fs" />
     <None Include="..\resources\shaders\skybox\view_normal\geometry_normal.gs" />
     <None Include="..\resources\shaders\skybox\view_normal\vertex.vs" />
+    <None Include="..\resources\shaders\ssao\ssao_lighting.fs" />
+    <None Include="..\resources\shaders\ssao\ssao_blur.fs" />
+    <None Include="..\resources\shaders\ssao\ssao.fs" />
+    <None Include="..\resources\shaders\ssao\ssao.vs" />
+    <None Include="..\resources\shaders\ssao\g_buffer.fs" />
+    <None Include="..\resources\shaders\ssao\g_buffer.vs" />
     <None Include="..\resources\shaders\Tessellation\triangle.tes" />
     <None Include="..\resources\shaders\Tessellation\fragment.fs" />
     <None Include="..\resources\shaders\Tessellation\triangle.tcs" />

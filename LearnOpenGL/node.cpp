@@ -2,7 +2,8 @@
 #include "GLFW/glfw3.h"
 
 Node::Node() :m_uiVAO(0), m_uiVBO(0), m_uiEBO(0),
-m_spRenderState(nullptr), m_spTransform(nullptr)
+m_spRenderState(nullptr), m_spTransform(nullptr),
+m_bUniformColor(false), m_bUniformCull(false), m_bUnifromReverse(false), m_bUseNodeCull(false)
 {
 
 }
@@ -173,6 +174,14 @@ void Node::ApplyUniform()
 	{
 		spShader->SetBool("reverse_normals", m_bUnifromReverse);
 	}
+
+	if (m_vecSamples.size()>0)
+	{
+		for (size_t i = 0; i < m_vecSamples.size(); i++)
+		{
+			spShader->SetVec3("samples[" + std::to_string(i) + "]", m_vecSamples[i]);
+		}
+	}
 }
 
 void Node::SetVertexs(std::vector<Vertex>& vecVertexs)
@@ -271,6 +280,11 @@ void Node::SetUniformCull(bool bUseNodeCull, bool bUniformCull)
 void Node::SetUniformReverseNormal(bool bUnifromReverse)
 {
 	m_bUnifromReverse = bUnifromReverse;
+}
+
+void Node::SetUniformSamples(const std::vector<glm::vec3>& vecSamples)
+{
+	m_vecSamples = vecSamples;
 }
 
 void Node::SetVAOVBO()
