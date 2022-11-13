@@ -227,8 +227,8 @@ void CreateSceneNode(std::shared_ptr<Entity>& spEntity,
 	spEntity->SetCubeNode(spCubeNode);
 }
 
-#define CASE1
-//#define CASE2
+//#define CASE1
+#define CASE2
 
 int main()
 {
@@ -335,7 +335,7 @@ int main()
 
 	auto spTexture = std::make_shared<Texture>();
 	auto spRenderState = std::make_shared<RenderState>(spShader, spTexture);
-	spRenderState->SetBackGround(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f));
+	spRenderState->SetBackGround(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
 	spRenderState->EnableDepthTest(true);
 	spRenderState->SetDrawMode(DRAW_MODE::ELEMENT_MODE);
 	spRenderState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_MODE);
@@ -374,7 +374,7 @@ int main()
 	auto spSSAOShader = std::make_shared<Shader>("../resources/shaders/ssao/ssao.vs",
 		"../resources/shaders/ssao/ssao.fs");
 	auto spSSAORenderState = std::make_shared<RenderState>(spSSAOShader, spSSAOTexture);
-	spSSAORenderState->SetBackGround(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f));
+	spSSAORenderState->SetBackGround(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
 	spSSAORenderState->EnableDepthTest(true);
 	spSSAORenderState->SetDrawMode(DRAW_MODE::ELEMENT_MODE);
 	spSSAORenderState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_MODE);

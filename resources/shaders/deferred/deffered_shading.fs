@@ -37,7 +37,7 @@ void main()
       vec3 Diffuse = texture(texture_diffuse3, fs_in.TexCoords).rgb;
       float Specular = texture(texture_diffuse3, fs_in.TexCoords).a;
       
-      vec3 lighting = Diffuse * 0.1;
+      vec3 lighting = Diffuse * 0.5;
       vec3 viewDir = normalize(viewPos - FragPos);
       for (int i = 0; i < NR_LIGHTS; ++i)
       {
