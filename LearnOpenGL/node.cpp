@@ -208,6 +208,11 @@ void Node::SetRenderState(std::shared_ptr<RenderState> spRenderState)
 	}
 }
 
+std::shared_ptr<RenderState> Node::GetRenderState()
+{
+	return m_spRenderState;
+}
+
 void Node::SetTransform(std::shared_ptr<Transform> spTransform)
 {
 	this->m_spTransform = spTransform;

@@ -150,6 +150,7 @@
     <ClInclude Include="BlurBuffer.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="common.h" />
+    <ClInclude Include="CubeMapBuffer.h" />
     <ClInclude Include="DepthBuffer.h" />
     <ClInclude Include="entity.h" />
     <ClInclude Include="frame_buffer.h" />
@@ -172,6 +173,7 @@
   <ItemGroup>
     <ClCompile Include="BlurBuffer.cpp" />
     <ClCompile Include="camera.cpp" />
+    <ClCompile Include="CubeMapBuffer.cpp" />
     <ClCompile Include="DepthBuffer.cpp" />
     <ClCompile Include="entity.cpp" />
     <ClCompile Include="frame_buffer.cpp" />
@@ -218,6 +220,12 @@
     <None Include="..\resources\shaders\Geometry\fragment.fs" />
     <None Include="..\resources\shaders\geometry\geometry.gs" />
     <None Include="..\resources\shaders\Geometry\vertex.vs" />
+    <None Include="..\resources\shaders\IBL\background.fs" />
+    <None Include="..\resources\shaders\IBL\background.vs" />
+    <None Include="..\resources\shaders\IBL\pbr.vs" />
+    <None Include="..\resources\shaders\IBL\cubemap.vs" />
+    <None Include="..\resources\shaders\IBL\cubemap.fs" />
+    <None Include="..\resources\shaders\IBL\pbr.fs" />
     <None Include="..\resources\shaders\instance\fragment.fs" />
     <None Include="..\resources\shaders\instance\rock_fragment.fs" />
     <None Include="..\resources\shaders\instance\rock_vertex.vs" />

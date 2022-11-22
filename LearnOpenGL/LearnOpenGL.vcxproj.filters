@@ -88,6 +88,9 @@
     <Filter Include="shader\ssao">
       <UniqueIdentifier>{97f93288-a6ee-449c-b753-e83077d0340e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shader\IBL">
+      <UniqueIdentifier>{3b5cac55-6aea-4022-8910-02c4740fde79}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="entity.h">
@@ -153,6 +156,9 @@
     <ClInclude Include="ssao.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="CubeMapBuffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="entity.cpp">
@@ -216,6 +222,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="ssao.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CubeMapBuffer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -450,6 +459,24 @@
     </None>
     <None Include="..\resources\shaders\ssao\g_buffer.vs">
       <Filter>shader\ssao</Filter>
+    </None>
+    <None Include="..\resources\shaders\IBL\background.fs">
+      <Filter>shader\IBL</Filter>
+    </None>
+    <None Include="..\resources\shaders\IBL\background.vs">
+      <Filter>shader\IBL</Filter>
+    </None>
+    <None Include="..\resources\shaders\IBL\pbr.vs">
+      <Filter>shader\IBL</Filter>
+    </None>
+    <None Include="..\resources\shaders\IBL\cubemap.vs">
+      <Filter>shader\IBL</Filter>
+    </None>
+    <None Include="..\resources\shaders\IBL\cubemap.fs">
+      <Filter>shader\IBL</Filter>
+    </None>
+    <None Include="..\resources\shaders\IBL\pbr.fs">
+      <Filter>shader\IBL</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -28,6 +28,7 @@ public:
 		std::shared_ptr<RenderState> spRenderState, std::shared_ptr<Transform> spTransform);
 	~Node();
 	void SetRenderState(std::shared_ptr<RenderState> spRenderState);
+	std::shared_ptr<RenderState> GetRenderState();
 	void SetTransform(std::shared_ptr<Transform> spTransform);
 	void SetInstanceOffset(const std::vector<glm::vec2>& vecOffset);
 	void SetInstanceOffset(const std::vector<glm::mat4>& vecOffset);
@@ -40,8 +41,9 @@ public:
 	virtual void Draw();
 	virtual void PostRender();
 
-private:
 	void ApplyTexture();
+
+private:
 	void ApplyTransform();
 	void ApplyUniform();
 
