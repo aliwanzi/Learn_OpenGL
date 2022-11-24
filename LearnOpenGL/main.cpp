@@ -57,11 +57,94 @@ std::vector<unsigned int> vecIndex
 	0,1,2,3,4,5, 6,7,8,9,10,11, 12,13,14,15,16,17, 18,19,20,21,22,23, 24,25,26,27,28,29, 30,31,32,33,34,35
 };
 
+std::vector<glm::vec3> lightPositions{
+	glm::vec3(-10.0f, 10.0f,10.0f),
+	glm::vec3(10.0f, 10.0f,10.0f),
+	glm::vec3(-10.0f,-10.0f,10.0f),
+	glm::vec3(10.0f,-10.0f,10.0f),
+};
+
 std::shared_ptr<GeometryNode> CreatBoxNode(std::shared_ptr<RenderState> spRenderState)
 {
 	auto spTransform = std::make_shared<Transform>();
-	spTransform->SetModelPan(glm::vec3(0.f));
 	return std::make_shared<GeometryNode>(vecVertex, vecIndex, spRenderState, spTransform);
+}
+
+void CreateSphere(std::shared_ptr<RenderState> spRenderState, std::vector<std::shared_ptr<Node>>& vecNode)
+{
+	const unsigned int X_SEGMENTS = 64;
+	const unsigned int Y_SEGMENTS = 64;
+
+	std::vector<Vertex> vecVertex;
+	vecVertex.reserve(64 * 64);
+	for (unsigned int x = 0; x <= X_SEGMENTS; ++x)
+	{
+		for (unsigned int y = 0; y <= Y_SEGMENTS; ++y)
+		{
+			float xSegment = float(x) / float(X_SEGMENTS);
+			float ySegment = float(y) / float(Y_SEGMENTS);
+			float xPos = std::cos(xSegment * 2.0f * std::_Pi) * std::sin(ySegment * std::_Pi);
+			float yPos = std::cos(ySegment * std::_Pi);
+			float zPos = std::sin(xSegment * 2.0f * std::_Pi) * std::sin(ySegment * std::_Pi);
+
+			Vertex vertex(glm::vec3(xPos, yPos, zPos), glm::vec2(xSegment, ySegment), glm::vec3(xPos, yPos, zPos));
+			vecVertex.push_back(vertex);
+		}
+	}
+
+
+	std::vector<unsigned int> vecIndices;
+	vecIndices.reserve(X_SEGMENTS * Y_SEGMENTS);
+	bool oddRow(false);
+	for (unsigned int y = 0; y < Y_SEGMENTS; y++)
+	{
+		//if (!oddRow)
+		//{
+			for (unsigned int x = 0; x <= X_SEGMENTS; x++)
+			{
+				vecIndices.push_back(y * (X_SEGMENTS + 1) + x);
+				vecIndices.push_back((y + 1) * (X_SEGMENTS + 1) + x);
+			}
+		//}
+		//else
+		//{
+		//	for (int x = X_SEGMENTS; x >= 0; --x)
+		//	{
+		//		vecIndices.push_back((y + 1) * (X_SEGMENTS + 1) + x);
+		//		vecIndices.push_back(y * (X_SEGMENTS + 1) + x);
+		//	}
+		//}
+		//oddRow = !oddRow;
+	}
+
+	for (int row = 0; row < 7; row++)
+	{
+		for (int col = 0; col < 7; col++)
+		{
+			auto spTransform = std::make_shared<Transform>();
+			spTransform->SetModelPan(glm::vec3((col - 3.5) * 3, (row - 3.5) * 3, -2.0f));
+
+			auto spNode = std::make_shared<GeometryNode>(vecVertex, vecIndices, spRenderState, spTransform);
+			spNode->SetUniformAlbedo(glm::vec3(0.5f, 0.0, 0.0));
+			spNode->SetUniformAo(1.0f);
+			spNode->SetUniformRouthness(glm::clamp(col / 7.0, 0.05, 1.0));
+			spNode->SetUniformMetallic(row / 7.0);
+			vecNode.push_back(spNode);
+		}
+	}
+
+	for (int i = 0; i < lightPositions.size(); i++)
+	{
+		auto spPointLight = std::make_shared<PointLight>();
+		spPointLight->SetLightType(LightType::POINT_LIGHT);
+
+		spPointLight->SetLightPosition(lightPositions[i]);
+		spPointLight->SetDiffuse(glm::vec3(300.f));
+
+		std::vector<std::shared_ptr<Light>> vecLights;
+		vecLights.emplace_back(spPointLight);
+		spRenderState->SetLights(vecLights);
+	}
 }
 
 #define CASE1
@@ -121,6 +204,26 @@ int main()
 	spEnvEntity->AddGeometryNode(CreatBoxNode(spEnvRenderState));
 	auto spEnvRenderPass = std::make_shared<RenderPass>(spEnvEntity, spEnvRenderState);
 	spScene->AddRenderPass(spEnvRenderPass);
+
+	//draw sphere
+	auto spSphereShader = std::make_shared<Shader>("../resources/shaders/IBL/pbr.vs",
+		"../resources/shaders/IBL/pbr.fs");
+	auto spSphereTexture = std::make_shared<Texture>();
+	auto spSphereState = std::make_shared<RenderState>(spSphereShader, spSphereTexture);
+	spSphereState->SetClearBuffer(false);
+	spSphereState->EnableDepthTest(true);
+	spSphereState->SetDrawMode(DRAW_MODE::ELEMENT_MODE);
+	spSphereState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_STRIP_MODE);
+
+	auto spSphereEntity = std::make_shared<Entity>();
+	std::vector<std::shared_ptr<Node>> vecNode;
+	CreateSphere(spSphereState, vecNode);
+	for (int i = 0; i < vecNode.size(); ++i)
+	{
+		spSphereEntity->AddGeometryNode(vecNode[i]);
+	}
+	auto spSphereRenderPass = std::make_shared<RenderPass>(spSphereEntity, spSphereState);
+	spScene->AddRenderPass(spSphereRenderPass);
 
 	spScene->Draw();
 #endif // !CASE1

@@ -11,7 +11,9 @@ m_bUniformColor(false), m_bUniformCull(false), m_bUnifromReverse(false), m_bUseN
 Node::Node(std::vector<Vertex>& vecVertexs, std::vector<unsigned int>& vecIndexs,
 	std::shared_ptr<RenderState> spRenderState, std::shared_ptr<Transform> spTransform) :
 	m_vecVertexs(vecVertexs), m_vecIndexs(vecIndexs), m_spRenderState(spRenderState), m_spTransform(spTransform),
-	m_bUniformColor(false), m_bUniformCull(false), m_bUnifromReverse(false),m_bUseNodeCull(false)
+	m_bUniformColor(false), m_bUniformCull(false), m_bUnifromReverse(false),m_bUseNodeCull(false),
+	m_bAlbedo(false),m_fRouthness(0.f),m_bRouthness(false),m_fMetallic(0.f),m_bMetallic(false),
+	m_fAo(0.f),m_bAo(false)
 {
 	SetVAOVBO();
 }
@@ -48,6 +50,10 @@ void Node::Draw()
 		else if (m_spRenderState->GetPrimitiveMode() == PRIMITIVE_MODE::TRIANGLES_MODE)
 		{
 			glDrawElements(GL_TRIANGLES, static_cast<unsigned int>(m_vecIndexs.size()), GL_UNSIGNED_INT, 0);
+		}
+		else if(m_spRenderState->GetPrimitiveMode() == PRIMITIVE_MODE::TRIANGLES_STRIP_MODE)
+		{
+			glDrawElements(GL_TRIANGLE_STRIP, static_cast<unsigned int>(m_vecIndexs.size()), GL_UNSIGNED_INT, 0);
 		}
 	}
 	else if(m_spRenderState->GetDrawMode() == DRAW_MODE::ELEMENT_INSTANCE_MODE)
@@ -182,6 +188,22 @@ void Node::ApplyUniform()
 			spShader->SetVec3("samples[" + std::to_string(i) + "]", m_vecSamples[i]);
 		}
 	}
+	if (m_bAlbedo)
+	{
+		spShader->SetVec3("albedo", m_vec3Albedo);
+	}
+	if (m_bMetallic)
+	{
+		spShader->SetFloat("metallic", m_fMetallic);
+	}
+	if (m_bMetallic)
+	{
+		spShader->SetFloat("routhness", m_fRouthness);
+	}
+	if (m_bMetallic)
+	{
+		spShader->SetFloat("ao", m_fAo);
+	}
 }
 
 void Node::SetVertexs(std::vector<Vertex>& vecVertexs)
@@ -290,6 +312,30 @@ void Node::SetUniformReverseNormal(bool bUnifromReverse)
 void Node::SetUniformSamples(const std::vector<glm::vec3>& vecSamples)
 {
 	m_vecSamples = vecSamples;
+}
+
+void Node::SetUniformAlbedo(const glm::vec3& albedo, bool bAlbedo)
+{
+	m_vec3Albedo = albedo;
+	m_bAlbedo = bAlbedo;
+}
+
+void Node::SetUniformMetallic(float metallic, bool bMetallic)
+{
+	m_fMetallic = metallic;
+	m_bMetallic = bMetallic;
+}
+
+void Node::SetUniformRouthness(float roughness, bool bRoughness)
+{
+	m_fRouthness = roughness;
+	m_bRouthness = bRoughness;
+}
+
+void Node::SetUniformAo(float ao, bool bAo)
+{
+	m_fAo = ao;
+	m_bAo = bAo;
 }
 
 void Node::SetVAOVBO()

@@ -36,6 +36,10 @@ public:
 	void SetUniformCull(bool bUseNodeCull, bool bUniformCull = true);
 	void SetUniformReverseNormal(bool bUnifromReverse);
 	void SetUniformSamples(const std::vector<glm::vec3>& vecSamples);
+	void SetUniformAlbedo(const glm::vec3& albedo, bool bAlbedo = true);
+	void SetUniformMetallic(float metallic, bool bMetallic = true);
+	void SetUniformRouthness(float roughness, bool bRoughness = true);
+	void SetUniformAo(float ao, bool bAo = true);
 
 	virtual void Prender();
 	virtual void Draw();
@@ -74,4 +78,13 @@ private:
 	bool m_bUniformCull;
 	bool m_bUnifromReverse;
 	std::vector<glm::vec3> m_vecSamples;
+
+	glm::vec3 m_vec3Albedo;
+	bool m_bAlbedo;
+	float m_fMetallic;
+	bool m_bMetallic;
+	float m_fRouthness;
+	bool m_bRouthness;
+	float m_fAo;
+	bool m_bAo;
 };
