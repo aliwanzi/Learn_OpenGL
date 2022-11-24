@@ -198,7 +198,7 @@ void Node::ApplyUniform()
 	}
 	if (m_bMetallic)
 	{
-		spShader->SetFloat("routhness", m_fRouthness);
+		spShader->SetFloat("roughness", m_fRouthness);
 	}
 	if (m_bMetallic)
 	{
