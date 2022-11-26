@@ -20,13 +20,13 @@ struct PointLight
 const int NR_LIGHTS=4;
 uniform PointLight pointLights[NR_LIGHTS];
 
-uniform samplerCube texture_cube_map1;
 uniform vec3 viewPos;
 
 uniform vec3 albedo;
 uniform float metallic;
 uniform float roughness;
 uniform float ao;
+uniform samplerCube texture_cube_map1;
 
 float DistributionGGX(vec3 N,vec3 H,float roughness)
 {
@@ -97,13 +97,18 @@ void main()
 
     }
 
-    vec3 ambient = vec3(0.03) * albedo * ao;
+    vec3 kS = fresnelSchlick(N, V);
+    vec3 kD = vec3(1.0) - kS;
 
+    kD *= (1.0 - metallic);
+    vec3 irradiance = texture(texture_cube_map1,N).rgb;
+    vec3 ambient = kD * irradiance * albedo * ao;
     vec3 color = ambient + Lo;
 
-    color = color /(color + vec3(1.0));
+    color = color/(color+vec3(1.0));
 
-    color = pow (color ,vec3(1.0/2.2));
+    color = pow(color,vec3(1.0/2.2));
 
     FragColor = vec4(color,1.0);
+
 }

@@ -222,6 +222,9 @@
     <None Include="..\resources\shaders\Geometry\vertex.vs" />
     <None Include="..\resources\shaders\IBL\background.fs" />
     <None Include="..\resources\shaders\IBL\background.vs" />
+    <None Include="..\resources\shaders\IBL\irradiance.fs" />
+    <None Include="..\resources\shaders\IBL\irradiance_pbr.fs" />
+    <None Include="..\resources\shaders\IBL\light.fs" />
     <None Include="..\resources\shaders\IBL\pbr.vs" />
     <None Include="..\resources\shaders\IBL\cubemap.vs" />
     <None Include="..\resources\shaders\IBL\cubemap.fs" />
