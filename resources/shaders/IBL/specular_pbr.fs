@@ -10,24 +10,6 @@ uniform samplerCube texture_cube_map1;
 uniform float roughness;
 const float PI = 3.14159265359;
 
-struct PointLight
-{
-    vec3 position;
-
-    vec3 diffuse;
-};
-
-const int NR_LIGHTS=4;
-uniform PointLight pointLights[NR_LIGHTS];
-
-uniform vec3 viewPos;
-
-uniform vec3 albedo;
-uniform float metallic;
-uniform float roughness;
-uniform float ao;
-
-
 float DistributionGGX(vec3 N,vec3 H,float roughness)
 {
     float a = roughness * roughness;
@@ -59,7 +41,7 @@ vec3 ImportanceSamleGGX(vec2 Xi,vec3 N,float roughness)
 {
     float a = roughness * roughness;
     float phi = 2.0 * PI * Xi.x;
-    float cosTheta = sqrt((1.0 - Xi.y)/(1.0+(a*a - 1.0) * xi.y));
+    float cosTheta = sqrt((1.0 - Xi.y)/(1.0+(a*a - 1.0) * Xi.y));
     float sinTheta = sqrt(1.0 - cosTheta * cosTheta);
 
     vec3 H;
@@ -83,16 +65,16 @@ void main()
     vec3 prefilteredColor = vec3(0.0);
     float totalWeight = 0.0;
 
-    for(uint i = 0u; i < SAMPLE_COUTN ; ++i)
+    for(uint i = 0u; i < SAMPLE_COUNT ; ++i)
     {
-        vec2 Xi = Hammersley(i,SAMPLE_COUTN);
+        vec2 Xi = Hammersley(i,SAMPLE_COUNT);
         vec3 H = ImportanceSamleGGX(Xi,N,roughness);
         vec3 L = normalize(2.0 * dot(V,H) * H - V);
 
         float NdotL = max(dot(N,L),0.0);
         if(NdotL > 0.0)
         {
-            prefilteredColor += texture(environmentMap, L).rgb * NdotL;
+            prefilteredColor += texture(texture_cube_map1, L).rgb * NdotL;
             totalWeight      += NdotL;
         }
     }
