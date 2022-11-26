@@ -222,6 +222,8 @@
     <None Include="..\resources\shaders\Geometry\vertex.vs" />
     <None Include="..\resources\shaders\IBL\background.fs" />
     <None Include="..\resources\shaders\IBL\background.vs" />
+    <None Include="..\resources\shaders\IBL\brdf.fs" />
+    <None Include="..\resources\shaders\IBL\brdf.vs" />
     <None Include="..\resources\shaders\IBL\irradiance.fs" />
     <None Include="..\resources\shaders\IBL\irradiance_pbr.fs" />
     <None Include="..\resources\shaders\IBL\light.fs" />
@@ -229,6 +231,7 @@
     <None Include="..\resources\shaders\IBL\cubemap.vs" />
     <None Include="..\resources\shaders\IBL\cubemap.fs" />
     <None Include="..\resources\shaders\IBL\pbr.fs" />
+    <None Include="..\resources\shaders\IBL\specular_pbr.fs" />
     <None Include="..\resources\shaders\IBL\texture_pbr.fs" />
     <None Include="..\resources\shaders\instance\fragment.fs" />
     <None Include="..\resources\shaders\instance\rock_fragment.fs" />

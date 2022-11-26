@@ -490,5 +490,14 @@
     <None Include="..\resources\shaders\IBL\texture_pbr.fs">
       <Filter>shader\IBL</Filter>
     </None>
+    <None Include="..\resources\shaders\IBL\brdf.fs">
+      <Filter>shader\IBL</Filter>
+    </None>
+    <None Include="..\resources\shaders\IBL\brdf.vs">
+      <Filter>shader\IBL</Filter>
+    </None>
+    <None Include="..\resources\shaders\IBL\specular_pbr.fs">
+      <Filter>shader\IBL</Filter>
+    </None>
   </ItemGroup>
 </Project>

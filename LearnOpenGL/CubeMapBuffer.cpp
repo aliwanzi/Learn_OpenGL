@@ -38,6 +38,11 @@ CubeMapBuffer::CubeMapBuffer(int width, int height, int oriWidth, int oriHeight,
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, bMipMap ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+	if (bMipMap)
+	{
+		glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+	}
+
 	//glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, m_iTexture, 0);
 
 	assert(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Framebuffer is incomplete");
@@ -63,6 +68,38 @@ void CubeMapBuffer::DrawCubeMap(std::shared_ptr<Node> spNode)
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, m_iTexture, 0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		spNode->Draw();
+	}
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glViewport(0, 0, m_iOriWidth, m_iOriHeight);
+}
+
+void CubeMapBuffer::DrawCubeMipMap(std::shared_ptr<Node> spNode, unsigned int uiLevel)
+{
+	auto spRenderState = spNode->GetRenderState();
+	auto spShader = spRenderState->GetShader();
+
+
+	glBindFramebuffer(GL_FRAMEBUFFER, m_iFrameBuffer);
+	for (unsigned int mip = 0; mip < uiLevel; mip++)
+	{
+		unsigned int mipWidth = static_cast<unsigned int>(m_iWidth * std::pow(0.5, mip));
+		unsigned int mipHeight = static_cast<unsigned int>(m_iHeight * std::pow(0.5, mip));
+		glBindRenderbuffer(GL_RENDERBUFFER, m_iRenderBuffer);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, mipWidth, mipHeight);
+		glViewport(0, 0, mipWidth, mipHeight);
+
+		float roughness = (float)mip / (float)(uiLevel - 1);
+
+		spShader->Use();
+		spShader->SetMat4("matProjection", matProjection);
+		spShader->SetFloat("roughness", roughness);
+		for (unsigned int i = 0; i < 6; i++)
+		{
+			spShader->SetMat4("matView", matView[i]);
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, m_iTexture, mip);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			spNode->Draw();
+		}
 	}
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glViewport(0, 0, m_iOriWidth, m_iOriHeight);
