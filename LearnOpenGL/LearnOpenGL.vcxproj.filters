@@ -487,5 +487,8 @@
     <None Include="..\resources\shaders\IBL\irradiance_pbr.fs">
       <Filter>shader\IBL</Filter>
     </None>
+    <None Include="..\resources\shaders\IBL\texture_pbr.fs">
+      <Filter>shader\IBL</Filter>
+    </None>
   </ItemGroup>
 </Project>

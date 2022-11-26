@@ -31,17 +31,24 @@ uniform samplerCube texture_cube_map1;
 float DistributionGGX(vec3 N,vec3 H,float roughness)
 {
     float a = roughness * roughness;
+    float a2 = a*a;
+
     float NdotH = max(dot(N,H),0.0);
-    float denom = NdotH * NdotH * (a-1.0) + 1;
+    float denom = NdotH * NdotH * (a2-1.0) + 1.0;
     denom = PI * denom * denom;
 
-    return a/denom;
+    return a2/denom;
 }
 
-float GeometrySchlickGGX(float NdotV,float k)
+float GeometrySchlickGGX(float NdotV,float roughness)
 {
+    float r = (roughness + 1.0);
+    float k = (r*r)/8.0;
+
+    float nom   = NdotV;
     float denom = NdotV * (1.0 - k) + k;
-    return NdotV / denom;
+
+    return nom / denom;
 }
 
 float GeometrySmith(vec3 N,vec3 V,vec3 L,float k)
@@ -52,21 +59,27 @@ float GeometrySmith(vec3 N,vec3 V,vec3 L,float k)
     float ggx1 = GeometrySchlickGGX(NdotV,k);
     float ggx2 = GeometrySchlickGGX(NdotL,k);
     return ggx1 * ggx2;
+    
 }
 
-vec3 fresnelSchlick(vec3 H,vec3 V)
+vec3 fresnelSchlick(vec3 H,vec3 V,vec3 F0)
 {
     float HdotV = max(dot(H,V),0.0);
-
-    vec3 F0 = mix(vec3(0.04),albedo,metallic);
-
-    return F0+(1.0-F0) * pow(1.0-HdotV,5.0);
+    return F0+(1.0-F0) * pow(clamp(1.0 - HdotV, 0.0, 1.0),5.0);
 }
+
+vec3 fresnelSchlickRoughness(vec3 H,vec3 V, vec3 F0, float roughness)
+{
+    float HdotV = max(dot(H,V),0.0);
+    return F0 + (max(vec3(1.0 - roughness), F0) - F0) * pow(clamp(1.0 - HdotV, 0.0, 1.0), 5.0);
+}   
 
 void main()
 {
-    vec3 N = fs_in.Normal;
+    vec3 N = normalize(fs_in.Normal);
     vec3 V = normalize(viewPos - fs_in.FragPos);
+
+    vec3  F0 = mix(vec3(0.04),albedo,metallic);
 
     vec3 Lo = vec3(0.0);
     for(int i=0;i<4;++i)
@@ -80,7 +93,7 @@ void main()
         // Cook-Torrance BRDF
         float NDF = DistributionGGX(N, H, roughness);   
         float G   = GeometrySmith(N, V, L, roughness);      
-        vec3 F    = fresnelSchlick(H, V);
+        vec3 F    = fresnelSchlick(H, V, F0);
 
         vec3 numerator = NDF * G * F; 
         float denominator = 4.0 * max(dot(N,V),0.0) * max(dot(N,L),0.0) + 0.0001;
@@ -97,12 +110,13 @@ void main()
 
     }
 
-    vec3 kS = fresnelSchlick(N, V);
+    vec3 kS = fresnelSchlickRoughness(N, V, F0,roughness);
     vec3 kD = vec3(1.0) - kS;
 
     kD *= (1.0 - metallic);
     vec3 irradiance = texture(texture_cube_map1,N).rgb;
     vec3 ambient = kD * irradiance * albedo * ao;
+
     vec3 color = ambient + Lo;
 
     color = color/(color+vec3(1.0));

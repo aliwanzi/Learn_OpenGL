@@ -229,6 +229,7 @@
     <None Include="..\resources\shaders\IBL\cubemap.vs" />
     <None Include="..\resources\shaders\IBL\cubemap.fs" />
     <None Include="..\resources\shaders\IBL\pbr.fs" />
+    <None Include="..\resources\shaders\IBL\texture_pbr.fs" />
     <None Include="..\resources\shaders\instance\fragment.fs" />
     <None Include="..\resources\shaders\instance\rock_fragment.fs" />
     <None Include="..\resources\shaders\instance\rock_vertex.vs" />

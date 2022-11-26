@@ -13,7 +13,7 @@ namespace
 	};
 }
 
-CubeMapBuffer::CubeMapBuffer(int width, int height, int oriWidth, int oriHeight):
+CubeMapBuffer::CubeMapBuffer(int width, int height, int oriWidth, int oriHeight, bool bMipMap):
 	m_iWidth(width),m_iHeight(height),m_iOriWidth(oriWidth),m_iOriHeight(oriHeight),
 	m_iFrameBuffer(0),m_iRenderBuffer(0),m_iTexture(0)
 {
@@ -35,7 +35,7 @@ CubeMapBuffer::CubeMapBuffer(int width, int height, int oriWidth, int oriHeight)
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, bMipMap ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	//glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, m_iTexture, 0);
