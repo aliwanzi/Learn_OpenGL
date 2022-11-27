@@ -20,15 +20,36 @@ struct PointLight
 const int NR_LIGHTS=4;
 uniform PointLight pointLights[NR_LIGHTS];
 
-uniform vec3 viewPos;
-
-uniform vec3 albedo;
-uniform float metallic;
-uniform float roughness;
-uniform float ao;
 uniform samplerCube texture_cube_map1;
 uniform samplerCube texture_cube_map2;
+uniform vec3 viewPos;
+
+// material parameters
 uniform sampler2D texture_diffuse1;
+uniform sampler2D texture_diffuse2;
+uniform sampler2D texture_diffuse3;
+uniform sampler2D texture_diffuse4;
+uniform sampler2D texture_diffuse5;
+uniform sampler2D texture_diffuse6;
+
+
+vec3 GetNormal()
+{
+    vec3 tangentNormal = texture(texture_diffuse6,fs_in.TexCoords).xyz * 2.0 - 1.0;
+
+    vec3 Q1 = dFdx(fs_in.FragPos);
+    vec3 Q2 = dFdy(fs_in.FragPos);
+    vec2 st1 = dFdx(fs_in.TexCoords);
+    vec2 st2 = dFdy(fs_in.TexCoords);
+
+    vec3 N = normalize(fs_in.Normal);
+    vec3 T = normalize(Q1*st2.t - Q2*st1.t);
+    vec3 B = - normalize(cross(N,T));
+
+    mat3 TBN = mat3(T,B,N);
+
+    return normalize(TBN*tangentNormal);
+}
 
 float DistributionGGX(vec3 N,vec3 H,float roughness)
 {
@@ -78,11 +99,15 @@ vec3 fresnelSchlickRoughness(vec3 H,vec3 V, vec3 F0, float roughness)
 
 void main()
 {
-    vec3 N = normalize(fs_in.Normal);
+    vec3 albedo = pow(texture(texture_diffuse2,fs_in.TexCoords).rgb,vec3(2.2));
+    float metallic = texture(texture_diffuse3,fs_in.TexCoords).r;
+    float roughness = texture(texture_diffuse4,fs_in.TexCoords).r;
+    float ao = texture(texture_diffuse5,fs_in.TexCoords).r;
+
+   vec3  F0 = mix(vec3(0.04),albedo,metallic);
+    vec3 N = GetNormal();
     vec3 V = normalize(viewPos - fs_in.FragPos);
     vec3 R = reflect(-V, N); 
-
-    vec3  F0 = mix(vec3(0.04),albedo,metallic);
 
     vec3 Lo = vec3(0.0);
     for(int i=0;i<4;++i)
@@ -118,7 +143,7 @@ void main()
     //specular
     const float MAX_REFLECTION_LOD = 4.0;
     vec3 prefilteredColor = textureLod(texture_cube_map2,R,roughness * MAX_REFLECTION_LOD).rgb;
-    vec2 brdf = texture(texture_diffuse1,vec2(max(dot(N,V),0.0),roughness)).rg;
+    vec2 brdf = texture(texture_diffuse6,vec2(max(dot(N,V),0.0),roughness)).rg;
     vec3 specular = prefilteredColor *(kS*brdf.x + brdf.y);
 
     //ambient
@@ -135,6 +160,5 @@ void main()
 
     color = pow(color,vec3(1.0/2.2));
 
-    FragColor = vec4(color,1.0);
-
+    FragColor = vec4(Lo,1.0);
 }

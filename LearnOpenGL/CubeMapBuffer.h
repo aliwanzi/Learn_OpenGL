@@ -1,7 +1,6 @@
 #pragma once
 #include "common.h"
 #include "node.h"
-#include <memory>
 
 class CubeMapBuffer
 {
@@ -19,5 +18,6 @@ private:
 	GLuint m_iFrameBuffer;
 	GLuint m_iRenderBuffer;
 	GLuint m_iTexture;
+	bool m_bMipMap;
 };
 

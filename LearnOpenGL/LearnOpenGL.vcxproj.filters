@@ -159,6 +159,9 @@
     <ClInclude Include="CubeMapBuffer.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="lut_buffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="entity.cpp">
@@ -225,6 +228,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="CubeMapBuffer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="lut_buffer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -496,7 +502,13 @@
     <None Include="..\resources\shaders\IBL\brdf.vs">
       <Filter>shader\IBL</Filter>
     </None>
+    <None Include="..\resources\shaders\IBL\prefilter.fs">
+      <Filter>shader\IBL</Filter>
+    </None>
     <None Include="..\resources\shaders\IBL\specular_pbr.fs">
+      <Filter>shader\IBL</Filter>
+    </None>
+    <None Include="..\resources\shaders\IBL\specular_texture_pbr.fs">
       <Filter>shader\IBL</Filter>
     </None>
   </ItemGroup>

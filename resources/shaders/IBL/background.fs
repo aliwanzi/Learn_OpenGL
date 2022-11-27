@@ -10,7 +10,7 @@ uniform samplerCube texture_cube_map1;
 void main()
 {
     //FragColor = vec4(1.0,0.0,0.0,0.0);
-    vec3 envColor = texture(texture_cube_map1, fs_in.WorldPos).rgb;
+    vec3 envColor = texture(texture_cube_map1, fs_in.WorldPos,0.0).rgb;
 
     envColor = envColor / (envColor + vec3(1.0));
     envColor = pow(envColor, vec3(1.0/2.2)); 

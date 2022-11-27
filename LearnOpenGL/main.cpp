@@ -1,6 +1,7 @@
 #include "scene.h"
 #include "gl_resource.h"
 #include "CubeMapBuffer.h"
+#include "lut_buffer.h"
 #include <random>
 
 const unsigned int SCR_WIDTH = 1280;
@@ -57,6 +58,7 @@ std::vector<unsigned int> vecIndex
 	0,1,2,3,4,5, 6,7,8,9,10,11, 12,13,14,15,16,17, 18,19,20,21,22,23, 24,25,26,27,28,29, 30,31,32,33,34,35
 };
 
+
 std::vector<glm::vec3> lightPositions{
 	glm::vec3(-10.0f, 10.0f,10.0f),
 	glm::vec3(10.0f, 10.0f,10.0f),
@@ -64,10 +66,28 @@ std::vector<glm::vec3> lightPositions{
 	glm::vec3(10.0f,-10.0f,10.0f),
 };
 
+std::vector<Vertex> vecQuatVertex{
+	Vertex(glm::vec3(-1.0, 1.0, 0.0), glm::vec2(0.0, 1.0)),
+	Vertex(glm::vec3(-1.0,-1.0, 0.0), glm::vec2(0.0, 0.0)),
+	Vertex(glm::vec3( 1.0, 1.0, 0.0), glm::vec2(1.0, 1.0)),
+	Vertex(glm::vec3( 1.0,-1.0, 0.0), glm::vec2(1.0, 0.0))
+};
+
+std::vector<unsigned int> vecQuatIndex
+{
+	0,1,2,1,2,3
+};
+
 std::shared_ptr<GeometryNode> CreatBoxNode(std::shared_ptr<RenderState> spRenderState)
 {
 	auto spTransform = std::make_shared<Transform>();
 	return std::make_shared<GeometryNode>(vecVertex, vecIndex, spRenderState, spTransform);
+}
+
+std::shared_ptr<GeometryNode> CreatQuadNode(std::shared_ptr<RenderState> spRenderState)
+{
+	auto spTransform = std::make_shared<Transform>();
+	return std::make_shared<GeometryNode>(vecQuatVertex, vecQuatIndex, spRenderState, spTransform);
 }
 
 void CreatSphere(std::vector<Vertex>& vecVertex, std::vector<unsigned int>& vecIndices)
@@ -132,7 +152,7 @@ void CreateSphereNode(std::shared_ptr<RenderState> spRenderState, std::vector<st
 			spTransform->SetModelPan(glm::vec3(
 				(col - (nrColumns / 2)) * spacing,
 				(row - (nrRows / 2)) * spacing,
-				0.0f));
+				-2.0f));
 
 			auto spNode = std::make_shared<GeometryNode>(vecVertex, vecIndices, spRenderState, spTransform);
 			spNode->SetUniformAlbedo(glm::vec3(0.5f, 0.0, 0.0));
@@ -170,10 +190,84 @@ void CreateLightNode(std::shared_ptr<RenderState> spRenderState, std::vector<std
 	}
 }
 
+void CreateTexture(std::shared_ptr<CubeMapBuffer>spCubeMapBuffer, std::shared_ptr<CubeMapBuffer>spIrradianceBuffer,
+	std::shared_ptr<CubeMapBuffer>spFilterBuffer,std::shared_ptr<LutBuffer> spLutBuffer)
+{
+	//DrawBuffer envCubemap
+	auto spCubeMapShader = std::make_shared<Shader>("../resources/shaders/IBL/cubemap.vs",
+		"../resources/shaders/IBL/cubemap.fs");
+
+	auto spCubeMapTexture = std::make_shared<Texture>();
+	spCubeMapTexture->AddTexture("../resources/textures/newport_loft.hdr", TextureType::DIFFUSE, true, false, true);
+
+	auto spCubeMapRenderState = std::make_shared<RenderState>(spCubeMapShader, spCubeMapTexture);
+	spCubeMapRenderState->SetBackGround(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+	spCubeMapRenderState->EnableDepthTest(true);
+	spCubeMapRenderState->SetDrawMode(DRAW_MODE::ELEMENT_MODE);
+	spCubeMapRenderState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_MODE);
+
+	auto spCubeMapNode = CreatBoxNode(spCubeMapRenderState);
+	spCubeMapBuffer->DrawCubeMap(spCubeMapNode);
+
+	//DrawBuffer irradiance
+	auto spIrradianceShader = std::make_shared<Shader>("../resources/shaders/IBL/cubemap.vs",
+		"../resources/shaders/IBL/irradiance.fs");
+
+	auto spIrradianceTexture = std::make_shared<Texture>();
+	auto spIrrTex = std::make_shared<TextureStruct>();
+	spIrrTex->eType = TextureType::CUBEMAP;
+	spIrrTex->uiID = spCubeMapBuffer->GetCubeMapTexture();
+	spIrradianceTexture->AddTexture(spIrrTex);
+
+	auto spIrradianceRenderState = std::make_shared<RenderState>(spIrradianceShader, spIrradianceTexture);
+	spIrradianceRenderState->SetBackGround(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+	spIrradianceRenderState->EnableDepthTest(true);
+	spIrradianceRenderState->SetDrawMode(DRAW_MODE::ELEMENT_MODE);
+	spIrradianceRenderState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_MODE);
+
+	auto spIrradianceNode = CreatBoxNode(spIrradianceRenderState);
+	spIrradianceBuffer->DrawCubeMap(spIrradianceNode);
+
+	//DrawBuffer Filter
+	auto spFilterShader = std::make_shared<Shader>("../resources/shaders/IBL/cubemap.vs",
+		"../resources/shaders/IBL/prefilter.fs");
+
+	auto spFilterTexture = std::make_shared<Texture>();
+	auto spFilTex = std::make_shared<TextureStruct>();
+	spFilTex->eType = TextureType::CUBEMAP;
+	spFilTex->uiID = spCubeMapBuffer->GetCubeMapTexture();
+	spFilterTexture->AddTexture(spFilTex);
+
+	auto spFilterRenderState = std::make_shared<RenderState>(spFilterShader, spFilterTexture);
+	spFilterRenderState->SetBackGround(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+	spFilterRenderState->EnableDepthTest(true);
+	spFilterRenderState->SetDrawMode(DRAW_MODE::ELEMENT_MODE);
+	spFilterRenderState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_MODE);
+
+	auto spFilterNode = CreatBoxNode(spFilterRenderState);
+	spFilterBuffer->DrawCubeMipMap(spFilterNode, 5);
+
+	//Draw LutTexture;
+	auto spLutShader = std::make_shared<Shader>("../resources/shaders/IBL/brdf.vs",
+		"../resources/shaders/IBL/brdf.fs");
+
+	auto spLutTexture = std::make_shared<Texture>();
+
+	auto spLutRenderState = std::make_shared<RenderState>(spLutShader, spLutTexture);
+	spLutRenderState->SetBackGround(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+	spLutRenderState->EnableDepthTest(true);
+	spLutRenderState->SetDrawMode(DRAW_MODE::ELEMENT_MODE);
+	spLutRenderState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_MODE);
+
+	auto spLutNode = CreatQuadNode(spLutRenderState);
+	spLutBuffer->DrawLutTexture(spLutNode);
+}
+
 //#define CASE1
 //#define CASE2
 //#define CASE3
-#define CASE4
+//#define CASE4
+#define CASE5
 
 int main()
 {
@@ -188,6 +282,12 @@ int main()
 	std::vector<Vertex> vecVertex;
 	std::vector<unsigned int> vecIndices;
 	CreatSphere(vecVertex, vecIndices);
+
+	auto spCubeMapBuffer = std::make_shared<CubeMapBuffer>(512, 512, SCR_WIDTH, SCR_HEIGHT);
+	auto spIrradianceBuffer = std::make_shared<CubeMapBuffer>(32, 32, SCR_WIDTH, SCR_HEIGHT);
+	auto spFilterBuffer = std::make_shared<CubeMapBuffer>(128, 128, SCR_WIDTH, SCR_HEIGHT, true);
+	auto spLutBuffer = std::make_shared<LutBuffer>(512, 512, SCR_WIDTH, SCR_HEIGHT);
+	CreateTexture(spCubeMapBuffer, spIrradianceBuffer, spFilterBuffer, spLutBuffer);
 #ifdef CASE3
 	//DrawBuffer envCubemap
 	auto spCubeMapShader = std::make_shared<Shader>("../resources/shaders/IBL/cubemap.vs",
@@ -250,7 +350,7 @@ int main()
 	spScene->AddRenderPass(spEnvRenderPass);
 #endif // CASE3
 
-#ifdef CASE4
+#ifdef CASE5
 	//DrawBuffer envCubemap
 	auto spCubeMapShader = std::make_shared<Shader>("../resources/shaders/IBL/cubemap.vs",
 		"../resources/shaders/IBL/cubemap.fs");
@@ -289,6 +389,42 @@ int main()
 	auto spIrradianceBuffer = std::make_shared<CubeMapBuffer>(32, 32, SCR_WIDTH, SCR_HEIGHT);
 	spIrradianceBuffer->DrawCubeMap(spIrradianceNode);
 
+	//DrawBuffer Filter
+	auto spFilterShader = std::make_shared<Shader>("../resources/shaders/IBL/cubemap.vs",
+		"../resources/shaders/IBL/prefilter.fs");
+
+	auto spFilterTexture = std::make_shared<Texture>();
+	auto spFilTex = std::make_shared<TextureStruct>();
+	spFilTex->eType = TextureType::CUBEMAP;
+	spFilTex->uiID = spCubeMapBuffer->GetCubeMapTexture();
+	spFilterTexture->AddTexture(spFilTex);
+
+	auto spFilterRenderState = std::make_shared<RenderState>(spFilterShader, spFilterTexture);
+	spFilterRenderState->SetBackGround(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+	spFilterRenderState->EnableDepthTest(true);
+	spFilterRenderState->SetDrawMode(DRAW_MODE::ELEMENT_MODE);
+	spFilterRenderState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_MODE);
+
+	auto spFilterNode = CreatBoxNode(spFilterRenderState);
+	auto spFilterBuffer = std::make_shared<CubeMapBuffer>(128, 128, SCR_WIDTH, SCR_HEIGHT, true);
+	spFilterBuffer->DrawCubeMipMap(spFilterNode, 5);
+
+	//Draw LutTexture;
+	auto spLutShader = std::make_shared<Shader>("../resources/shaders/IBL/brdf.vs",
+		"../resources/shaders/IBL/brdf.fs");
+
+	auto spLutTexture = std::make_shared<Texture>();
+
+	auto spLutRenderState = std::make_shared<RenderState>(spLutShader, spLutTexture);
+	spLutRenderState->SetBackGround(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+	spLutRenderState->EnableDepthTest(true);
+	spLutRenderState->SetDrawMode(DRAW_MODE::ELEMENT_MODE);
+	spLutRenderState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_MODE);
+
+	auto spLutNode = CreatQuadNode(spLutRenderState);
+	auto spLutBuffer = std::make_shared<LutBuffer>(512, 512, SCR_WIDTH, SCR_HEIGHT);
+	spLutBuffer->DrawLutTexture(spLutNode);
+
 	//Draw Environment
 	auto spEnvShader = std::make_shared<Shader>("../resources/shaders/IBL/background.vs",
 		"../resources/shaders/IBL/background.fs");
@@ -310,6 +446,7 @@ int main()
 	spEnvEntity->AddGeometryNode(CreatBoxNode(spEnvRenderState));
 	auto spEnvRenderPass = std::make_shared<RenderPass>(spEnvEntity, spEnvRenderState);
 	spScene->AddRenderPass(spEnvRenderPass);
+
 #endif // CASE4
 
 	//draw sphere
@@ -340,11 +477,56 @@ int main()
 #ifdef CASE4
 	auto spSphereShader = std::make_shared<Shader>("../resources/shaders/IBL/pbr.vs",
 		"../resources/shaders/IBL/specular_pbr.fs");
+	auto spIrrTexStr = std::make_shared<TextureStruct>();
+	spIrrTexStr->eType = TextureType::CUBEMAP;
+	spIrrTexStr->uiID = spIrradianceBuffer->GetCubeMapTexture();
+	auto spFilTexStr = std::make_shared<TextureStruct>();
+	spFilTexStr->eType = TextureType::CUBEMAP;
+	spFilTexStr->uiID = spFilterBuffer->GetCubeMapTexture();
+	auto spLut = std::make_shared<TextureStruct>();
+	spLut->eType = TextureType::DIFFUSE;
+	spLut->uiID = spLutBuffer->GetLutTexture();
+
+	spSphereTexture->AddTexture(spIrrTexStr);
+	spSphereTexture->AddTexture(spFilTexStr);
+	spSphereTexture->AddTexture(spLut);
 #endif // CASE4
 
+#ifdef CASE5
+	auto spSphereShader = std::make_shared<Shader>("../resources/shaders/IBL/pbr.vs",
+		"../resources/shaders/IBL/specular_texture_pbr.fs");
+
+	auto spIrrTexStr = std::make_shared<TextureStruct>();
+	spIrrTexStr->eType = TextureType::CUBEMAP;
+	spIrrTexStr->uiID = spIrradianceBuffer->GetCubeMapTexture();
+	auto spFilTexStr = std::make_shared<TextureStruct>();
+	spFilTexStr->eType = TextureType::CUBEMAP;
+	spFilTexStr->uiID = spFilterBuffer->GetCubeMapTexture();
+	auto spLut = std::make_shared<TextureStruct>();
+	spLut->eType = TextureType::DIFFUSE;
+	spLut->uiID = spLutBuffer->GetLutTexture();
+
+	spSphereTexture->AddTexture(spIrrTexStr);
+	spSphereTexture->AddTexture(spFilTexStr);
+	spSphereTexture->AddTexture(spLut);
+	spSphereTexture->AddTexture("../resources/textures/pbr/rusted_iron/albedo.png", TextureType::DIFFUSE);
+	spSphereTexture->AddTexture("../resources/textures/pbr/rusted_iron/metallic.png", TextureType::DIFFUSE);
+	spSphereTexture->AddTexture("../resources/textures/pbr/rusted_iron/roughness.png", TextureType::DIFFUSE);
+	spSphereTexture->AddTexture("../resources/textures/pbr/rusted_iron/ao.png", TextureType::DIFFUSE);
+	spSphereTexture->AddTexture("../resources/textures/pbr/rusted_iron/normal.png", TextureType::DIFFUSE);
+#endif // CASE5
+
 	auto spSphereState = std::make_shared<RenderState>(spSphereShader, spSphereTexture);
-	spSphereState->SetBackGround(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
+	spSphereState->SetBackGround(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f));
 	spSphereState->SetClearBuffer(false);
+
+#ifdef CASE1
+	spSphereState->SetClearBuffer(true);
+#endif // !CASE1
+#ifdef CASE2
+	spSphereState->SetClearBuffer(true);
+#endif // !CASE2
+
 	spSphereState->EnableDepthTest(true);
 	spSphereState->SetDrawMode(DRAW_MODE::ELEMENT_MODE);
 	spSphereState->SetPrimitiveMode(PRIMITIVE_MODE::TRIANGLES_STRIP_MODE);

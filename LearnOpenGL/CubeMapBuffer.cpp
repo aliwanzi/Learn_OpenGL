@@ -15,7 +15,7 @@ namespace
 
 CubeMapBuffer::CubeMapBuffer(int width, int height, int oriWidth, int oriHeight, bool bMipMap):
 	m_iWidth(width),m_iHeight(height),m_iOriWidth(oriWidth),m_iOriHeight(oriHeight),
-	m_iFrameBuffer(0),m_iRenderBuffer(0),m_iTexture(0)
+	m_iFrameBuffer(0),m_iRenderBuffer(0),m_iTexture(0),m_bMipMap(bMipMap)
 {
 	glGenFramebuffers(1, &m_iFrameBuffer);
 	glGenRenderbuffers(1, &m_iRenderBuffer);
@@ -35,11 +35,12 @@ CubeMapBuffer::CubeMapBuffer(int width, int height, int oriWidth, int oriHeight,
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, bMipMap ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, m_bMipMap ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	if (bMipMap)
+	if (m_bMipMap)
 	{
+		glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 		glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
 	}
 
@@ -69,6 +70,13 @@ void CubeMapBuffer::DrawCubeMap(std::shared_ptr<Node> spNode)
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		spNode->Draw();
 	}
+
+	if (m_bMipMap)
+	{
+		glBindTexture(GL_TEXTURE_CUBE_MAP, m_iTexture);
+		glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+	}
+
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glViewport(0, 0, m_iOriWidth, m_iOriHeight);
 }
@@ -76,10 +84,12 @@ void CubeMapBuffer::DrawCubeMap(std::shared_ptr<Node> spNode)
 void CubeMapBuffer::DrawCubeMipMap(std::shared_ptr<Node> spNode, unsigned int uiLevel)
 {
 	auto spRenderState = spNode->GetRenderState();
-	auto spShader = spRenderState->GetShader();
-
-
 	glBindFramebuffer(GL_FRAMEBUFFER, m_iFrameBuffer);
+
+	auto spShader = spRenderState->GetShader();
+	spShader->Use();
+	spShader->SetMat4("matProjection", matProjection);
+
 	for (unsigned int mip = 0; mip < uiLevel; mip++)
 	{
 		unsigned int mipWidth = static_cast<unsigned int>(m_iWidth * std::pow(0.5, mip));
@@ -90,8 +100,6 @@ void CubeMapBuffer::DrawCubeMipMap(std::shared_ptr<Node> spNode, unsigned int ui
 
 		float roughness = (float)mip / (float)(uiLevel - 1);
 
-		spShader->Use();
-		spShader->SetMat4("matProjection", matProjection);
 		spShader->SetFloat("roughness", roughness);
 		for (unsigned int i = 0; i < 6; i++)
 		{
@@ -101,6 +109,7 @@ void CubeMapBuffer::DrawCubeMipMap(std::shared_ptr<Node> spNode, unsigned int ui
 			spNode->Draw();
 		}
 	}
+
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glViewport(0, 0, m_iOriWidth, m_iOriHeight);
 }

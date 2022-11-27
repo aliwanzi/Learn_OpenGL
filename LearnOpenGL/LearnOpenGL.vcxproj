@@ -159,6 +159,7 @@
     <ClInclude Include="gl_resource.h" />
     <ClInclude Include="HDRBuffer.h" />
     <ClInclude Include="light.h" />
+    <ClInclude Include="lut_buffer.h" />
     <ClInclude Include="mesh_node.h" />
     <ClInclude Include="node.h" />
     <ClInclude Include="render_pass.h" />
@@ -182,6 +183,7 @@
     <ClCompile Include="gl_resource.cpp" />
     <ClCompile Include="HDRBuffer.cpp" />
     <ClCompile Include="light.cpp" />
+    <ClCompile Include="lut_buffer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mesh_node.cpp" />
     <ClCompile Include="node.cpp" />
@@ -231,7 +233,9 @@
     <None Include="..\resources\shaders\IBL\cubemap.vs" />
     <None Include="..\resources\shaders\IBL\cubemap.fs" />
     <None Include="..\resources\shaders\IBL\pbr.fs" />
+    <None Include="..\resources\shaders\IBL\prefilter.fs" />
     <None Include="..\resources\shaders\IBL\specular_pbr.fs" />
+    <None Include="..\resources\shaders\IBL\specular_texture_pbr.fs" />
     <None Include="..\resources\shaders\IBL\texture_pbr.fs" />
     <None Include="..\resources\shaders\instance\fragment.fs" />
     <None Include="..\resources\shaders\instance\rock_fragment.fs" />
