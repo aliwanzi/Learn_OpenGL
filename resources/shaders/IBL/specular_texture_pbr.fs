@@ -143,7 +143,7 @@ void main()
     //specular
     const float MAX_REFLECTION_LOD = 4.0;
     vec3 prefilteredColor = textureLod(texture_cube_map2,R,roughness * MAX_REFLECTION_LOD).rgb;
-    vec2 brdf = texture(texture_diffuse6,vec2(max(dot(N,V),0.0),roughness)).rg;
+    vec2 brdf = texture(texture_diffuse1,vec2(max(dot(N,V),0.0),roughness)).rg;
     vec3 specular = prefilteredColor *(kS*brdf.x + brdf.y);
 
     //ambient
@@ -160,5 +160,5 @@ void main()
 
     color = pow(color,vec3(1.0/2.2));
 
-    FragColor = vec4(Lo,1.0);
+    FragColor = vec4(color,1.0);
 }
