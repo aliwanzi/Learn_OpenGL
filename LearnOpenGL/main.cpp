@@ -376,10 +376,10 @@ int main()
 	spSphereTexture->AddTexture(spIrrTexStr);
 	spSphereTexture->AddTexture(spFilTexStr);
 	spSphereTexture->AddTexture(spLut);
-	//AddTexture(spSphereTexture, "gold");
+	AddTexture(spSphereTexture, "gold");
 	//AddTexture(spSphereTexture, "grass");
 	//AddTexture(spSphereTexture, "plastic");
-	AddTexture(spSphereTexture, "rusted_iron");
+	//AddTexture(spSphereTexture, "rusted_iron");
 	//AddTexture(spSphereTexture, "wall");
 #endif // CASE5
 
